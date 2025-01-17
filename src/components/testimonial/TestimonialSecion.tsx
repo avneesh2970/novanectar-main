@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, useAnimation } from "framer-motion";
 import bg from "@/assets/testimonial/testimonial.jpg";
 import { DMSans } from "@/fonts/font";
 
@@ -31,51 +31,18 @@ const testimonialData = [
   },
 ];
 
-const MotionImage = motion(Image);
-
-interface TestimonialCardProps {
+const TestimonialCard: React.FC<{
   name: string;
   role: string;
   content: string;
   className?: string;
-}
-
-const TestimonialCard: React.FC<TestimonialCardProps> = ({
-  name,
-  role,
-  content,
-  className = "",
-}) => {
-  const cardVariants = {
-    initial: {
-      opacity: 0,
-      y: 20,
-      scale: 0.95,
-    },
-    animate: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: {
-        duration: 0.8,
-        ease: "easeOut",
-      },
-    },
-    hover: {
-      y: -5,
-      scale: 1.02,
-      transition: {
-        duration: 0.3,
-        ease: "easeInOut",
-      },
-    },
-  };
-
-  // Generate random floating animation parameters
-  const floatingAnimation:any = {
-    y: ["-10px", "10px"],
+  isSmallScreen: boolean;
+  index: number;
+}> = ({ name, role, content, className = "", isSmallScreen, index }) => {
+  const floatingAnimation = {
+    y: [0, -10, 0],
     transition: {
-      duration: Math.random() * 2 + 3, // Random duration between 3-5 seconds
+      duration: 3 + index,
       repeat: Infinity,
       repeatType: "reverse" as const,
       ease: "easeInOut",
@@ -84,11 +51,10 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
 
   return (
     <motion.div
-      className={`bg-white text-start rounded-xl p-4 shadow-lg w-80 z-20 ${className} ${DMSans.className}`}
-      variants={cardVariants}
-      initial="initial"
-      animate={["animate", floatingAnimation]}
-      whileHover="hover"
+      className={`bg-white text-start rounded-xl p-4 shadow-lg w-full md:w-80 z-20 ${className} ${DMSans.className}`}
+      whileHover={isSmallScreen ? undefined : { scale: 1.05 }}
+      animate={!isSmallScreen ? floatingAnimation : undefined}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
     >
       <div className="flex items-center gap-3 mb-3">
         <div className="relative w-8 h-8 rounded-full overflow-hidden">
@@ -112,8 +78,41 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
 };
 
 const TestimonialSection: React.FC = () => {
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const controls = useAnimation();
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth < 768);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isSmallScreen) {
+      const autoScroll = async () => {
+        await controls.start({
+          x: "-100%",
+          transition: { duration: 60, ease: "linear" },
+        });
+        controls.set({ x: "0%" });
+        autoScroll();
+      };
+      autoScroll();
+    } else {
+      controls.stop();
+    }
+  }, [isSmallScreen, controls]);
+
   return (
-    <div className="relative min-h-screen w-full bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="relative w-full min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       {/* Background Elements */}
       <div className="absolute top-0 left-0 w-32 h-32 bg-green-200/20 rounded-full blur-3xl" />
       <div className="absolute bottom-0 right-0 w-32 h-32 bg-purple-200/20 rounded-full blur-3xl" />
@@ -122,39 +121,30 @@ const TestimonialSection: React.FC = () => {
       <div className="relative w-full min-h-screen">
         {/* Background Image */}
         <div className="absolute inset-0 w-full h-full">
-          <MotionImage
-            src={bg}
+          <Image
+            src={bg || "/placeholder.svg"}
             alt="Brain background"
             fill
             sizes="100vw"
-            className="object-cover"
+            className="object-cover opacity-50"
             priority
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.8 }}
-            transition={{ duration: 1 }}
           />
         </div>
 
         {/* Responsive Cards Grid */}
         <div className="relative z-10 w-full min-h-screen">
-          <motion.div
-            className="container mx-auto px-4 py-8 min-h-screen"
-            initial="initial"
-            animate="animate"
-            variants={{
-              animate: {
-                transition: {
-                  staggerChildren: 0.2,
-                },
-              },
-            }}
+          <div
+            className="container mx-auto px-4 py-8 min-h-screen flex items-center"
+            ref={containerRef}
           >
             {/* Desktop Layout */}
-            <div className="hidden lg:block relative min-h-screen">
+            <div className="hidden lg:block relative w-full min-h-[600px]">
               {testimonialData.map((testimonial, index) => (
                 <TestimonialCard
                   key={index}
                   {...testimonial}
+                  isSmallScreen={isSmallScreen}
+                  index={index}
                   className={`absolute ${
                     index === 0
                       ? "top-[0%] left-[8%]"
@@ -169,23 +159,38 @@ const TestimonialSection: React.FC = () => {
             </div>
 
             {/* Tablet Layout */}
-            <div className="hidden md:block lg:hidden">
+            <div className="hidden md:block lg:hidden w-full">
               <div className="grid grid-cols-2 gap-8 place-items-center">
                 {testimonialData.map((testimonial, index) => (
-                  <TestimonialCard key={index} {...testimonial} />
+                  <TestimonialCard
+                    key={index}
+                    {...testimonial}
+                    isSmallScreen={isSmallScreen}
+                    index={index}
+                  />
                 ))}
               </div>
             </div>
 
-            {/* Mobile Layout */}
-            <div className="md:hidden">
-              <div className="flex flex-col gap-6 items-center">
-                {testimonialData.map((testimonial, index) => (
-                  <TestimonialCard key={index} {...testimonial} />
+            {/* Mobile Layout with Infinite Horizontal Scroll */}
+            <div className="md:hidden overflow-hidden w-full">
+              <motion.div
+                className="flex gap-6"
+                animate={controls}
+                style={{ width: `${testimonialData.length * 300}%` }}
+              >
+                {[...testimonialData, ...testimonialData, ...testimonialData].map((testimonial, index) => (
+                  <TestimonialCard
+                    key={index}
+                    {...testimonial}
+                    isSmallScreen={isSmallScreen}
+                    index={index % testimonialData.length}
+                    className="flex-shrink-0 w-[80vw] max-w-[300px]"
+                  />
                 ))}
-              </div>
+              </motion.div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </div>
@@ -193,3 +198,4 @@ const TestimonialSection: React.FC = () => {
 };
 
 export default TestimonialSection;
+
