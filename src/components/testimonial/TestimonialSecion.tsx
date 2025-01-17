@@ -147,11 +147,11 @@ const TestimonialSection: React.FC = () => {
                   index={index}
                   className={`absolute ${
                     index === 0
-                      ? "top-[0%] left-[8%]"
+                      ? "top-[0%] left-[5%]"
                       : index === 1
                       ? "top-[5%] right-[10%]"
                       : index === 2
-                      ? "top-[45%] left-[15%]"
+                      ? "top-[50%] left-[15%]"
                       : "bottom-[1%] right-[15%]"
                   }`}
                 />
@@ -179,7 +179,7 @@ const TestimonialSection: React.FC = () => {
                 animate={controls}
                 style={{ width: `${testimonialData.length * 300}%` }}
               >
-                {[...testimonialData, ...testimonialData, ...testimonialData].map((testimonial, index) => (
+                {[...testimonialData, ...testimonialData, ...testimonialData, ...testimonialData].map((testimonial, index) => (
                   <TestimonialCard
                     key={index}
                     {...testimonial}
