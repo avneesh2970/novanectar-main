@@ -24,7 +24,7 @@ export default function AboutPage() {
           </p>
         </div>
 
-        <div className="flex flex-col md:flex-row gap-6 mt-12">
+        <div className="flex flex-row md:gap-6 sm:gap-4 gap-2 mt-12">
           <motion.div
             className="relative overflow-hidden rounded-2xl"
             style={{ width: '100%' }}

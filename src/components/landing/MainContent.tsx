@@ -88,29 +88,39 @@ export const MainContent = () => {
           />
           {/* //landing page// */}
           <FloatingTechLayout>
-            <div className="w-5xl pt-28 px-2 text-center">
-              <h1 className={`text-black text-3xl md:text-5xl sm:text-4xl max-w-4xl mx-auto font-bold ${WorkSans.className}`}>
-                We Build Success Stories Not Just Websites
-              </h1>
-            </div>
-            <div className="pt-10 text-center px-2 max-w-xl mx-auto">
-              <p className={`text-black text-center font-medium text-sm md:text-base lg:text-lg ${DMSans}`}>
-                Transform your business with powerful digital strategies
-                designed for real world results
+            <div className="h-screen flex flex-col items-center justify-center">
+              <div className="w-5xl px-2 pl-5 sm:text-center text-start">
+                <h1
+                  className={`text-black text-2xl md:text-5xl sm:text-4xl max-w-4xl mx-auto font-bold ${WorkSans.className}`}
+                >
+                  We Build <span className="text-blue-500 sm:text-black">Success Stories</span> Not Just Websites
+                </h1>
+              </div>
+              <div className="pt-10 text-center px-2 max-w-xl mx-auto">
+                <p
+                  className={`text-black text-center font-medium text-sm md:text-base lg:text-lg ${DMSans}`}
+                >
+                  Transform your business with powerful digital strategies
+                  designed for real world results
+                </p>
+              </div>
+              <div className="flex pt-10 px-2 justify-center gap-4">
+                <button
+                  className={`bg-blue-500 px-3 py-2 sm:px-5 sm:py-2 text-white text-xs sm:text-base rounded-md font-medium shadow-md transition-transform transform hover:scale-105 hover:bg-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none active:scale-95 ${DMSans}`}
+                >
+                  Get Started Today
+                </button>
+                <button
+                  className={`border border-blue-500 text-blue-500 px-3 py-3 sm:px-5 sm:py-3 text-xs sm:text-base rounded-md font-medium shadow-md transition-transform transform hover:scale-105 hover:text-white hover:bg-blue-500 focus:ring-2 focus:ring-blue-400 focus:outline-none active:scale-95 bg-white ${DMSans}`}
+                >
+                  Schedule a Free Consultation
+                </button>
+              </div>
+              <p className="text-black text-center pt-8 px-2">
+                Building Success Stories for
+                <span className="text-blue-500"> 200+ Trusted Clients</span>
               </p>
             </div>
-            <div className="flex pt-10 px-2 justify-center gap-4">
-              <button className={`bg-blue-500 px-4 py-2 sm:px-5 sm:py-2 text-white text-sm sm:text-base rounded-md font-medium shadow-md transition-transform transform hover:scale-105 hover:bg-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none active:scale-95 ${DMSans}`}>
-                Get Started Today
-              </button>
-              <button className={`border border-blue-500 text-blue-500 px-4 py-2 sm:px-5 sm:py-2 text-sm sm:text-base rounded-md font-medium shadow-md transition-transform transform hover:scale-105 hover:text-white hover:bg-blue-500 focus:ring-2 focus:ring-blue-400 focus:outline-none active:scale-95 bg-white ${DMSans}`}>
-                Schedule a Free Consultation
-              </button>
-            </div>
-            <p className="text-black text-center pt-8 px-2">
-              Building Success Stories for
-              <span className="text-blue-500"> 200+ Trusted Clients</span>
-            </p>
           </FloatingTechLayout>
           {/* //landing page end// */}
           <AboutSection />
