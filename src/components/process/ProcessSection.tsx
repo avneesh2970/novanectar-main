@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useAnimation } from "framer-motion";
 import Image from "next/image";
 import bgImage from "@/assets/pocess/bg.png";
 import { DMSans } from "@/fonts/font";
@@ -63,29 +63,24 @@ const ServiceCard = ({ title, description, icon }: any) => {
 export default function ProcessSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [scrollRange, setScrollRange] = useState("-100%");
-
-  /////////////adjusting view porth width dynamically/////////
+  const [isMobile, setIsMobile] = useState(false);
+  const controls = useAnimation();
 
   useEffect(() => {
     const updateScrollRange = () => {
-      if (window.innerWidth < 480) {
-        // Very small screens (e.g., small mobile)
-        setScrollRange("-600%"); // Scroll more for tighter spaces
-      } else if (window.innerWidth < 640) {
-        // Small screens (mobile)
-        setScrollRange("-400%");
-      } else if (window.innerWidth < 768) {
-        // Large mobile or small tablets
-        setScrollRange("-320%");
-      } else if (window.innerWidth < 1024) {
-        // Tablets
+      const width = window.innerWidth;
+      if (width < 768) {  // md breakpoint
+        setScrollRange("0%");
+        setIsMobile(true);
+      } else if (width < 1024) {
         setScrollRange("-230%");
-      } else if (window.innerWidth < 1440) {
-        // Small desktops or laptops
+        setIsMobile(false);
+      } else if (width < 1440) {
         setScrollRange("-150%");
+        setIsMobile(false);
       } else {
-        // Large screens (desktops)
         setScrollRange("-100%");
+        setIsMobile(false);
       }
     };
 
@@ -97,14 +92,24 @@ export default function ProcessSection() {
     };
   }, []);
 
-  /////////////end//////////////////////////////////////////////////
+  useEffect(() => {
+    if (isMobile) {
+      const autoScroll = async () => {
+        await controls.start({ x: "-100%", transition: { duration: 20, ease: "linear" } });
+        await controls.start({ x: "0%", transition: { duration: 0 } });
+        autoScroll();
+      };
+      autoScroll();
+    } else {
+      controls.stop();
+    }
+  }, [isMobile, controls]);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"],
   });
 
-  // const x = useTransform(scrollYProgress, [0, 1], ["0%", "-100%"]);
   const x = useTransform(scrollYProgress, [0, 1], ["0%", scrollRange]);
 
   const services = [
@@ -234,32 +239,33 @@ export default function ProcessSection() {
   return (
     <div
       ref={containerRef}
-      className={`relative w-full h-[300vh] bg-gray-900 ${DMSans.className}`}
+      className={`relative w-full ${isMobile ? 'min-h-screen' : 'h-[300vh]'} bg-gray-900 ${DMSans.className}`}
     >
-      <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden">
+      <div className={`${isMobile ? 'min-h-screen flex items-center' : 'sticky top-0 h-screen'} flex flex-col justify-center overflow-hidden`}>
         <Image
           alt="Process"
-          src={bgImage}
+          src={bgImage || "/placeholder.svg"}
           placeholder="blur"
           quality={100}
           fill
           sizes="100vw"
           style={{
-            objectFit: "cover",
+            objectFit: isMobile ? "contain" : "cover",
             objectPosition: "center",
           }}
           className="opacity-50"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-gray-900/50 to-gray-900"></div>
 
-        <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8">
+        <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8 py-8">
           <h2 className="text-white text-3xl sm:text-4xl lg:text-5xl font-medium mb-8 sm:mb-12 text-start underline">
             Process
           </h2>
           <div className="overflow-hidden">
             <motion.div
-              style={{ x }}
-              className="flex space-x-4 sm:space-x-6 lg:space-x-8"
+              style={isMobile ? {} : { x }}
+              animate={isMobile ? controls : {}}
+              className="flex space-x-4 sm:space-x-6 lg:space-x-8 pb-8"
             >
               {services.map((service, index) => (
                 <motion.div
@@ -278,3 +284,4 @@ export default function ProcessSection() {
     </div>
   );
 }
+
