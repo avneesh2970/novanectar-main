@@ -1,3 +1,4 @@
+import CallingIcon from "@/components/calling/Call";
 import ContactForm from "@/components/contact/contact";
 import FAQSection from "@/components/faq/FaqSection";
 import FooterSection from "@/components/footer/FooterSection";
@@ -22,6 +23,7 @@ export default function Home() {
       <FAQSection />
       <FooterSection />
       <WhatsappIcon />
+      <CallingIcon/>
     </div>
   );
 }

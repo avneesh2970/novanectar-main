@@ -89,7 +89,9 @@ const FooterSection = () => {
         <div className="grid grid-cols-1 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-5 gap-8">
           {/* Company Info */}
           <div className="col-span-2 sm:col-span-2 md:col-span-1 md:text-start text-center">
-            <h2 className="text-2xl font-medium md:mb-4 mb-2 underline md:no-underline">NOVANECTAR</h2>
+            <h2 className="text-2xl font-medium md:mb-4 mb-2 underline md:no-underline">
+              NOVANECTAR
+            </h2>
             <p className="text-sm text-gray-400">IT Services & IT Consulting</p>
             <div className="mt-4 hidden md:block">
               <p className="text-sm text-gray-400">VISIT US</p>
@@ -151,7 +153,7 @@ const FooterSection = () => {
 
           {/* Career and Legal */}
           <div className="md:text-start">
-            <div className="mb-8">
+            <div className="mb-4">
               <h3 className="text-sm font-medium mb-4">CAREER</h3>
               <ul className="space-y-2">
                 {["Jobs", "Internship", "Training"].map((item) => (
@@ -171,7 +173,7 @@ const FooterSection = () => {
                 ))}
               </ul>
             </div>
-            <div>
+            <div className="hidden sm:block">
               <h3 className="text-sm font-medium mb-4">LEGAL</h3>
               <ul className="space-y-2">
                 {["Privacy Policy", "Terms of Service"].map((item) => (
@@ -194,7 +196,7 @@ const FooterSection = () => {
           </div>
 
           {/* Follow Us */}
-          <div className="col-span-1 sm:col-span-2 md:col-span-1 md:text-start">
+          <div className="hidden sm:block col-span-1 sm:col-span-2 md:col-span-1 md:text-start">
             <h3 className="text-sm font-medium mb-4">FOLLOW US</h3>
             <div className="flex flex-wrap gap-4">
               {socialIcons.map((social) => (
@@ -212,6 +214,69 @@ const FooterSection = () => {
               ))}
             </div>
           </div>
+
+          <div className="sm:hidden">
+            <h3 className="text-sm font-medium mb-4">LEGAL</h3>
+            <ul className="space-y-2">
+              {["Privacy Policy", "Terms of Service"].map((item) => (
+                <motion.li
+                  key={item}
+                  variants={linkVariants}
+                  whileHover="hover"
+                  className="text-sm"
+                >
+                  <Link
+                    href="#"
+                    className="text-gray-400 hover:text-white transition-colors"
+                  >
+                    {item}
+                  </Link>
+                </motion.li>
+              ))}
+            </ul>
+          </div>
+
+          {/* <div className="hidden sm:block col-span-1 sm:col-span-2 md:col-span-1 md:text-start">
+            <h3 className="text-sm font-medium mb-4">FOLLOW USs</h3>
+            <div className="flex flex-wrap gap-4">
+              {socialIcons.map((social) => (
+                <motion.a
+                  key={social.name}
+                  href={social.href}
+                  target="_blank"
+                  variants={linkVariants}
+                  whileHover="hover"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  <social.icon className="w-6 h-6" />
+                  <span className="sr-only">{social.name}</span>
+                </motion.a>
+              ))}
+            </div>
+          </div> */}
+          <div className="sm:hidden col-span-1 sm:col-span-2 md:col-span-1 md:text-start">
+            <h3 className="text-sm font-medium mb-4">FOLLOW US</h3>
+            <div className="flex flex-wrap gap-4">
+              {socialIcons.map((social) => (
+                <motion.a
+                  key={social.name}
+                  href={social.href}
+                  target="_blank"
+                  variants={linkVariants}
+                  whileHover="hover"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  <social.icon className="w-6 h-6" />
+                  <span className="sr-only">{social.name}</span>
+                </motion.a>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="mt-10 text-center sm:hidden">
+          <p className="text-sm text-gray-400">VISIT US</p>
+          <p className="text-sm text-gray-400">GMS Road Dehradun</p>
+          <p className="text-sm text-gray-400">Uttarakhand, India</p>
         </div>
       </div>
     </footer>

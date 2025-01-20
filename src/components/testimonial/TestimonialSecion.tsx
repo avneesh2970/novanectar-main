@@ -1,9 +1,10 @@
-"use client"
-import React from "react";
+"use client";
+import type React from "react";
+import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
 import bg from "@/assets/testimonial/testimonial.jpg";
 import { DMSans } from "@/fonts/font";
+import { initGSAP, cleanupGSAP, gsap } from "@/lib/gsapUtils";
 
 const testimonialData = [
   {
@@ -20,76 +21,44 @@ const testimonialData = [
   },
   {
     name: "Suraj Kumar",
-    role: "WellOpportunityTechElixir.com",
+    role: "WellOpportunity",
     content:
-      "Novanectar transformed WellOpportunityTechElixir.com with its cutting-edge website development and digital marketing services. The website now boasts a sleek design, intuitive navigation, and faster loading speeds. Their comprehensive digital marketing approach, from keyword optimization to analytics, drove tangible results for our brand.",
+      "Novanectar transformed WellOpportunity with its cutting-edge website development and digital marketing services. The website now boasts a sleek design, intuitive navigation, and faster loading speeds. Their comprehensive digital marketing approach, from keyword optimization to analytics, drove tangible results for our brand.",
   },
   {
     name: "Prince Kumar",
-    role: "Techellixir.com",
+    role: "Techellixir",
     content:
       "Novanectar developed a world-class website for Techellixir.com. They incorporated responsive design, smooth user interfaces, and advanced features tailored to my requirements. The team also guided me on SEO and future scalability, ensuring my website stays competitive. Their professionalism is truly commendable!",
   },
 ];
 
-const MotionImage = motion(Image);
-
-interface TestimonialCardProps {
+const TestimonialCard: React.FC<{
   name: string;
   role: string;
   content: string;
   className?: string;
-}
+  isSmallScreen: boolean;
+  index: number;
+}> = ({ name, role, content, className = "", isSmallScreen, index }) => {
+  const cardRef = useRef<HTMLDivElement>(null);
 
-const TestimonialCard: React.FC<TestimonialCardProps> = ({
-  name,
-  role,
-  content,
-  className = "",
-}) => {
-  const cardVariants = {
-    initial: {
-      opacity: 0,
-      y: 20,
-      scale: 0.95,
-    },
-    animate: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: {
-        duration: 0.8,
-        ease: "easeOut",
-      },
-    },
-    hover: {
-      y: -5,
-      scale: 1.02,
-      transition: {
-        duration: 0.3,
-        ease: "easeInOut",
-      },
-    },
-  };
-
-  // Generate random floating animation parameters
-  const floatingAnimation:any = {
-    y: ["-10px", "10px"],
-    transition: {
-      duration: Math.random() * 2 + 3, // Random duration between 3-5 seconds
-      repeat: Infinity,
-      repeatType: "reverse" as const,
-      ease: "easeInOut",
-    },
-  };
+  useEffect(() => {
+    if (!isSmallScreen && cardRef.current) {
+      gsap.to(cardRef.current, {
+        y: -10,
+        duration: 3 + index,
+        repeat: -1,
+        yoyo: true,
+        ease: "power1.inOut",
+      });
+    }
+  }, [isSmallScreen, index]);
 
   return (
-    <motion.div
-      className={`bg-white text-start rounded-xl p-4 shadow-lg w-80 z-20 ${className} ${DMSans.className}`}
-      variants={cardVariants}
-      initial="initial"
-      animate={["animate", floatingAnimation]}
-      whileHover="hover"
+    <div
+      ref={cardRef}
+      className={`bg-white text-start rounded-xl p-4 shadow-lg w-full md:w-80 z-20 ${className} ${DMSans.className}`}
     >
       <div className="flex items-center gap-3 mb-3">
         <div className="relative w-8 h-8 rounded-full overflow-hidden">
@@ -108,54 +77,94 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
         </div>
       </div>
       <p className="text-sm text-gray-800 leading-relaxed">{content}</p>
-    </motion.div>
+    </div>
   );
 };
 
 const TestimonialSection: React.FC = () => {
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const bgImageRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    initGSAP();
+
+    const handleResize = () => {
+      const smallScreen = window.innerWidth < 768;
+      setIsSmallScreen(smallScreen);
+
+      if (bgImageRef.current) {
+        gsap.set(bgImageRef.current, {
+          height: smallScreen ? "50vh" : "100%",
+        });
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      cleanupGSAP();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isSmallScreen && scrollContainerRef.current) {
+      const scrollWidth = scrollContainerRef.current.scrollWidth;
+      const clientWidth = scrollContainerRef.current.clientWidth;
+      const cardWidth = clientWidth * 0.8; // 80vw as per the card's width
+      const totalDistance = scrollWidth + cardWidth; // Add one more card width to ensure smooth looping
+
+      gsap.to(scrollContainerRef.current, {
+        x: -totalDistance,
+        duration: totalDistance / 50, // Adjust speed as needed
+        ease: "none",
+        repeat: -1,
+        onRepeat: () => {
+          gsap.set(scrollContainerRef.current, { x: 0 });
+        },
+      });
+    } else {
+      gsap.killTweensOf(scrollContainerRef.current);
+    }
+  }, [isSmallScreen]);
+
   return (
-    <div className="relative min-h-screen w-full bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="relative w-full sm:min-h-screen bg-gradient-to-br from-gray-50 to-gray-200">
       {/* Background Elements */}
-      <div className="absolute top-0 left-0 w-32 h-32 bg-green-200/20 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 right-0 w-32 h-32 bg-purple-200/20 rounded-full blur-3xl" />
+      <div className="absolute top-0 left-0 w-32 h-32 bg-green-300 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 right-0 w-32 h-32 bg-purple-300 rounded-full blur-3xl" />
 
       {/* Main Container */}
-      <div className="relative w-full min-h-screen">
+      <div className="relative w-full sm:min-h-screen">
         {/* Background Image */}
-        <div className="absolute inset-0 w-full h-full">
-          <MotionImage
-            src={bg}
+        <div ref={bgImageRef} className="absolute inset-0 w-full h-full">
+          <Image
+            src={bg || "/placeholder.svg"}
             alt="Brain background"
             fill
             sizes="100vw"
-            className="object-cover"
+            className="object-cover h-full w-full opacity-50"
             priority
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.8 }}
-            transition={{ duration: 1 }}
           />
         </div>
 
         {/* Responsive Cards Grid */}
-        <div className="relative z-10 w-full min-h-screen">
-          <motion.div
-            className="container mx-auto px-4 py-8 min-h-screen"
-            initial="initial"
-            animate="animate"
-            variants={{
-              animate: {
-                transition: {
-                  staggerChildren: 0.2,
-                },
-              },
-            }}
+        <div className="relative z-10 w-full h-[30rem] sm:h-screen">
+          <div
+            className="container mx-auto px-4 py-8 h-full flex items-center"
+            ref={containerRef}
           >
             {/* Desktop Layout */}
-            <div className="hidden lg:block relative min-h-screen">
+            <div className="hidden lg:block relative w-full min-h-[600px]">
               {testimonialData.map((testimonial, index) => (
                 <TestimonialCard
                   key={index}
                   {...testimonial}
+                  isSmallScreen={isSmallScreen}
+                  index={index}
                   className={`absolute ${
                     index === 0
                       ? "top-[0%] left-[8%]"
@@ -170,23 +179,51 @@ const TestimonialSection: React.FC = () => {
             </div>
 
             {/* Tablet Layout */}
-            <div className="hidden md:block lg:hidden">
+            <div className="hidden md:block lg:hidden w-full">
               <div className="grid grid-cols-2 gap-8 place-items-center">
                 {testimonialData.map((testimonial, index) => (
-                  <TestimonialCard key={index} {...testimonial} />
+                  <TestimonialCard
+                    key={index}
+                    {...testimonial}
+                    isSmallScreen={isSmallScreen}
+                    index={index}
+                  />
                 ))}
               </div>
             </div>
 
-            {/* Mobile Layout */}
-            <div className="md:hidden">
-              <div className="flex flex-col gap-6 items-center">
-                {testimonialData.map((testimonial, index) => (
-                  <TestimonialCard key={index} {...testimonial} />
+            {/* Mobile Layout with Infinite Horizontal Scroll */}
+            <div className="md:hidden overflow-hidden w-full h-full flex items-center justify-center">
+              <div
+                ref={scrollContainerRef}
+                className="flex gap-6"
+                style={{ width: `${testimonialData.length * 300}%` }}
+              >
+                {[
+                  ...testimonialData,
+                  ...testimonialData,
+                  ...testimonialData,
+                  ...testimonialData,
+                  ...testimonialData,
+                  ...testimonialData,
+                  ...testimonialData,
+                  ...testimonialData,
+                  ...testimonialData,
+                  ...testimonialData,
+                  ...testimonialData,
+                  ...testimonialData,
+                ].map((testimonial, index) => (
+                  <TestimonialCard
+                    key={index}
+                    {...testimonial}
+                    isSmallScreen={isSmallScreen}
+                    index={index % testimonialData.length}
+                    className="flex-shrink-0 w-[80vw] max-w-[300px]"
+                  />
                 ))}
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </div>

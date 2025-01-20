@@ -4,8 +4,8 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { useState, useCallback } from "react";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import about1 from "@/assets/about/about1.jpg";
-import about2 from "@/assets/about/about2.jpg";
+import about1 from "@/assets/about/ab1.jpg";
+import about2 from "@/assets/about/ab2.jpg";
 
 export default function AboutPage() {
   const [activeImage, setActiveImage] = useState<number | null>(null);
