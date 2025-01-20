@@ -36,7 +36,11 @@ body {
   }
 }
 
-
+.no-select {
+  user-select: none; /* Disable text/image selection */
+  -webkit-user-drag: none; /* Disable dragging in WebKit browsers */
+  pointer-events: none; /* Disable all pointer interactions */
+}
 
 
 

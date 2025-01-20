@@ -110,7 +110,7 @@ const Landing = () => {
   // If animation has played or user isn't at top, only render main content
   if (hasAnimationPlayed) {
     return (
-      <div className="relative min-h-screen bg-white">
+      <div className="relative bg-white">
         <div className="w-full">
           <MainContent />
         </div>
@@ -119,7 +119,7 @@ const Landing = () => {
   }
 
   return (
-    <div ref={containerRef} className="relative min-h-screen bg-black">
+    <div ref={containerRef} className="relative min-h-screen">
       {shouldShowAnimation ? (
         <main className="relative h-screen w-full overflow-hidden">
           <div className="relative w-full h-full">
@@ -144,7 +144,6 @@ const Landing = () => {
             </div>
           </div>
 
-          {/* Floating ellipses */}
           <motion.div
             className="absolute left-[10%] top-[20%] h-32 w-32 md:h-48 md:w-48"
             animate={{
@@ -233,7 +232,7 @@ const Landing = () => {
             />
           </motion.div>
 
-          {/* Title */}
+     
           <div
             ref={titleRef}
             className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform"
@@ -245,9 +244,10 @@ const Landing = () => {
         </main>
       ) : null}
 
-      {/* Main content */}
+ 
       <div ref={mainContentRef} className="absolute top-0 left-0 w-full">
-        <MainContent />
+        {/* show some loading animation */}
+        <MainContent />  
       </div>
     </div>
   );

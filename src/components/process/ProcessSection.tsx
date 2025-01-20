@@ -1,5 +1,6 @@
+"use client";
 import { useEffect, useRef, useState } from "react";
-import { motion, useScroll, useTransform, useAnimation } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import Image from "next/image";
 import bgImage from "@/assets/pocess/bg.png";
 import { DMSans } from "@/fonts/font";
@@ -62,55 +63,28 @@ const ServiceCard = ({ title, description, icon }: any) => {
 
 export default function ProcessSection() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [scrollRange, setScrollRange] = useState("-100%");
   const [isMobile, setIsMobile] = useState(false);
-  const controls = useAnimation();
 
   useEffect(() => {
-    const updateScrollRange = () => {
-      const width = window.innerWidth;
-      if (width < 768) {  // md breakpoint
-        setScrollRange("0%");
-        setIsMobile(true);
-      } else if (width < 1024) {
-        setScrollRange("-230%");
-        setIsMobile(false);
-      } else if (width < 1440) {
-        setScrollRange("-150%");
-        setIsMobile(false);
-      } else {
-        setScrollRange("-100%");
-        setIsMobile(false);
-      }
+    const updateDeviceType = () => {
+      setIsMobile(window.innerWidth < 768);
     };
 
-    updateScrollRange();
-    window.addEventListener("resize", updateScrollRange);
+    updateDeviceType();
+    window.addEventListener("resize", updateDeviceType);
 
     return () => {
-      window.removeEventListener("resize", updateScrollRange);
+      window.removeEventListener("resize", updateDeviceType);
     };
   }, []);
-
-  useEffect(() => {
-    if (isMobile) {
-      const autoScroll = async () => {
-        await controls.start({ x: "-100%", transition: { duration: 20, ease: "linear" } });
-        await controls.start({ x: "0%", transition: { duration: 0 } });
-        autoScroll();
-      };
-      autoScroll();
-    } else {
-      controls.stop();
-    }
-  }, [isMobile, controls]);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"],
   });
 
-  const x = useTransform(scrollYProgress, [0, 1], ["0%", scrollRange]);
+  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-1850%"]);
+  const xSpring = useSpring(x, { stiffness: 100, damping: 30 });
 
   const services = [
     {
@@ -239,9 +213,15 @@ export default function ProcessSection() {
   return (
     <div
       ref={containerRef}
-      className={`relative w-full ${isMobile ? 'min-h-screen' : 'h-[300vh]'} bg-gray-900 ${DMSans.className}`}
+      className={`relative w-full ${
+        isMobile ? "h-screen" : "h-[200vh]"
+      } bg-gray-900 ${DMSans.className}`}
     >
-      <div className={`${isMobile ? 'min-h-screen flex items-center' : 'sticky top-0 h-screen'} flex flex-col justify-center overflow-hidden`}>
+      <div
+        className={`${
+          isMobile ? "" : "sticky top-0"
+        } h-screen flex flex-col items-start justify-center overflow-hidden`}
+      >
         <Image
           alt="Process"
           src={bgImage || "/placeholder.svg"}
@@ -250,22 +230,23 @@ export default function ProcessSection() {
           fill
           sizes="100vw"
           style={{
-            objectFit: isMobile ? "contain" : "cover",
+            objectFit: "cover",
             objectPosition: "center",
           }}
           className="opacity-50"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-gray-900/50 to-gray-900"></div>
 
-        <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8 py-8">
+        <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8">
           <h2 className="text-white text-3xl sm:text-4xl lg:text-5xl font-medium mb-8 sm:mb-12 text-start underline">
             Process
           </h2>
-          <div className="overflow-hidden">
+          <div
+            className={`overflow-hidden ${isMobile ? "overflow-x-auto" : ""}`}
+          >
             <motion.div
-              style={isMobile ? {} : { x }}
-              animate={isMobile ? controls : {}}
-              className="flex space-x-4 sm:space-x-6 lg:space-x-8 pb-8"
+              style={isMobile ? {} : { x: xSpring }}
+              className="flex space-x-4 sm:space-x-6 lg:space-x-8"
             >
               {services.map((service, index) => (
                 <motion.div
@@ -284,4 +265,3 @@ export default function ProcessSection() {
     </div>
   );
 }
-

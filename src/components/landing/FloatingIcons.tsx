@@ -3,7 +3,6 @@ import Image from "next/image";
 import js from "@/assets/landing/icons/js.png";
 import angular from "@/assets/landing/icons/angular.png";
 import dock from "@/assets/landing/icons/dock.png";
-import dock1 from "@/assets/landing/icons/dock1.png";
 import dock2 from "@/assets/landing/icons/dock2.png";
 import express from "@/assets/landing/icons/express.png";
 import node from "@/assets/landing/icons/node.png";
@@ -12,7 +11,7 @@ import react from "@/assets/landing/icons/react.png";
 import view from "@/assets/landing/icons/view.png";
 import java from "@/assets/landing/icons/java.png";
 
-import gsap from "gsap";
+import { gsap } from "@/lib/gsapUtils";
 
 const FloatingTechLayout = ({ children }: any) => {
   const techIcons: any = [
@@ -20,53 +19,47 @@ const FloatingTechLayout = ({ children }: any) => {
     {
       src: node,
       alt: "Node.js",
-      className: "w-12 h-12 md:w-16 md:h-16 left-[5%] top-[15%]",
+      className: "w-12 h-12 md:w-16 md:h-16 left-[5%] top-[8%]",
       pattern: "circular",
     },
     {
       src: java,
       alt: "Java",
-      className: "w-12 h-12 md:w-16 md:h-16 left-[8%] bottom-[20%]",
-      pattern: "wave",
+      className: "w-12 h-12 md:w-16 md:h-16 left-[5%] bottom-[18%]",
+      pattern: "circular",
     },
     {
       src: python,
       alt: "Python",
-      className: "w-14 h-14 md:w-20 md:h-20 left-[15%] top-[40%]",
-      pattern: "bounce",
+      className: "w-14 h-14 md:w-20 md:h-20 left-[55%] top-[7%]",
+      pattern: "circular",
     },
 
     // Right side icons with different patterns
     {
       src: js,
       alt: "JavaScript",
-      className: "w-12 h-12 md:w-16 md:h-16 right-[5%] top-[20%]",
-      pattern: "wave",
+      className: "w-12 h-12 md:w-16 md:h-16 right-[5%] top-[8%]",
+      pattern: "circular",
     },
     {
       src: react,
       alt: "React",
-      className: "w-12 h-12 md:w-16 md:h-16 right-[10%] bottom-[25%]",
+      className: "w-12 h-12 md:w-16 md:h-16 right-[5%] bottom-[18%]",
       pattern: "circular",
     },
     {
       src: angular,
       alt: "Angular",
-      className: "w-12 h-12 md:w-16 md:h-16 right-[15%] top-[45%]",
-      pattern: "bounce",
+      className: "md:w-16 md:h-16 right-[5%] top-[40%]",
+      pattern: "circular",
     },
 
     // Top icons
     {
       src: dock,
       alt: "Flutter",
-      className: "w-12 h-12 md:w-16 md:h-16 left-[30%] top-[10%]",
-      pattern: "wave",
-    },
-    {
-      src: dock1,
-      alt: "Kotlin",
-      className: "w-12 h-12 md:w-16 md:h-16 right-[30%] top-[5%]",
+      className: "w-12 h-12 md:w-16 md:h-16 left-[28%] top-[2%]",
       pattern: "circular",
     },
 
@@ -74,33 +67,42 @@ const FloatingTechLayout = ({ children }: any) => {
     {
       src: express,
       alt: "Express",
-      className: "w-12 h-12 md:w-16 md:h-16 left-[25%] bottom-[10%]",
-      pattern: "bounce",
+      className: "w-12 h-12 md:w-16 md:h-16 left-[29%] bottom-[9%]",
+      pattern: "circular",
     },
     {
       src: dock2,
       alt: "Next.js",
-      className: "w-12 h-12 md:w-16 md:h-16 right-[25%] bottom-[15%]",
-      pattern: "wave",
+      className: "w-12 h-12 md:w-16 md:h-16 right-[29%] bottom-[9%]",
+      pattern: "circular",
     },
     {
       src: view,
       alt: "TypeScript",
-      className: "w-12 h-12 md:w-16 md:h-16 right-[40%] bottom-[8%]",
+      className: "md:w-16 md:h-16 right-[88%] bottom-[45%]",
       pattern: "circular",
     },
   ];
 
-  const iconRefs: any = useRef<any>([]);
+  const iconRefs:any = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
-    iconRefs.current = iconRefs.current.slice(0, techIcons.length);
+    // Ensure GSAP is initialized
+    if (typeof window !== "undefined") {
+      import("@/lib/gsapUtils").then(({ initGSAP }) => {
+        initGSAP();
+        animateIcons();
+      });
+    }
 
-    // Clear any existing animations
-    gsap.killTweensOf(iconRefs.current);
+    return () => {
+      // Clean up animations
+      gsap.killTweensOf(iconRefs.current);
+    };
+  }, []);
 
-    // Create animations for each icon based on its pattern
-    iconRefs.current.forEach((icon: any, index: any) => {
+  const animateIcons = () => {
+    iconRefs.current.forEach((icon:any, index:any) => {
       if (!icon) return;
 
       const pattern = techIcons[index].pattern;
@@ -109,7 +111,6 @@ const FloatingTechLayout = ({ children }: any) => {
 
       switch (pattern) {
         case "circular":
-          // Smooth circular motion
           gsap.to(icon, {
             duration: duration,
             repeat: -1,
@@ -129,7 +130,6 @@ const FloatingTechLayout = ({ children }: any) => {
           break;
 
         case "wave":
-          // Smooth wave motion
           gsap.to(icon, {
             duration: duration,
             repeat: -1,
@@ -142,7 +142,6 @@ const FloatingTechLayout = ({ children }: any) => {
           break;
 
         case "bounce":
-          // Gentle bouncing motion
           gsap.to(icon, {
             duration: duration * 0.8,
             repeat: -1,
@@ -165,26 +164,21 @@ const FloatingTechLayout = ({ children }: any) => {
         delay: delay,
       });
     });
-
-    // Cleanup function
-    return () => {
-      gsap.killTweensOf(iconRefs.current);
-    };
-  }, []);
+  };
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden">
+    <div className="relative w-full overflow-hidden">
       {/* Floating icons layer */}
       <div className="absolute inset-0 pointer-events-none">
-        {techIcons.map((icon: any, index: any) => (
+        {techIcons.map((icon: any, index: number) => (
           <div
             key={icon.alt}
-            ref={(el: any) => (iconRefs.current[index] = el)}
+            ref={(el:any) => (iconRefs.current[index] = el)}
             className={`absolute ${icon.className} transition-transform will-change-transform`}
           >
             <div className="relative w-full h-full">
               <Image
-                src={icon.src}
+                src={icon.src || "/placeholder.svg"}
                 alt={icon.alt}
                 fill
                 style={{ objectFit: "contain" }}
@@ -203,3 +197,4 @@ const FloatingTechLayout = ({ children }: any) => {
 };
 
 export default FloatingTechLayout;
+

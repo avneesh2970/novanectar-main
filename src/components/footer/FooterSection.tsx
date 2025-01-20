@@ -88,10 +88,10 @@ const FooterSection = () => {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-5 gap-8">
           {/* Company Info */}
-          <div className="col-span-2 sm:col-span-2 md:col-span-1 md:text-start">
-            <h2 className="text-2xl font-medium mb-4">NOVANECTAR</h2>
+          <div className="col-span-2 sm:col-span-2 md:col-span-1 md:text-start text-center">
+            <h2 className="text-2xl font-medium md:mb-4 mb-2 underline md:no-underline">NOVANECTAR</h2>
             <p className="text-sm text-gray-400">IT Services & IT Consulting</p>
-            <div className="mt-4">
+            <div className="mt-4 hidden md:block">
               <p className="text-sm text-gray-400">VISIT US</p>
               <p className="text-sm text-gray-400">GMS Road Dehradun</p>
               <p className="text-sm text-gray-400">Uttarakhand, India</p>

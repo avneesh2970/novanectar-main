@@ -1,55 +1,73 @@
-'use client'
+"use client";
 
-import { useEffect, useRef } from 'react'
-import Image, { StaticImageData } from 'next/image'
-import { motion, AnimatePresence } from 'framer-motion'
-import gsap from 'gsap'
+import { useEffect, useRef } from "react";
+import Image, { StaticImageData } from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
+import { gsap, cleanupGSAP } from '@/lib/gsapUtils';
 
 interface ServiceDetailViewProps {
-  isOpen: boolean
-  onClose: () => void
+  isOpen: boolean;
+  onClose: () => void;
   service: {
-    title: string
-    description: string
-    image: StaticImageData
-    detailedDescription?: string
-  }
+    title: string;
+    description: string;
+    image: StaticImageData;
+    detailedDescription?: string;
+  };
 }
 
 export default function ServiceDetailView({
   isOpen,
   onClose,
-  service
+  service,
 }: ServiceDetailViewProps) {
-  const modalRef = useRef<HTMLDivElement>(null)
+  const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden'
-      
+      document.body.style.overflow = "hidden";
+
       // GSAP animation for content
-      gsap.from('.service-content', {
+      gsap.from(".service-content", {
         y: 100,
         opacity: 0,
         duration: 0.6,
         delay: 0.3,
-        ease: 'power3.out'
-      })
+        ease: "power3.out",
+      });
     } else {
-      document.body.style.overflow = 'unset'
+      document.body.style.overflow = "unset";
     }
-
+    const ctx = gsap.context(() => {
+      gsap.from(".service-content", {
+        y: 100,
+        opacity: 0,
+        duration: 0.6,
+        delay: 0.3,
+        ease: "power3.out",
+      });
+    }, modalRef);
     return () => {
-      document.body.style.overflow = 'unset'
-    }
-  }, [isOpen])
+      document.body.style.overflow = "unset";
+      ctx.kill();
+    };
+  }, [isOpen]);
 
-  const detailedDescription = service.detailedDescription || `Embark on a journey of digital innovation with 
+  // Add an unmount cleanup
+useEffect(() => {
+  return () => {
+    cleanupGSAP();
+  };
+}, []);
+
+  const detailedDescription =
+    service.detailedDescription ||
+    `Embark on a journey of digital innovation with 
     our ${service.title} services. We specialize in creating cutting-edge solutions that surpass 
     expectations. Whether you're envisioning a dynamic business platform, an interactive experience, 
     or a seamless user interface, we're here to turn your concepts into compelling, user-centric 
     realities. Join us on a voyage where technology meets imagination, and together, we'll shape 
-    the future of digital solutions.`
+    the future of digital solutions.`;
 
   return (
     <AnimatePresence>
@@ -66,7 +84,7 @@ export default function ServiceDetailView({
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
-            transition={{ type: 'spring', damping: 20 }}
+            transition={{ type: "spring", damping: 20 }}
             className="relative w-full max-w-4xl bg-white rounded-lg overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
@@ -120,6 +138,5 @@ export default function ServiceDetailView({
         </motion.div>
       )}
     </AnimatePresence>
-  )
+  );
 }
-

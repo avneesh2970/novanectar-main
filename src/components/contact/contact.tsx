@@ -103,6 +103,7 @@ const ContactForm = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3, duration: 0.6 }}
+            className="text-black"
           >
             Start your{" "}
           </motion.span>
@@ -143,6 +144,7 @@ const ContactForm = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.2, duration: 0.6 }}
+             className="text-black"
           >
             {" "}
             Today!

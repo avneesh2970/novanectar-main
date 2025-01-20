@@ -1,34 +1,19 @@
-"use client";
-// import { cn } from "@/lib/utils";
-// import { motion } from "framer-motion";
-// import techLife from "@/assets/landing/tech-life.png";
-// import dotts from "@/assets/landing/dotted-background.png";
-// import triangle from "@/assets/landing/triangleBackground.png";
-
-// import { gsap } from "gsap";
-import gsap, { registerGSAPPlugins } from "@/lib/gsapUtils";
+import { gsap } from "@/lib/gsapUtils";
 // import Image from "next/image";
 import { useEffect } from "react";
 import ServicesSection from "../services/ServicesSection";
-import ProcessSection from "../process/ProcessSection";
-import ProjectSession from "../projects/ProjectSession";
-import WhyChooseUs from "../why-us/WhyUsSession";
-import ContactForm from "../contact/contact";
-import TestimonialSection from "../testimonial/TestimonialSecion";
-import FAQSection from "../faq/FaqSection";
-import FooterSection from "../footer/FooterSection";
 import FloatingTechLayout from "./FloatingIcons";
 import AboutSection from "../about/AboutSection";
-import WhatsappIcon from "../whatsapp/Whatsapp";
 
 //fonts
 import { DMSans, WorkSans } from "@/fonts/font";
+import Navbar from "../navbar/Navbar";
 
 export const MainContent = () => {
   // Animation with GSAP
   useEffect(() => {
     // Register GSAP plugins
-    registerGSAPPlugins();
+    // registerGSAPPlugins();
     gsap.fromTo(
       ".grid-square",
       { opacity: 0, scale: 0 },
@@ -76,8 +61,9 @@ export const MainContent = () => {
 
   return (
     <>
-      <div>
-        <div className="relative h-[350rem] w-full dark:bg-black bg-white">
+      <div className="">
+        <Navbar />
+        <div className="relative w-full bg-white pt-16">
           {/* Base grid */}
           <div className="absolute inset-0 dark:bg-grid-white/[0.2] bg-grid-black/[0.2]" />
 
@@ -88,17 +74,21 @@ export const MainContent = () => {
           />
           {/* //landing page// */}
           <FloatingTechLayout>
-            <div className="h-screen flex flex-col items-center justify-center">
+            <div className="h-[34rem] md:h-[40rem] flex flex-col items-center justify-center">
               <div className="w-5xl px-2 pl-5 sm:text-center text-start">
                 <h1
                   className={`text-black text-2xl md:text-5xl sm:text-4xl max-w-4xl mx-auto font-bold ${WorkSans.className}`}
                 >
-                  We Build <span className="text-blue-500 sm:text-black">Success Stories</span> Not Just Websites
+                  We Build{" "}
+                  <span className="text-blue-500 sm:text-black">
+                    Success Stories
+                  </span>{" "}
+                  Not Just Websites
                 </h1>
               </div>
               <div className="pt-10 text-center px-2 max-w-xl mx-auto">
                 <p
-                  className={`text-black text-center font-medium text-sm md:text-base lg:text-lg ${DMSans}`}
+                  className={`text-black text-center font-medium text-sm md:text-base lg:text-lg ${DMSans.className}`}
                 >
                   Transform your business with powerful digital strategies
                   designed for real world results
@@ -106,38 +96,28 @@ export const MainContent = () => {
               </div>
               <div className="flex pt-10 px-2 justify-center gap-4">
                 <button
-                  className={`bg-blue-500 px-3 py-2 sm:px-5 sm:py-2 text-white text-xs sm:text-base rounded-md font-medium shadow-md transition-transform transform hover:scale-105 hover:bg-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none active:scale-95 ${DMSans}`}
+                  className={`bg-blue-500 px-3 py-2 sm:px-5 sm:py-2 text-white text-xs sm:text-base rounded-md font-medium shadow-md transition-transform transform hover:scale-105 hover:bg-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none active:scale-95 ${DMSans.className}`}
                 >
                   Get Started Today
                 </button>
                 <button
-                  className={`border border-blue-500 text-blue-500 px-3 py-3 sm:px-5 sm:py-3 text-xs sm:text-base rounded-md font-medium shadow-md transition-transform transform hover:scale-105 hover:text-white hover:bg-blue-500 focus:ring-2 focus:ring-blue-400 focus:outline-none active:scale-95 bg-white ${DMSans}`}
+                  className={`border border-blue-500 text-blue-500 px-3 py-3 sm:px-5 sm:py-3 text-xs sm:text-base rounded-md font-medium shadow-md transition-transform transform hover:scale-105 hover:text-white hover:bg-blue-500 focus:ring-2 focus:ring-blue-400 focus:outline-none active:scale-95 bg-white ${DMSans.className}`}
                 >
                   Schedule a Free Consultation
                 </button>
               </div>
-              <p className="text-black text-center pt-8 px-2">
+              <p
+                className={`text-black text-center pt-8 px-2 ${DMSans.className}`}
+              >
                 Building Success Stories for
                 <span className="text-blue-500"> 200+ Trusted Clients</span>
               </p>
             </div>
           </FloatingTechLayout>
-          {/* //landing page end// */}
           <AboutSection />
-          {/* about end  */}
-          <div className="bg-[#f5f5fa] bg-opacity-50 h-[300rem] pt-16 text-black text-3xl text-center">
+          <div className="bg-[#f5f5fa] bg-opacity-50 pt-16 text-black text-3xl text-center">
             <h1 className="font-semibold underline">Services</h1>
             <ServicesSection />
-            <ProcessSection />
-            <div id="project-section">
-              <ProjectSession />
-            </div>
-            <WhyChooseUs />
-            <ContactForm />
-            <TestimonialSection />
-            <FAQSection />
-            <FooterSection />
-            <WhatsappIcon />
           </div>
         </div>
       </div>

@@ -8,6 +8,7 @@ import { ChevronDown } from "lucide-react";
 import HamburgerIcon from "./HambergerIcon";
 import { gsap } from "gsap";
 import { ContactPopup } from "../contact/ContactPopup";
+import { DMSans } from "@/fonts/font";
 
 interface NavItem {
   label: string;
@@ -121,7 +122,7 @@ export default function Navbar() {
     <>
       <nav
         ref={navRef}
-        className="fixed top-0 left-0 w-full bg-white shadow-md z-50"
+        className={`fixed top-0 left-0 w-full bg-white shadow-md z-50 ${DMSans.className}`}
       >
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-20">
