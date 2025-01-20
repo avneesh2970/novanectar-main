@@ -13,7 +13,7 @@ const CallingIcon = () => {
     >
       <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
         <Link
-          href="tel:+918979891705"
+          href="tel:+918979891703"
           className="block relative"
           aria-label="Call Company"
         >

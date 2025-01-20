@@ -9,27 +9,27 @@ import { initGSAP, cleanupGSAP, gsap } from "@/lib/gsapUtils";
 const testimonialData = [
   {
     name: "Rajesh Gupta",
-    role: "N.D. Garments",
+    role: "N.D. Collections",
     content:
-      "Novanectar's digital marketing services gave our brand a complete makeover. From social media marketing to pay-per-click campaigns, every strategy was tailored to our business. The results? Increased traffic, higher sales, and an engaged audience. Their commitment to excellence is unmatched.",
+      "Novanectar’s digital marketing services gave our brand a complete makeover. From social media marketing to pay-per-click campaigns, every strategy was tailored to our business. Increased traffic, sales, and an engaged audience. ",
   },
   {
     name: "Muskan Rana",
-    role: "Yoga Digital Marketing",
+    role: "Muskan Moves",
     content:
-      "Novanectar's expertise in digital marketing helped my yoga brand find its audience. They developed engaging content, managed social media platforms, and implemented SEO strategies that boosted my website traffic. The team's understanding of wellness marketing was spot on!",
+      "Novanectar’s expertise in digital marketing helped my yoga brand find its audience. They managed social media platforms and implemented SEO strategies that boosted my website traffic. ",
   },
   {
     name: "Suraj Kumar",
     role: "WellOpportunity",
     content:
-      "Novanectar transformed WellOpportunity with its cutting-edge website development and digital marketing services. The website now boasts a sleek design, intuitive navigation, and faster loading speeds. Their comprehensive digital marketing approach, from keyword optimization to analytics, drove tangible results for our brand.",
+      "Novanectar transformed WellOpportunity with its cutting-edge website development and digital marketing services. The website now boasts a sleek design, intuitive navigation, and faster loading speeds. ",
   },
   {
     name: "Prince Kumar",
     role: "Techellixir",
     content:
-      "Novanectar developed a world-class website for Techellixir.com. They incorporated responsive design, smooth user interfaces, and advanced features tailored to my requirements. The team also guided me on SEO and future scalability, ensuring my website stays competitive. Their professionalism is truly commendable!",
+      "Novanectar developed a world-class website for Techellixir. They incorporated responsive design, smooth user interfaces, and advanced features tailored to my requirements. The team’s guidance on SEO and future scalability was top-notch.",
   },
 ];
 
@@ -146,7 +146,7 @@ const TestimonialSection: React.FC = () => {
             alt="Brain background"
             fill
             sizes="100vw"
-            className="object-cover h-full w-full opacity-50"
+            className="object-cover h-full w-full opacity-50 border-2 border-green-500"
             priority
           />
         </div>
@@ -193,7 +193,7 @@ const TestimonialSection: React.FC = () => {
             </div>
 
             {/* Mobile Layout with Infinite Horizontal Scroll */}
-            <div className="md:hidden overflow-hidden w-full h-full flex items-center justify-center">
+            <div className="md:hidden overflow-hidden w-full h-full flex items-center justify-center border-2 border-red-500">
               <div
                 ref={scrollContainerRef}
                 className="flex gap-6"

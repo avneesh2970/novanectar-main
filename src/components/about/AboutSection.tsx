@@ -29,7 +29,7 @@ export default function AboutPage() {
   return (
     <div className="w-full mx-auto px-4 sm:px-6 lg:px-8">
       <div className="space-y-8">
-        <h2 className="text-4xl font-medium text-gray-800 underline">About</h2>
+        <h2 className="text-4xl font-medium text-gray-800 underline">About Us</h2>
 
         <div className="max-w-3xl">
           <h1 className="text-3xl text-black font-medium leading-tight mb-6">

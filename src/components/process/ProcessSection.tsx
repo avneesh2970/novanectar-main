@@ -3,14 +3,14 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import Image from "next/image";
 import bgImage from "@/assets/pocess/bg.png";
-import { DMSans } from "@/fonts/font";
+import { DMSans, DMSans400, DMSans500 } from "@/fonts/font";
 
 const ServiceCard = ({ title, description, icon }: any) => {
   return (
     <motion.div
       initial="initial"
       whileHover="hover"
-      className="relative w-[280px] sm:w-[300px] h-[380px] sm:h-[400px] bg-gradient-to-br from-gray-400/90 to-gray-700/90 rounded-xl p-4 sm:p-6 overflow-hidden backdrop-blur-sm border-4 border-gray-300 flex-shrink-0"
+      className="relative w-[280px] sm:w-[300px] h-[380px] sm:h-[400px] bg-gradient-to-br from-gray-400/90 to-gray-700/0 rounded-xl p-4 sm:p-6 overflow-hidden backdrop-blur-sm border-4 border-gray-300 flex-shrink-0"
     >
       <motion.div
         variants={{
@@ -47,11 +47,13 @@ const ServiceCard = ({ title, description, icon }: any) => {
           }}
           transition={{ duration: 0.3 }}
         >
-          <h3 className="pt-2 text-xl sm:text-2xl font-medium text-white mb-2 sm:mb-3 tracking-wider">
+          <h3
+            className={`text-center pt-8 text-lg sm:text-xl font-medium text-white mb-2 sm:mb-3 tracking-wider ${DMSans500.className}`}
+          >
             {title}
           </h3>
           <p
-            className={`text-gray-200 tracking-widest pt-4 leading-tight text-base font-thin`}
+            className={`text-gray-200 text-center leading-tight text-base ${DMSans400.className}`}
           >
             {description}
           </p>
@@ -215,7 +217,7 @@ export default function ProcessSection() {
       ref={containerRef}
       className={`relative w-full ${
         isMobile ? "h-screen" : "h-[200vh]"
-      } bg-gray-900 ${DMSans.className}`}
+      } bg-gray-900`}
     >
       <div
         className={`${
@@ -238,7 +240,9 @@ export default function ProcessSection() {
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-gray-900/50 to-gray-900"></div>
 
         <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8">
-          <h2 className="text-white text-3xl sm:text-4xl lg:text-5xl font-medium mb-8 sm:mb-12 text-start underline">
+          <h2
+            className={`sm:pt-12 text-white text-4xl sm:text-4xl lg:text-5xl font-medium mb-8 sm:mb-12 text-start underline ${DMSans.className}`}
+          >
             Process
           </h2>
           <div

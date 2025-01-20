@@ -37,3 +37,17 @@ export const DMSans = DM_Sans({
   style: ["normal", "italic"],
   display: "swap",
 });
+
+export const DMSans500 = DM_Sans({
+  subsets: ["latin"],
+  weight: ["300"],
+  style: ["normal"],
+  display: "swap",
+});
+
+export const DMSans400 = DM_Sans({
+  subsets: ["latin"],
+  weight: ["200"],
+  style: ["normal"],
+  display: "swap",
+});
