@@ -110,26 +110,26 @@ const TestimonialSection: React.FC = () => {
     };
   }, []);
 
-  useEffect(() => {
-    if (isSmallScreen && scrollContainerRef.current) {
-      const scrollWidth = scrollContainerRef.current.scrollWidth;
-      const clientWidth = scrollContainerRef.current.clientWidth;
-      const cardWidth = clientWidth * 0.8; // 80vw as per the card's width
-      const totalDistance = scrollWidth + cardWidth; // Add one more card width to ensure smooth looping
+  // useEffect(() => {
+  //   if (isSmallScreen && scrollContainerRef.current) {
+  //     const scrollWidth = scrollContainerRef.current.scrollWidth;
+  //     const clientWidth = scrollContainerRef.current.clientWidth;
+  //     const cardWidth = clientWidth * 0.8; // 80vw as per the card's width
+  //     const totalDistance = scrollWidth + cardWidth; // Add one more card width to ensure smooth looping
 
-      gsap.to(scrollContainerRef.current, {
-        x: -totalDistance,
-        duration: totalDistance / 50, // Adjust speed as needed
-        ease: "none",
-        repeat: -1,
-        onRepeat: () => {
-          gsap.set(scrollContainerRef.current, { x: 0 });
-        },
-      });
-    } else {
-      gsap.killTweensOf(scrollContainerRef.current);
-    }
-  }, [isSmallScreen]);
+  //     gsap.to(scrollContainerRef.current, {
+  //       x: -totalDistance,
+  //       duration: totalDistance / 50, // Adjust speed as needed
+  //       ease: "none",
+  //       repeat: -1,
+  //       onRepeat: () => {
+  //         gsap.set(scrollContainerRef.current, { x: 0 });
+  //       },
+  //     });
+  //   } else {
+  //     gsap.killTweensOf(scrollContainerRef.current);
+  //   }
+  // }, [isSmallScreen]);
 
   return (
     <div className="relative w-full sm:min-h-screen bg-gradient-to-br from-gray-50 to-gray-200">
@@ -146,7 +146,7 @@ const TestimonialSection: React.FC = () => {
             alt="Brain background"
             fill
             sizes="100vw"
-            className="object-cover h-full w-full opacity-50 border-2 border-green-500"
+            className="object-cover h-full w-full opacity-50"
             priority
           />
         </div>
@@ -193,24 +193,13 @@ const TestimonialSection: React.FC = () => {
             </div>
 
             {/* Mobile Layout with Infinite Horizontal Scroll */}
-            <div className="md:hidden overflow-hidden w-full h-full flex items-center justify-center border-2 border-red-500">
+            <div className="md:hidden overflow-x-scroll flex items-center relative left-0">
               <div
-                ref={scrollContainerRef}
+                // ref={scrollContainerRef}
                 className="flex gap-6"
-                style={{ width: `${testimonialData.length * 300}%` }}
+                // style={{ width: `${testimonialData.length * 300}%` }}
               >
                 {[
-                  ...testimonialData,
-                  ...testimonialData,
-                  ...testimonialData,
-                  ...testimonialData,
-                  ...testimonialData,
-                  ...testimonialData,
-                  ...testimonialData,
-                  ...testimonialData,
-                  ...testimonialData,
-                  ...testimonialData,
-                  ...testimonialData,
                   ...testimonialData,
                 ].map((testimonial, index) => (
                   <TestimonialCard

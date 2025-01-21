@@ -275,9 +275,14 @@ const FooterSection = () => {
         </div>
         <div className="mt-10 text-center sm:hidden">
           <p className="text-sm text-gray-400">VISIT US</p>
-          <p className="text-sm text-gray-400">GMS Road Dehradun</p>
+          <p className="text-sm text-gray-400">
+            GMS Road Dehradun, Kamla Palace Chowk
+          </p>
           <p className="text-sm text-gray-400">Uttarakhand, India</p>
         </div>
+      </div>
+      <div className="text-center mt-8">
+        <p className="text-gray-500">&copy; All Rights Reserved. Novenectar</p>
       </div>
     </footer>
   );

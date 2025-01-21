@@ -1,68 +1,66 @@
-"use client";
-import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
-import gsap from "gsap";
-import ellipse1 from "@/assets/landing/ellipse1.png";
-import ellipse2 from "@/assets/landing/ellipse2.png";
-import landing from "@/assets/landing/landing.png";
-import { MainContent } from "./MainContent";
-import Image from "next/image";
+"use client"
+import { useEffect, useRef, useState } from "react"
+import gsap from "gsap"
+
+import landing from "@/assets/landing/landing.png"
+import { MainContent } from "./MainContent"
+import Image from "next/image"
 
 // Add this function at the top of the file, outside of the Landing component
 function shouldPlayAnimation() {
-  if (typeof window === 'undefined') return false;
-  const hasPlayed = sessionStorage.getItem('landingAnimationPlayed');
+  if (typeof window === "undefined") return false
+  const hasPlayed = sessionStorage.getItem("landingAnimationPlayed")
   if (!hasPlayed) {
-    sessionStorage.setItem('landingAnimationPlayed', 'true');
-    return true;
+    sessionStorage.setItem("landingAnimationPlayed", "true")
+    return true
   }
-  return false;
+  return false
 }
 
 const Landing = () => {
-  const [hasAnimationPlayed, setHasAnimationPlayed] = useState(false);
-  const [shouldShowAnimation, setShouldShowAnimation] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const titleRef = useRef<HTMLDivElement>(null);
-  const portalRef = useRef<HTMLImageElement>(null);
-  const mainContentRef = useRef<HTMLDivElement>(null);
+  const [hasAnimationPlayed, setHasAnimationPlayed] = useState(false)
+  const [shouldShowAnimation, setShouldShowAnimation] = useState(false)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const titleRef = useRef<HTMLDivElement>(null)
+  const portalRef = useRef<HTMLImageElement>(null)
+  const mainContentRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     // Check if the animation should play
-    const shouldPlay = shouldPlayAnimation();
-    setShouldShowAnimation(shouldPlay);
+    const shouldPlay = shouldPlayAnimation()
+    setShouldShowAnimation(shouldPlay)
     if (!shouldPlay) {
-      setHasAnimationPlayed(true);
+      setHasAnimationPlayed(true)
     }
-  }, []);
+  }, [])
 
   useEffect(() => {
-    if (!shouldShowAnimation) return;
+    if (!shouldShowAnimation) return
 
-    const container = containerRef.current;
-    const title = titleRef.current;
-    const portal = portalRef.current;
-    const mainContent = mainContentRef.current;
+    const container = containerRef.current
+    const title = titleRef.current
+    const portal = portalRef.current
+    const mainContent = mainContentRef.current
 
-    if (!container || !title || !portal || !mainContent) return;
+    if (!container || !title || !portal || !mainContent) return
 
     // Show main content immediately if we're not animating
     if (!shouldShowAnimation) {
-      gsap.set(mainContent, { y: 0, opacity: 1 });
-      gsap.set(container, { opacity: 1, backgroundColor: "white" });
-      return;
+      gsap.set(mainContent, { y: 0, opacity: 1 })
+      gsap.set(container, { opacity: 1, backgroundColor: "white" })
+      return
     }
 
     const tl = gsap.timeline({
       defaults: { ease: "power2.inOut" },
       onComplete: () => {
-        setHasAnimationPlayed(true);
+        setHasAnimationPlayed(true)
       },
-    });
+    })
 
     // Initial setup
-    gsap.set(mainContent, { y: 100, opacity: 0 });
-    gsap.set(container, { opacity: 0 });
+    gsap.set(mainContent, { y: 100, opacity: 0 })
+    gsap.set(container, { opacity: 0 })
 
     // Animation sequence
     tl.to(container, {
@@ -81,7 +79,7 @@ const Landing = () => {
           opacity: 0,
           duration: 1.5,
         },
-        "-=0.5"
+        "-=0.5",
       )
       .to(
         container,
@@ -89,7 +87,7 @@ const Landing = () => {
           backgroundColor: "white",
           duration: 1,
         },
-        "-=1"
+        "-=1",
       )
       .to(
         mainContent,
@@ -98,14 +96,14 @@ const Landing = () => {
           opacity: 1,
           duration: 1,
         },
-        "-=0.5"
-      );
+        "-=0.5",
+      )
 
     // Cleanup function
     return () => {
-      tl.kill();
-    };
-  }, [shouldShowAnimation]);
+      tl.kill()
+    }
+  }, [shouldShowAnimation])
 
   // If animation has played or user isn't at top, only render main content
   if (hasAnimationPlayed) {
@@ -115,7 +113,7 @@ const Landing = () => {
           <MainContent />
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -134,7 +132,7 @@ const Landing = () => {
               }}
             >
               <Image
-                src={landing}
+                src={landing || "/placeholder.svg"}
                 alt="Portal background"
                 fill
                 style={{ objectFit: "cover" }}
@@ -144,99 +142,95 @@ const Landing = () => {
             </div>
           </div>
 
-          <motion.div
+          {/* <div
             className="absolute left-[10%] top-[20%] h-32 w-32 md:h-48 md:w-48"
-            animate={{
-              x: [0, 20, 0],
-              y: [0, -20, 0],
-            }}
-            transition={{
-              repeat: Infinity,
-              duration: 5,
-              ease: "easeInOut",
-            }}
+            // animate={{
+            //   x: [0, 20, 0],
+            //   y: [0, -20, 0],
+            // }}
+            // transition={{
+            //   repeat: Number.POSITIVE_INFINITY,
+            //   duration: 3, // Changed from 5 to 3
+            //   ease: "easeInOut",
+            // }}
           >
             <Image
-              src={ellipse1}
+              src={ellipse1 || "/placeholder.svg"}
               alt="Floating element"
               fill
               style={{ objectFit: "contain" }}
               className="w-full h-full"
               priority
             />
-          </motion.div>
+          </div> */}
 
-          <motion.div
+          {/* <div
             className="absolute right-[15%] top-[15%] h-24 w-24 md:h-36 md:w-36"
-            animate={{
-              x: [0, -20, 0],
-              y: [0, 20, 0],
-            }}
-            transition={{
-              repeat: Infinity,
-              duration: 6,
-              ease: "easeInOut",
-            }}
+            // animate={{
+            //   x: [0, -20, 0],
+            //   y: [0, 20, 0],
+            // }}
+            // transition={{
+            //   repeat: Number.POSITIVE_INFINITY,
+            //   duration: 4, // Changed from 6 to 4
+            //   ease: "easeInOut",
+            // }}
           >
             <Image
-              src={ellipse2}
+              src={ellipse2 || "/placeholder.svg"}
               alt="Floating element"
               fill
               style={{ objectFit: "contain" }}
               className="w-full h-full"
               priority
             />
-          </motion.div>
+          </div> */}
 
-          <motion.div
+          {/* <div
             className="absolute bottom-[25%] left-[20%] h-16 w-16 md:h-24 md:w-24"
-            animate={{
-              x: [0, 15, 0],
-              y: [0, 15, 0],
-            }}
-            transition={{
-              repeat: Infinity,
-              duration: 4,
-              ease: "easeInOut",
-            }}
+            // animate={{
+            //   x: [0, 15, 0],
+            //   y: [0, 15, 0],
+            // }}
+            // transition={{
+            //   repeat: Number.POSITIVE_INFINITY,
+            //   duration: 2, // Changed from 4 to 2
+            //   ease: "easeInOut",
+            // }}
           >
             <Image
-              src={ellipse1}
+              src={ellipse1 || "/placeholder.svg"}
               alt="Floating element"
               fill
               style={{ objectFit: "contain" }}
               className="w-full h-full"
               priority
             />
-          </motion.div>
+          </div> */}
 
-          <motion.div
+          {/* <div
             className="absolute bottom-[30%] right-[25%] h-28 w-28 md:h-40 md:w-40"
-            animate={{
-              x: [0, -15, 0],
-              y: [0, -15, 0],
-            }}
-            transition={{
-              repeat: Infinity,
-              duration: 7,
-              ease: "easeInOut",
-            }}
+            // animate={{
+            //   x: [0, -15, 0],
+            //   y: [0, -15, 0],
+            // }}
+            // transition={{
+            //   repeat: Number.POSITIVE_INFINITY,
+            //   duration: 2, // Changed from 7 to 5
+            //   ease: "easeInOut",
+            // }}
           >
             <Image
-              src={ellipse2}
+              src={ellipse2 || "/placeholder.svg"}
               alt="Floating element"
               fill
               style={{ objectFit: "contain" }}
               className="w-full h-full"
               priority
             />
-          </motion.div>
+          </div> */}
 
-     
-          <div
-            ref={titleRef}
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform"
-          >
+          <div ref={titleRef} className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform">
             <h1 className="text-center font-sans text-5xl font-bold tracking-widest text-[#F5F5DC] md:text-7xl lg:text-8xl">
               NOVANECTAR
             </h1>
@@ -244,14 +238,13 @@ const Landing = () => {
         </main>
       ) : null}
 
- 
       <div ref={mainContentRef} className="absolute top-0 left-0 w-full">
         {/* show some loading animation */}
-        <MainContent />  
+        <MainContent />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Landing;
+export default Landing
 
