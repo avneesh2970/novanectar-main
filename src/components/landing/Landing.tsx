@@ -99,13 +99,11 @@ const Landing = () => {
         "-=0.5",
       )
 
-    // Cleanup function
     return () => {
       tl.kill()
     }
   }, [shouldShowAnimation])
 
-  // If animation has played or user isn't at top, only render main content
   if (hasAnimationPlayed) {
     return (
       <div className="relative bg-white">
@@ -142,94 +140,6 @@ const Landing = () => {
             </div>
           </div>
 
-          {/* <div
-            className="absolute left-[10%] top-[20%] h-32 w-32 md:h-48 md:w-48"
-            // animate={{
-            //   x: [0, 20, 0],
-            //   y: [0, -20, 0],
-            // }}
-            // transition={{
-            //   repeat: Number.POSITIVE_INFINITY,
-            //   duration: 3, // Changed from 5 to 3
-            //   ease: "easeInOut",
-            // }}
-          >
-            <Image
-              src={ellipse1 || "/placeholder.svg"}
-              alt="Floating element"
-              fill
-              style={{ objectFit: "contain" }}
-              className="w-full h-full"
-              priority
-            />
-          </div> */}
-
-          {/* <div
-            className="absolute right-[15%] top-[15%] h-24 w-24 md:h-36 md:w-36"
-            // animate={{
-            //   x: [0, -20, 0],
-            //   y: [0, 20, 0],
-            // }}
-            // transition={{
-            //   repeat: Number.POSITIVE_INFINITY,
-            //   duration: 4, // Changed from 6 to 4
-            //   ease: "easeInOut",
-            // }}
-          >
-            <Image
-              src={ellipse2 || "/placeholder.svg"}
-              alt="Floating element"
-              fill
-              style={{ objectFit: "contain" }}
-              className="w-full h-full"
-              priority
-            />
-          </div> */}
-
-          {/* <div
-            className="absolute bottom-[25%] left-[20%] h-16 w-16 md:h-24 md:w-24"
-            // animate={{
-            //   x: [0, 15, 0],
-            //   y: [0, 15, 0],
-            // }}
-            // transition={{
-            //   repeat: Number.POSITIVE_INFINITY,
-            //   duration: 2, // Changed from 4 to 2
-            //   ease: "easeInOut",
-            // }}
-          >
-            <Image
-              src={ellipse1 || "/placeholder.svg"}
-              alt="Floating element"
-              fill
-              style={{ objectFit: "contain" }}
-              className="w-full h-full"
-              priority
-            />
-          </div> */}
-
-          {/* <div
-            className="absolute bottom-[30%] right-[25%] h-28 w-28 md:h-40 md:w-40"
-            // animate={{
-            //   x: [0, -15, 0],
-            //   y: [0, -15, 0],
-            // }}
-            // transition={{
-            //   repeat: Number.POSITIVE_INFINITY,
-            //   duration: 2, // Changed from 7 to 5
-            //   ease: "easeInOut",
-            // }}
-          >
-            <Image
-              src={ellipse2 || "/placeholder.svg"}
-              alt="Floating element"
-              fill
-              style={{ objectFit: "contain" }}
-              className="w-full h-full"
-              priority
-            />
-          </div> */}
-
           <div ref={titleRef} className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform">
             <h1 className="text-center font-sans text-5xl font-bold tracking-widest text-[#F5F5DC] md:text-7xl lg:text-8xl">
               NOVANECTAR
@@ -239,7 +149,6 @@ const Landing = () => {
       ) : null}
 
       <div ref={mainContentRef} className="absolute top-0 left-0 w-full">
-        {/* show some loading animation */}
         <MainContent />
       </div>
     </div>

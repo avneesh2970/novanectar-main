@@ -84,7 +84,7 @@ const TestimonialCard: React.FC<{
 const TestimonialSection: React.FC = () => {
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  // const scrollContainerRef = useRef<HTMLDivElement>(null);
   const bgImageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
