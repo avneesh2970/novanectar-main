@@ -79,19 +79,17 @@ export const MainContent = () => {
                 <h1
                   className={`text-black text-2xl md:text-5xl sm:text-4xl max-w-4xl mx-auto font-bold ${WorkSans.className}`}
                 >
-                  We Build{" "}
+                  Fueling Progress with Smart {" "}
                   <span className="text-blue-500 sm:text-black">
-                    Success Stories
-                  </span>{" "}
-                  Not Just Websites
+                  IT Solutions
+                  </span>
                 </h1>
               </div>
               <div className="pt-10 text-center px-2 max-w-xl mx-auto">
                 <p
                   className={`text-black text-center font-medium text-sm md:text-base lg:text-lg ${DMSans.className}`}
                 >
-                  Transform your business with powerful digital strategies
-                  designed for real world results
+                  We empower your business with powerful IT solutions that aims your success.
                 </p>
               </div>
               <div className="flex pt-10 px-2 justify-center gap-4">

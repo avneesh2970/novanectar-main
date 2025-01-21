@@ -110,27 +110,6 @@ const TestimonialSection: React.FC = () => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   if (isSmallScreen && scrollContainerRef.current) {
-  //     const scrollWidth = scrollContainerRef.current.scrollWidth;
-  //     const clientWidth = scrollContainerRef.current.clientWidth;
-  //     const cardWidth = clientWidth * 0.8; // 80vw as per the card's width
-  //     const totalDistance = scrollWidth + cardWidth; // Add one more card width to ensure smooth looping
-
-  //     gsap.to(scrollContainerRef.current, {
-  //       x: -totalDistance,
-  //       duration: totalDistance / 50, // Adjust speed as needed
-  //       ease: "none",
-  //       repeat: -1,
-  //       onRepeat: () => {
-  //         gsap.set(scrollContainerRef.current, { x: 0 });
-  //       },
-  //     });
-  //   } else {
-  //     gsap.killTweensOf(scrollContainerRef.current);
-  //   }
-  // }, [isSmallScreen]);
-
   return (
     <div className="relative w-full sm:min-h-screen bg-gradient-to-br from-gray-50 to-gray-200">
       {/* Background Elements */}
@@ -167,11 +146,11 @@ const TestimonialSection: React.FC = () => {
                   index={index}
                   className={`absolute ${
                     index === 0
-                      ? "top-[0%] left-[8%]"
+                      ? "top-[14%] left-[5%]"
                       : index === 1
-                      ? "top-[5%] right-[10%]"
+                      ? "top-[5%] right-[20%]"
                       : index === 2
-                      ? "top-[45%] left-[15%]"
+                      ? "top-[60%] left-[15%]"
                       : "bottom-[1%] right-[15%]"
                   }`}
                 />
@@ -194,14 +173,8 @@ const TestimonialSection: React.FC = () => {
 
             {/* Mobile Layout with Infinite Horizontal Scroll */}
             <div className="md:hidden overflow-x-scroll flex items-center relative left-0">
-              <div
-                // ref={scrollContainerRef}
-                className="flex gap-6"
-                // style={{ width: `${testimonialData.length * 300}%` }}
-              >
-                {[
-                  ...testimonialData,
-                ].map((testimonial, index) => (
+              <div className="flex gap-6">
+                {[...testimonialData].map((testimonial, index) => (
                   <TestimonialCard
                     key={index}
                     {...testimonial}
