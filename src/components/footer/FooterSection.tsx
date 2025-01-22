@@ -282,7 +282,7 @@ const FooterSection = () => {
         </div>
       </div>
       <div className="text-center mt-8">
-        <p className="text-gray-500">&copy; All Rights Reserved. Novenectar</p>
+      <p className="text-gray-300">© All Rights Reserved {new Date().getFullYear()}. Novenectar</p>
       </div>
     </footer>
   );

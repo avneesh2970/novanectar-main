@@ -6,6 +6,7 @@ import wearvia from "@/assets/projects/wearvia.png";
 import visionIq from "@/assets/projects/vision-iq.png";
 import ds from "@/assets/projects/ds.png";
 import poj from "@/assets/projects/poj.png";
+import { DMSans, DMSans500 } from "@/fonts/font";
 
 const gridItems = [
   {
@@ -104,13 +105,14 @@ const ProjectCard = ({ item, index }:any) => {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 + index * 0.1 }}
+        className={`${DMSans500.className}`}
       >
-        <h3 className="text-lg text-start font-semibold mb-2 text-gray-700 pl-8 pt-4">
-          {item.title}
-        </h3>
-        <p className="text-lg text-start font-medium mb-3 text-black pl-8">
+        <p className="text-lg text-start font-medium mb- text-gray-700 pl-4 pt-4">
           {item.subtitle}
         </p>
+        <h3 className="text-lg text-start font-semibold mb-2 text-gray-900 pl-4">
+          {item.title}
+        </h3>
       </motion.div>
     </motion.div>
   );
@@ -125,7 +127,7 @@ const ProjectSession = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl mb-4 text-start underline pt-8">
+          <h2 className={`font-medium text-gray-900 text-4xl mb-4 text-center underline pt-8 ${DMSans.className}`}>
             Projects
           </h2>
         </motion.div>

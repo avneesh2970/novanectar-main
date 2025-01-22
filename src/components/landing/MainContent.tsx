@@ -114,7 +114,7 @@ export const MainContent = () => {
           </FloatingTechLayout>
           <AboutSection />
           <div className="bg-[#f5f5fa] bg-opacity-50 pt-16 text-black text-3xl text-center">
-            <h1 className="font-semibold underline">Services</h1>
+            <h1 className={`font-medium text-gray-800 underline text-4xl ${DMSans.className}`}>Services</h1>
             <ServicesSection />
           </div>
         </div>

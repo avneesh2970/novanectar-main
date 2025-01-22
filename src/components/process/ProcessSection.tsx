@@ -241,7 +241,7 @@ export default function ProcessSection() {
 
         <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8">
           <h2
-            className={`sm:pt-12 text-white text-4xl sm:text-4xl lg:text-5xl font-medium mb-8 sm:mb-12 text-start underline ${DMSans.className}`}
+            className={`sm:pt-12 text-white text-4xl font-medium mb-8 sm:mb-12 text-center underline ${DMSans.className}`}
           >
             Process
           </h2>
