@@ -17,7 +17,7 @@ export default function ServicePage({
   }
 
   return (
-    <main className="min-h-screen bg-[#bcd0f3]">
+    <main className="min-h-screen">
       <div
         className="relative w-full"
         style={{ height: "calc(100vw / (16 / 9))" }}

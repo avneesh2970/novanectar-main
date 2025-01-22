@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import wearvia from "@/assets/projects/wearvia.png";
 import visionIq from "@/assets/projects/vision-iq.png";
 import ds from "@/assets/projects/ds.png";
-import poj from "@/assets/projects/poj.jpg";
+import poj from "@/assets/projects/poj.png";
 
 const gridItems = [
   {

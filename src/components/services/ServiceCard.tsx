@@ -50,7 +50,7 @@ export default function ServiceCard({
         <div className="px-4 pt-2">
           <div>
             <motion.h3
-              className={`text-base sm:text-lg text-gray-800 group-hover:text-blue-500 transition-colors duration-300 ${DMSans500.className}`}
+              className={`text-xl sm:text-2xl text-gray-800 group-hover:text-blue-500 transition-colors duration-300 ${DMSans500.className}`}
               animate={{ scale: isHovered ? 1.05 : 1 }}
               transition={{ duration: 0.2 }}
             >
@@ -58,7 +58,7 @@ export default function ServiceCard({
               <MoveUpRight className="ml-1 w-3 h-3 sm:w-4 sm:h-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1 inline" />
             </motion.h3>
             <p
-              className={`text-start text-gray-600 text-lg mt-1 ${DMSans500.className}`}
+              className={`text-start text-gray-600 text-base md:text-lg mt-1 ${DMSans500.className}`}
             >
               {description}
             </p>

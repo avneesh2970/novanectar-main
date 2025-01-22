@@ -6,6 +6,7 @@ import { useState, useCallback } from "react";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import about1 from "@/assets/about/ab1.jpg";
 import about2 from "@/assets/about/ab2.jpg";
+import { DMSans, DMSans400 } from "@/fonts/font";
 
 export default function AboutPage() {
   const [activeImage, setActiveImage] = useState<number | null>(null);
@@ -29,14 +30,14 @@ export default function AboutPage() {
   return (
     <div className="w-full mx-auto px-4 sm:px-6 lg:px-8">
       <div className="space-y-8 text-center">
-        <h2 className="text-4xl font-medium text-gray-800 underline text-center">About Us</h2>
+        <h2 className={`text-4xl font-medium text-gray-800 underline text-center ${DMSans.className}`}>About Us</h2>
 
         <div className="max-w-6xl mx-auto">
-          <h1 className="text-3xl text-black text-start font-medium leading-tight mb-6">
+          <h1 className={`text-xl md:text-3xl text-black text-start font-medium leading-tight mb-6 ${DMSans400.className}`}>
             We provide smart IT solutions to help your business grow.
           </h1>
 
-          <p className="text-gray-600 text-lg text-start">
+          <p className={`text-gray-600 text-base md:text-lg text-start font-medium ${DMSans400.className}`}>
           Novanectar Services Private Limited is a dynamic technical solutions start-up dedicated to empowering individuals and businesses with top-notch graphic design, website development, application development, and more. Guided by the motto &quot;Fueling Progress with Smart IT Solutions,&quot; we deliver smart, innovative, high-quality digital solutions tailored to our clients&lsquo; diverse needs.
           </p>
         </div>

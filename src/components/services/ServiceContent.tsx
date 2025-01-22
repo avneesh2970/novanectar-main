@@ -11,7 +11,7 @@ export default function ServiceContent({ service }: ServiceContentProps) {
   return (
     <>
       {/* Content Section */}
-      <div className="service-content p-8">
+      <div className="service-content p-8 bg-[#bcd0f3]">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">
             {service.title}
@@ -35,7 +35,7 @@ export default function ServiceContent({ service }: ServiceContentProps) {
         </div>
       </div>
 
-      <div className="py-10">
+      <div className="py-10 bg-[#bcd0f3]">
         <div className="max-w-6xl mx-auto px-4">
           <h1 className="text-2xl text-black md:text-4xl font-medium text-center mb-8">
             Capability
