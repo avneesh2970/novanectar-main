@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -25,12 +25,12 @@ const features = [
   },
   {
     id: 3,
-    icon:security,
+    icon: security,
     title: "Security",
   },
   {
     id: 4,
-    icon:time,
+    icon: time,
     title: "Time Efficiency",
   },
 ];
@@ -58,79 +58,84 @@ const bottomFeatures = [
   },
 ];
 
-const WhyChooseUs = () => {
+import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
+
+export const WhyChooseUs = () => {
   return (
-    <div className={`bg-[#F8F9FA] py-16 px-4 sm:px-6 lg:px-8 ${DMSans.className}`}>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="max-w-4xl mx-auto text-center"
+    <BackgroundBeamsWithCollision>
+      <div
+        className={`bg-[#F8F9FA] py-14 px-4 sm:px-6 lg:px-8 w-full h-full ${DMSans.className}`}
       >
-        <h2 className="text-2xl font-medium text-gray-800 mb-16">
-          Why Choose Us?
-        </h2>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="max-w-4xl mx-auto text-center"
+        >
+          <h2 className="text-2xl font-medium text-gray-800 mb-14">
+            Why Choose Us?
+          </h2>
 
-        <div className="space-y-16">
-          {/* Top Row */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-32">
-            {features.map((feature, index) => (
-              <motion.div
-                key={feature.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1, duration: 0.5 }}
-                whileHover={{ y: -5 }}
-                className="flex flex-col items-center group"
-              >
-                <motion.div whileHover={{ scale: 1.05 }} className="mb-3">
-                  <div className="relative w-8 h-8">
-                    <Image
-                      src={feature.icon}
-                      alt={feature.title}
-                      fill
-                      className="object-contain"
-                    />
-                  </div>
+          <div className="space-y-16">
+            {/* Top Row */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-32">
+              {features.map((feature, index) => (
+                <motion.div
+                  key={feature.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1, duration: 0.5 }}
+                  whileHover={{ y: -5 }}
+                  className="flex flex-col items-center group"
+                >
+                  <motion.div whileHover={{ scale: 1.05 }} className="mb-3">
+                    <div className="relative w-12 h-12">
+                      <Image
+                        src={feature.icon}
+                        alt={feature.title}
+                        fill
+                        className="object-contain"
+                      />
+                    </div>
+                  </motion.div>
+                  <span className="text-sm text-gray-600 group-hover:text-gray-800 transition-colors">
+                    {feature.title}
+                  </span>
                 </motion.div>
-                <span className="text-sm text-gray-600 group-hover:text-gray-800 transition-colors">
-                  {feature.title}
-                </span>
-              </motion.div>
-            ))}
-          </div>
+              ))}
+            </div>
 
-          {/* Bottom Row */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-32">
-            {bottomFeatures.map((feature, index) => (
-              <motion.div
-                key={feature.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 + index * 0.1, duration: 0.5 }}
-                whileHover={{ y: -5 }}
-                className="flex flex-col items-center group"
-              >
-                <motion.div whileHover={{ scale: 1.05 }} className="mb-3">
-                  <div className="relative w-8 h-8">
-                    <Image
-                      src={feature.icon}
-                      alt={feature.title}
-                      fill
-                      className="object-contain"
-                    />
-                  </div>
+            {/* Bottom Row */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-32">
+              {bottomFeatures.map((feature, index) => (
+                <motion.div
+                  key={feature.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 + index * 0.1, duration: 0.5 }}
+                  whileHover={{ y: -5 }}
+                  className="flex flex-col items-center group"
+                >
+                  <motion.div whileHover={{ scale: 1.05 }} className="mb-3">
+                    <div className="relative w-12 h-12">
+                      <Image
+                        src={feature.icon}
+                        alt={feature.title}
+                        fill
+                        className="object-contain"
+                      />
+                    </div>
+                  </motion.div>
+                  <span className="text-sm text-gray-600 group-hover:text-gray-800 transition-colors">
+                    {feature.title}
+                  </span>
                 </motion.div>
-                <span className="text-sm text-gray-600 group-hover:text-gray-800 transition-colors">
-                  {feature.title}
-                </span>
-              </motion.div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </motion.div>
-    </div>
+        </motion.div>
+      </div>
+    </BackgroundBeamsWithCollision>
   );
 };
-
 export default WhyChooseUs;
