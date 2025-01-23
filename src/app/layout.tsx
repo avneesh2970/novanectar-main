@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     siteName: "Novanectar Services Pvt. Ltd.",
     images: [
       {
-        url: "https://novanectar.co.in/logo.png",
+        url: "https://novanectar.co.in/twitter-image.jpg",
         width: 1200,
         height: 630,
         alt: "Novanectar Services Banner",
@@ -60,7 +60,7 @@ export const metadata: Metadata = {
     title: "Novanectar Services - Fueling Progress with Smart IT Solutions",
     description:
       "Empowering businesses with powerful IT solutions that aims your success.",
-    images: ["https://novanectar.co.in/twitter-image.jpg"], // Replace with your actual Twitter image
+    images: ["https://novanectar.co.in/twitter-image.jpg"],
   },
   robots: {
     index: true,
