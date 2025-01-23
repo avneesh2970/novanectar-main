@@ -62,7 +62,7 @@ const ContactForm = () => {
 
   return (
     <div
-      className={`relative min-h-screen w-full h-full bg-gradient-to-br from-blue-50 to-purple-50 overflow-hidden p-4 ${DMSans.className}`}
+      className={`relative w-full h-full bg-gradient-to-br from-blue-50 to-purple-50 overflow-hidden p-2 sm:p-4 pb-8 ${DMSans.className}`}
     >
       <FloatingShapes />
       <div className="max-w-6xl mx-auto relative z-10 pt-16">

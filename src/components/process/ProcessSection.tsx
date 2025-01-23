@@ -237,7 +237,7 @@ export default function ProcessSection() {
           }}
           className="opacity-50"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-gray-900/50 to-gray-900"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-gray-900/100 to-gray-900"></div>
 
         <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8">
           <h2

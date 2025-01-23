@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NovaNectar Company Website
 
-## Getting Started
+Welcome to the **NovaNectar** company website repository! 🚀 This project is built using **Next.js**, featuring stunning animations with **Framer Motion** and **GSAP**, and utilizing **MongoDB** as the database. The code is written in **TypeScript** and follows best practices for maintainability and scalability.
 
-First, run the development server:
+## 🚀 Tech Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Frontend:** Next.js, TypeScript, Tailwind CSS
+- **Animations:** Framer Motion, GSAP
+- **Backend:** Node.js, Express.js
+- **Database:** MongoDB
+- **State Management:** React Context API
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ✨ Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Smooth page transitions and animations
+- Fully responsive and modern UI
+- Optimized performance with server-side rendering (SSR) & static site generation (SSG)
+- Secure API routes and authentication
+- Scalable and maintainable code structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🛠 Installation
 
-## Learn More
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/avneesh2970/novanectar-main.git
+   ```
+2. Navigate to the project directory:
+   ```bash
+   cd novanectar-main
+   ```
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
+4. Set up environment variables in a `.env.local` file:
+   ```env
+   NEXT_PUBLIC_MONGODB_URI=your_mongodb_connection_string
+   ```
+5. Run the development server:
+   ```bash
+   npm run dev
+   ```
+6. Open [http://localhost:3000](http://localhost:3000) to see the website in action.
 
-To learn more about Next.js, take a look at the following resources:
+## 📦 Deployment
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This project is deployed on a **VPS**.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+To update on a VPS:
+1. Push the changes to this repository.
 
-## Deploy on Vercel
+2. Connect to your VPS via SSH:
+   ```bash
+   ssh user@your-vps-ip
+   password
+   ```
+3. Clone the repository:
+   ```bash
+   cd /var/www/novanectar-main
+   git pull origin main
+   npm install
+   npm run build
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+5. update environment variables if needed  `.env.local` file:
+   ```env.local
+   MONGODB_URI=your_mongodb_connection_string
+   ```
+6. reload the application using PM2 :
+   ```bash
+   pm2 reload <application id> --update-env
+   ```
+7. Set up a reverse proxy with Nginx for better performance and security.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🤝 Contributing
+
+Contributions are welcome! Feel free to fork this repository and submit a pull request.
+
+## 📜 License
+
+This project is licensed under the MIT License.
+
+---

@@ -11,7 +11,7 @@ import WhyChooseUs from "@/components/why-us/WhyUsSession";
 
 export default function Home() {
   return (
-    <div className="">
+    <>
       <Landing />
       <ProcessSection />
       <div id="project-section">
@@ -23,7 +23,7 @@ export default function Home() {
       <FAQSection />
       <FooterSection />
       <WhatsappIcon />
-      <CallingIcon/>
-    </div>
+      <CallingIcon />
+    </>
   );
 }
