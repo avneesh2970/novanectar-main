@@ -164,7 +164,7 @@ const FooterSection = () => {
                     className="text-sm"
                   >
                     <Link
-                      href="#"
+                      href="https://edu.novanectar.co.in/internships"
                       className="text-gray-400 hover:text-white transition-colors"
                     >
                       {item}

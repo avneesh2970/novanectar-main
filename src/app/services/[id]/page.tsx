@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url: `https://novanectar.co.in/services/${resolvedParams.id}`,
       images: [
         {
-          url: "https://novanectar.co.in/logo.png",
+          url: "https://novanectar.co.in/twitter-image.jpg",
           width: 1200,
           height: 630,
           alt: service.title,
@@ -46,6 +46,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
   };
 }
+
 
 // Add structured data for the service
 function getServiceStructuredData(service: ReturnType<typeof getServiceById>) {
