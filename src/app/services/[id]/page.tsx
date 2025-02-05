@@ -6,6 +6,7 @@ import { getServiceById } from "@/lib/services-data";
 import ServiceContent from "@/components/services/ServiceContent";
 import FooterSection from "@/components/footer/FooterSection";
 import Script from "next/script";
+import Navbar from "@/components/navbar/Navbar";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -89,6 +90,7 @@ export default function ServicePage({
         }}
       />
       <main className="min-h-screen">
+        <Navbar />
         <div
           className="relative w-full"
           style={{ height: "calc(100vw / (16 / 9))" }}
