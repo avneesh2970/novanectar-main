@@ -58,6 +58,7 @@ const navItems: NavItem[] = [
       { label: "Full Stack Development", href: "https://edu.novanectar.co.in" },
     ],
   },
+  { href: "/career", label: "Career" },
 ];
 
 export default function Navbar() {
