@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -50,7 +50,7 @@ const gridItems = [
   },
 ];
 
-const ProjectCard = ({ item, index }:any) => {
+const ProjectCard = ({ item, index }: any) => {
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
@@ -84,7 +84,10 @@ const ProjectCard = ({ item, index }:any) => {
       // id="project-section"
     >
       <div className="aspect-[14/9] relative overflow-hidden">
-        <motion.div className="w-full h-full overflow-hidden bg-blue-500" whileHover="hover">
+        <motion.div
+          className="w-full h-full overflow-hidden bg-blue-500"
+          whileHover="hover"
+        >
           <motion.div
             variants={imageVariants}
             className="w-full h-full relative overflow-hidden bg-blue-200"
@@ -127,7 +130,9 @@ const ProjectSession = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <h2 className={`font-medium text-gray-900 text-4xl mb-4 text-center underline pt-8 ${DMSans.className}`}>
+          <h2
+            className={`font-medium text-gray-900 text-4xl mb-4 text-center underline pt-8 ${DMSans.className}`}
+          >
             Projects
           </h2>
         </motion.div>

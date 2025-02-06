@@ -3,6 +3,8 @@ import ContactForm from "@/components/contact/contact";
 import FAQSection from "@/components/faq/FaqSection";
 import FooterSection from "@/components/footer/FooterSection";
 import Landing from "@/components/landing/Landing";
+import Clients from "@/components/ourClients/Clients";
+
 import ProcessSection from "@/components/process/ProcessSection";
 import ProjectSession from "@/components/projects/ProjectSession";
 import TestimonialSection from "@/components/testimonial/TestimonialSecion";
@@ -17,6 +19,7 @@ export default function Home() {
       <div id="project-section">
         <ProjectSession />
       </div>
+      <Clients />
       <WhyChooseUs />
       <ContactForm />
       <TestimonialSection />
