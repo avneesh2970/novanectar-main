@@ -1,6 +1,6 @@
 import { gsap } from "@/lib/gsapUtils";
 // import Image from "next/image";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import ServicesSection from "../services/ServicesSection";
 import FloatingTechLayout from "./FloatingIcons";
 import AboutSection from "../about/AboutSection";
@@ -8,8 +8,12 @@ import AboutSection from "../about/AboutSection";
 //fonts
 import { DMSans, WorkSans } from "@/fonts/font";
 import Navbar from "../navbar/Navbar";
+import { ContactPopup } from "../contact/ContactPopup";
 
 export const MainContent = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isContactPopupOpen, setIsContactPopupOpen] = useState(false);
+
   // Animation with GSAP
   useEffect(() => {
     // Register GSAP plugins
@@ -59,6 +63,12 @@ export const MainContent = () => {
     };
   }, []);
 
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const toggleContactPopup = () => setIsContactPopupOpen(!isContactPopupOpen);
+
   return (
     <>
       <div className="">
@@ -79,9 +89,9 @@ export const MainContent = () => {
                 <h1
                   className={`text-black text-2xl md:text-5xl sm:text-4xl max-w-4xl mx-auto font-bold ${WorkSans.className}`}
                 >
-                  Fueling Progress with Smart {" "}
+                  Fueling Progress with Smart{" "}
                   <span className="text-blue-500 sm:text-black">
-                  IT Solutions
+                    IT Solutions
                   </span>
                 </h1>
               </div>
@@ -89,17 +99,28 @@ export const MainContent = () => {
                 <p
                   className={`text-black text-center font-medium text-sm md:text-base lg:text-lg ${DMSans.className}`}
                 >
-                  We empower your business with powerful IT solutions that aims your success.
+                  We empower your business with powerful IT solutions that aims
+                  your success.
                 </p>
               </div>
               <div className="flex pt-10 px-2 justify-center gap-4">
                 <button
                   className={`bg-blue-500 px-3 py-2 sm:px-5 sm:py-2 text-white text-xs sm:text-base rounded-md font-medium shadow-md transition-transform transform hover:scale-105 hover:bg-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none active:scale-95 ${DMSans.className}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    toggleMenu();
+                    toggleContactPopup();
+                  }}
                 >
                   Get Started Today
                 </button>
                 <button
                   className={`border border-blue-500 text-blue-500 px-3 py-3 sm:px-5 sm:py-3 text-xs sm:text-base rounded-md font-medium shadow-md transition-transform transform hover:scale-105 hover:text-white hover:bg-blue-500 focus:ring-2 focus:ring-blue-400 focus:outline-none active:scale-95 bg-white ${DMSans.className}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    toggleMenu();
+                    toggleContactPopup();
+                  }}
                 >
                   Schedule a Free Consultation
                 </button>
@@ -114,10 +135,20 @@ export const MainContent = () => {
           </FloatingTechLayout>
           <AboutSection />
           <div className="bg-[#f5f5fa] bg-opacity-50 pt-16 text-black text-3xl text-center">
-            <h1 className={`font-medium text-gray-800 underline text-4xl ${DMSans.className}`}>Services</h1>
-            <ServicesSection />
+            <h1
+              className={`font-medium text-gray-800 underline text-4xl ${DMSans.className}`}
+            >
+              Services
+            </h1>
+            <div id="services-section">
+              <ServicesSection />
+            </div>
           </div>
         </div>
+        <ContactPopup
+          isOpen={isContactPopupOpen}
+          onClose={toggleContactPopup}
+        />
       </div>
     </>
   );
