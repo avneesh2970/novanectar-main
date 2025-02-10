@@ -117,6 +117,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${roboto_mono.variable} ${playfair.variable} ${DMSans} antialiased`}
       >
         <main>{children}</main>
+        <div id="portal-root" />
         <Toaster />
       </body>
     </html>

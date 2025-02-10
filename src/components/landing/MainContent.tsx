@@ -9,10 +9,13 @@ import AboutSection from "../about/AboutSection";
 import { DMSans, WorkSans } from "@/fonts/font";
 import Navbar from "../navbar/Navbar";
 import { ContactPopup } from "../contact/ContactPopup";
+import { AppointmentPicker } from "../appointment/appointent-picker";
 
 export const MainContent = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  // const [isOpen, setIsOpen] = useState(false);
   const [isContactPopupOpen, setIsContactPopupOpen] = useState(false);
+
+  const [isOpen, setIsOpen] = useState(false);
 
   // Animation with GSAP
   useEffect(() => {
@@ -63,9 +66,9 @@ export const MainContent = () => {
     };
   }, []);
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
+  // const toggleMenu = () => {
+  //   setIsOpen(!isOpen);
+  // };
 
   const toggleContactPopup = () => setIsContactPopupOpen(!isContactPopupOpen);
 
@@ -122,14 +125,14 @@ export const MainContent = () => {
                 </button>
                 <button
                   className={`border border-blue-500 text-blue-500 px-3 py-3 sm:px-5 sm:py-3 text-xs sm:text-base rounded-md font-medium shadow-md transition-transform transform hover:scale-105 hover:text-white hover:bg-blue-500 focus:ring-2 focus:ring-blue-400 focus:outline-none active:scale-95 bg-white ${DMSans.className}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    toggleMenu();
-                    toggleContactPopup();
-                  }}
+                  onClick={() => setIsOpen(true)}
                 >
                   Schedule a Free Consultation
                 </button>
+                <AppointmentPicker
+                  isOpen={isOpen}
+                  onClose={() => setIsOpen(false)}
+                />
               </div>
               <p
                 className={`text-black text-center pt-8 px-2 ${DMSans.className}`}

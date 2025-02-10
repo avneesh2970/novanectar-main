@@ -43,4 +43,45 @@ body {
 }
 
 
+.react-datepicker {
+  font-family: inherit;
+  border: none;
+  border-radius: 0.5rem;
+}
+
+.react-datepicker__header {
+  background-color: white;
+  border-bottom: none;
+}
+
+.react-datepicker__day-name,
+.react-datepicker__day {
+  width: 2.5rem;
+  line-height: 2.5rem;
+  margin: 0.2rem;
+}
+
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+  background-color: #3b82f6;
+  border-radius: 50%;
+}
+
+.react-datepicker__day:hover {
+  background-color: #bfdbfe;
+  border-radius: 50%;
+}
+
+.react-datepicker__navigation {
+  top: 1rem;
+}
+
+.react-datepicker__month-container {
+  float: none;
+}
+
+.react-datepicker__current-month {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
 
