@@ -69,6 +69,13 @@ export const MainContent = () => {
 
   const toggleContactPopup = () => setIsContactPopupOpen(!isContactPopupOpen);
 
+  const scrollToSection = (sectionId: string) => {
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <>
       <div className="">
@@ -108,8 +115,7 @@ export const MainContent = () => {
                   className={`bg-blue-500 px-3 py-2 sm:px-5 sm:py-2 text-white text-xs sm:text-base rounded-md font-medium shadow-md transition-transform transform hover:scale-105 hover:bg-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none active:scale-95 ${DMSans.className}`}
                   onClick={(e) => {
                     e.preventDefault();
-                    toggleMenu();
-                    toggleContactPopup();
+                    scrollToSection("services-section");
                   }}
                 >
                   Get Started Today
