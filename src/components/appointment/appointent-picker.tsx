@@ -15,6 +15,10 @@ export function AppointmentPicker({ isOpen, onClose }: AppointmentPickerProps) {
   const [currentMonth, setCurrentMonth] = useState(new Date())
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [selectedTime, setSelectedTime] = useState("")
+  const [customTime, setCustomTime] = useState("")
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [phone, setPhone] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"]
@@ -25,6 +29,10 @@ export function AppointmentPicker({ isOpen, onClose }: AppointmentPickerProps) {
       setCurrentMonth(new Date())
       setSelectedDate(null)
       setSelectedTime("")
+      setCustomTime("")
+      setName("")
+      setEmail("")
+      setPhone("")
     }
   }, [isOpen])
 
@@ -38,11 +46,12 @@ export function AppointmentPicker({ isOpen, onClose }: AppointmentPickerProps) {
   const handleNextMonth = () => setCurrentMonth(addMonths(currentMonth, 1))
 
   async function handleSubmit() {
-    if (!selectedDate || !selectedTime) return
+    if (!selectedDate || (!selectedTime && !customTime) || !name || !email || !phone) return
 
     setIsSubmitting(true)
+    const appointmentTime = customTime || selectedTime
     const dateString = `${format(selectedDate, "yyyy-MM-dd")}T${format(
-      new Date(`2024-01-01 ${selectedTime}`),
+      new Date(`2024-01-01 ${appointmentTime}`),
       "HH:mm",
     )}`
 
@@ -54,6 +63,10 @@ export function AppointmentPicker({ isOpen, onClose }: AppointmentPickerProps) {
         },
         body: JSON.stringify({
           date: new Date(dateString).toISOString(),
+          name,
+          email,
+          phone,
+          customTime
         }),
       })
 
@@ -67,7 +80,7 @@ export function AppointmentPicker({ isOpen, onClose }: AppointmentPickerProps) {
       }
     } catch (error) {
       console.error("Failed to book appointment:", error)
-      alert("Failed to book appointment. Please try again.")
+      toast.error("Failed to book appointment. Please try again.")
     } finally {
       setIsSubmitting(false)
     }
@@ -133,22 +146,84 @@ export function AppointmentPicker({ isOpen, onClose }: AppointmentPickerProps) {
               </div>
 
               {selectedDate && (
-                <div className="grid grid-cols-2 gap-4 mb-8">
-                  {times.map((time) => (
-                    <motion.button
-                      key={time}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className={`py-3 rounded-lg border ${
-                        selectedTime === time ? "border-blue-500 text-blue-500" : "border-gray-200 text-gray-700"
-                      }`}
-                      onClick={() => setSelectedTime(time)}
-                    >
-                      {time}
-                    </motion.button>
-                  ))}
-                </div>
+                <>
+                  <div className="grid grid-cols-2 gap-4 mb-4">
+                    {times.map((time) => (
+                      <motion.button
+                        key={time}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className={`py-3 rounded-lg border ${
+                          selectedTime === time ? "border-blue-500 text-blue-500" : "border-gray-200 text-gray-700"
+                        }`}
+                        onClick={() => {
+                          setSelectedTime(time)
+                          setCustomTime("")
+                        }}
+                      >
+                        {time}
+                      </motion.button>
+                    ))}
+                  </div>
+                  <div className="mb-4">
+                    <label htmlFor="customTime" className="block text-sm font-medium text-gray-700 mb-1">
+                      Custom Time
+                    </label>
+                    <input
+                      type="time"
+                      id="customTime"
+                      value={customTime}
+                      onChange={(e) => {
+                        setCustomTime(e.target.value)
+                        setSelectedTime("")
+                      }}
+                      className="text-gray-600 w-full p-2 border border-gray-300 rounded-md"
+                    />
+                  </div>
+                </>
               )}
+
+              <div className="space-y-4 mb-8">
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="w-full p-2 border border-gray-300 rounded-md text-gray-600"
+                    required
+                  />
+                </div>
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="text-gray-600 w-full p-2 border border-gray-300 rounded-md"
+                    required
+                  />
+                </div>
+                <div>
+                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                    Phone
+                  </label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    className="text-gray-600 w-full p-2 border border-gray-300 rounded-md"
+                    required
+                  />
+                </div>
+              </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <motion.button
@@ -165,7 +240,9 @@ export function AppointmentPicker({ isOpen, onClose }: AppointmentPickerProps) {
                   whileTap={{ scale: 0.95 }}
                   className="py-4 rounded-lg bg-blue-500 text-white font-medium disabled:opacity-50"
                   onClick={handleSubmit}
-                  disabled={isSubmitting || !selectedDate || !selectedTime}
+                  disabled={
+                    isSubmitting || !selectedDate || (!selectedTime && !customTime) || !name || !email || !phone
+                  }
                 >
                   {isSubmitting ? "Booking..." : "Confirm"}
                 </motion.button>

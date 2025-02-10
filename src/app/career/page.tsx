@@ -10,6 +10,7 @@ import { jobListings } from "@/data/jobsData"
 import Navbar from "@/components/navbar/Navbar"
 import FooterSection from "@/components/footer/FooterSection"
 import { useState } from "react"
+import { DMSans } from "@/fonts/font"
 
 export default function Jobs() {
   const [searchQuery, setSearchQuery] = useState("")
@@ -25,7 +26,7 @@ export default function Jobs() {
   })
 
   return (
-    <div className="bg-[#f6f6f6] min-h-screen">
+    <div className={`bg-[#f6f6f6] min-h-screen ${DMSans.className}`}>
       <Navbar />
 
       <div className="w-full overflow-hidden">
