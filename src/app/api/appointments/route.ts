@@ -7,8 +7,6 @@ export async function POST(request: Request) {
     await connectDB();
     const body = await request.json();
     const { date, name, email, phone, customTime } = body;
-    console.log("custome Time: ", customTime);
-    console.log("type of custome Time: ", typeof customTime);
     if (!date || !name || !email || !phone) {
       return NextResponse.json(
         { message: "Missing required fields" },
