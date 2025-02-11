@@ -102,7 +102,7 @@ export default function Jobs() {
               className="bg-white p-4 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow"
             >
               <div className="flex items-center gap-3 mb-3">
-                <div className="relative w-10 h-10">
+                {/* <div className="relative w-10 h-10">
                   <Image
                     src={job.company.logo || "/placeholder.svg"}
                     alt={job.company.name}
@@ -113,7 +113,7 @@ export default function Jobs() {
                       target.src = "/placeholder.svg"
                     }}
                   />
-                </div>
+                </div> */}
                 <h3 className="font-semibold text-gray-900">{job.position}</h3>
               </div>
               <div className="flex items-center text-gray-600 mb-2">

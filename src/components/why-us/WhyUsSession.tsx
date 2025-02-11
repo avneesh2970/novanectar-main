@@ -72,7 +72,9 @@ export const WhyChooseUs = () => {
           transition={{ duration: 0.6 }}
           className="max-w-4xl mx-auto text-center"
         >
-          <h2 className="text-2xl font-medium text-gray-800 mb-14">
+          <h2
+            className={`font-medium text-gray-900 text-4xl mb-12 text-center underline pt-8 ${DMSans.className}`}
+          >
             Why Choose Us?
           </h2>
 
