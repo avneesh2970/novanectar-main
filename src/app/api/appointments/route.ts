@@ -1,21 +1,14 @@
 import { NextResponse } from "next/server";
-import mongoose from "mongoose";
 import Appointment from "@/models/Appointment";
-
-// Connect to MongoDB
-const connectDB = async () => {
-  if (mongoose.connections[0].readyState) return;
-  await mongoose.connect(process.env.NEXT_PUBLIC_MONGODB_URI as string);
-};
+import { connectDB } from "@/lib/dbConnect";
 
 export async function POST(request: Request) {
   try {
     await connectDB();
-
     const body = await request.json();
     const { date, name, email, phone, customTime } = body;
     console.log("custome Time: ", customTime);
-    console.log("type of custome Time: ",typeof customTime);
+    console.log("type of custome Time: ", typeof customTime);
     if (!date || !name || !email || !phone) {
       return NextResponse.json(
         { message: "Missing required fields" },

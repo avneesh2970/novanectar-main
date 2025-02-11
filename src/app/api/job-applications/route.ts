@@ -1,11 +1,7 @@
 import { NextResponse } from "next/server"
-import mongoose from "mongoose"
 import JobApplication from "@/models/JobApplication"
+import { connectDB } from "@/lib/dbConnect"
 
-const connectDB = async () => {
-  if (mongoose.connections[0].readyState) return
-  await mongoose.connect(process.env.NEXT_PUBLIC_MONGODB_URI as string)
-}
 
 export async function POST(request: Request) {
   try {
