@@ -8,7 +8,7 @@ import img5 from "@/assets/clients/5.png"
 import img6 from "@/assets/clients/6.png"
 import img7 from "@/assets/clients/7.png"
 import img8 from "@/assets/clients/8.png"
-import { useRef, useEffect, useState } from "react"
+import { useRef, useEffect, useState, useCallback } from "react"
 import Image from "next/image"
 import { DMSans } from "@/fonts/font"
 import Button from "./Button"
@@ -33,25 +33,28 @@ export default function Clients() {
 
   const totalWidth = imageSizes.reduce((sum, size) => sum + size.width, 0) + (imageSizes.length - 1) * 16 // 16px for gap
 
-  const scroll = (direction: "left" | "right") => {
-    if (isTransitioning) return
+  const scroll = useCallback(
+    (direction: "left" | "right") => {
+      if (isTransitioning) return
 
-    setIsTransitioning(true)
-    const scrollAmount = totalWidth / 4 // Scroll by 1/4 of the total width
-    const newPosition = direction === "left" ? scrollPosition + scrollAmount : scrollPosition - scrollAmount
+      setIsTransitioning(true)
+      const scrollAmount = totalWidth / 4 // Scroll by 1/4 of the total width
+      const newPosition = direction === "left" ? scrollPosition + scrollAmount : scrollPosition - scrollAmount
 
-    setScrollPosition(newPosition)
+      setScrollPosition(newPosition)
 
-    // Reset scroll position for seamless looping
-    setTimeout(() => {
-      setIsTransitioning(false)
-      if (newPosition <= -totalWidth) {
-        setScrollPosition(0)
-      } else if (newPosition > 0) {
-        setScrollPosition(-totalWidth + scrollAmount)
-      }
-    }, 500) // This should match the transition duration in CSS
-  }
+      // Reset scroll position for seamless looping
+      setTimeout(() => {
+        setIsTransitioning(false)
+        if (newPosition <= -totalWidth) {
+          setScrollPosition(0)
+        } else if (newPosition > 0) {
+          setScrollPosition(-totalWidth + scrollAmount)
+        }
+      }, 500) // This should match the transition duration in CSS
+    },
+    [isTransitioning, scrollPosition, totalWidth],
+  )
 
   useEffect(() => {
     // Start the interval for automatic scrolling
@@ -64,7 +67,7 @@ export default function Clients() {
         clearInterval(intervalRef.current)
       }
     }
-  }, [scrollPosition, isTransitioning, scroll]) // Added 'scroll' to dependencies
+  }, [scroll])
 
   return (
     <section className="w-full py-14 px-4 bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 relative">
