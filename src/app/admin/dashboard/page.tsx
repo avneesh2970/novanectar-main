@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { format, parseISO } from "date-fns";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
+import Link from "next/link";
 
 // Define types for our data
 type Appointment = {
@@ -133,7 +134,7 @@ export default function AdminDashboard() {
 
   // Function to download data as PDF
   const downloadPDF = (data: any[], filename: string) => {
-    const doc:any = new jsPDF();
+    const doc: any = new jsPDF();
     doc.autoTable({
       head: [Object.keys(data[0])],
       body: data.map(Object.values),
@@ -323,6 +324,9 @@ export default function AdminDashboard() {
                       <th className="p-2 text-left text-gray-700">Name</th>
                       <th className="p-2 text-left text-gray-700">Email</th>
                       <th className="p-2 text-left text-gray-700">Phone</th>
+                      <th className="p-2 text-left text-gray-700">
+                        see resume
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -345,6 +349,15 @@ export default function AdminDashboard() {
                         </td>
                         <td className="p-2 text-gray-700">
                           {application.phone}
+                        </td>
+                        <td className="p-2 text-blue-500">
+                          <Link
+                            href={application.resume}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            Resume
+                          </Link>
                         </td>
                       </tr>
                     ))}

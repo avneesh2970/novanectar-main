@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import Image from "next/image"
 import { Clock, MapPin } from "lucide-react"
 import { jobListings } from "@/data/jobsData"
@@ -10,6 +10,8 @@ import Navbar from "@/components/navbar/Navbar"
 import FooterSection from "@/components/footer/FooterSection"
 import { DMSans } from "@/fonts/font"
 import { motion, AnimatePresence } from "framer-motion"
+import Script from "next/script"
+import toast from "react-hot-toast"
 
 export default function JobDetails() {
   const params = useParams()
@@ -20,24 +22,29 @@ export default function JobDetails() {
     name: "",
     email: "",
     phone: "",
-    resume: "",
     coverLetter: "",
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [job, setJob] = useState<any>(null)
+  const [resumeUrl, setResumeUrl] = useState("")
+  const [cloudinaryStatus, setCloudinaryStatus] = useState<"loading" | "ready" | "error">("loading")
 
   useEffect(() => {
     const foundJob = jobListings.find((job: any) => job.id === jobId)
     setJob(foundJob)
   }, [jobId])
 
-  if (!job) {
-    return (
-      <div className="max-w-2xl mx-auto p-6 text-center">
-        <h1 className="text-2xl font-bold text-gray-900 mb-4">Loading...</h1>
-      </div>
-    )
-  }
+  useEffect(() => {
+    const checkCloudinary = () => {
+      if (typeof window !== "undefined" && (window as any).cloudinary) {
+        setCloudinaryStatus("ready")
+      } else {
+        setTimeout(checkCloudinary, 1000)
+      }
+    }
+
+    checkCloudinary()
+  }, [])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -47,11 +54,43 @@ export default function JobDetails() {
     }))
   }
 
+  const handleUpload = useCallback(() => {
+    if (cloudinaryStatus !== "ready") {
+      return
+    }
+
+    const widget = (window as any).cloudinary.createUploadWidget(
+      {
+        cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+        uploadPreset: process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET,
+        sources: ["local"],
+        maxFiles: 1,
+        multiple: false,
+        resourceType: "raw",
+        acceptedFiles: ".pdf",
+        folder: "resumes",
+      },
+      (error: any, result: any) => {
+        if (error) {
+          console.error("Cloudinary upload error:", error)
+        } else if (result && result.event === "success") {
+          setResumeUrl(result.info.secure_url)
+        }
+      },
+    )
+
+    widget.open()
+  }, [cloudinaryStatus])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
 
     try {
+      if (!resumeUrl) {
+        throw new Error("Please upload a resume")
+      }
+
       const response = await fetch("/api/job-applications", {
         method: "POST",
         headers: {
@@ -59,33 +98,51 @@ export default function JobDetails() {
         },
         body: JSON.stringify({
           jobId,
-          ...formData,
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          resume: resumeUrl,
+          coverLetter: formData.coverLetter,
         }),
       })
 
       if (response.ok) {
-        alert("Application submitted successfully!")
+        toast.success("Application submitted successfully!")
         setIsApplying(false)
         setFormData({
           name: "",
           email: "",
           phone: "",
-          resume: "",
           coverLetter: "",
         })
+        setResumeUrl("")
       } else {
         throw new Error("Failed to submit application")
       }
     } catch (error) {
       console.error("Error submitting application:", error)
-      alert("Failed to submit application. Please try again.")
+      toast.error(error instanceof Error ? error.message : "Failed to submit application. Please try again.")
     } finally {
       setIsSubmitting(false)
     }
   }
 
+  if (!job) {
+    return (
+      <div className="max-w-2xl mx-auto p-6 text-center">
+        <h1 className="text-2xl font-bold text-gray-900 mb-4">Loading...</h1>
+      </div>
+    )
+  }
+
   return (
     <div className={`bg-gray-50 min-h-screen ${DMSans.className}`}>
+      <Script
+        src="https://upload-widget.cloudinary.com/global/all.js"
+        strategy="afterInteractive"
+        onLoad={() => setCloudinaryStatus("ready")}
+        onError={() => setCloudinaryStatus("error")}
+      />
       <Navbar />
       <div className="w-full mx-auto p-6 border-4 mt-20">
         <div className="rounded-lg p-6">
@@ -183,7 +240,7 @@ export default function JobDetails() {
                         value={formData.name}
                         onChange={handleInputChange}
                         required
-                        className="text-gray-600 px-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="text-gray-600 border px-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                       />
                     </div>
                     <div>
@@ -197,7 +254,7 @@ export default function JobDetails() {
                         value={formData.email}
                         onChange={handleInputChange}
                         required
-                        className="text-gray-600 px-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="text-gray-600 border px-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                       />
                     </div>
                     <div>
@@ -211,22 +268,28 @@ export default function JobDetails() {
                         value={formData.phone}
                         onChange={handleInputChange}
                         required
-                        className="text-gray-600 px-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="text-gray-600 border px-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                       />
                     </div>
                     <div>
                       <label htmlFor="resume" className="block text-sm font-medium text-gray-700">
-                        Resume Link
+                        Resume (PDF)
                       </label>
-                      <input
-                        type="url"
-                        id="resume"
-                        name="resume"
-                        value={formData.resume}
-                        onChange={handleInputChange}
-                        required
-                        className="text-gray-600 px-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                      />
+                      <div className="mt-1 flex items-center">
+                        <button
+                          type="button"
+                          onClick={handleUpload}
+                          disabled={cloudinaryStatus !== "ready"}
+                          className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          {cloudinaryStatus === "loading"
+                            ? "Loading Cloudinary..."
+                            : cloudinaryStatus === "error"
+                              ? "Cloudinary Error"
+                              : "Upload Resume"}
+                        </button>
+                        {resumeUrl && <span className="ml-3 text-sm text-gray-500">Resume uploaded successfully</span>}
+                      </div>
                     </div>
                     <div>
                       <label htmlFor="coverLetter" className="block text-sm font-medium text-gray-700">
@@ -239,7 +302,7 @@ export default function JobDetails() {
                         onChange={handleInputChange}
                         required
                         rows={4}
-                        className="text-gray-600 px-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        className="text-gray-600 px-2 mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                       ></textarea>
                     </div>
                     <div className="flex justify-end space-x-2">
