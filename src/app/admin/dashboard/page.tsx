@@ -281,7 +281,8 @@ export default function AdminDashboard() {
                         <td className="p-2 text-gray-700">{contact.email}</td>
                         <td className="p-2 text-gray-700">{contact.subject}</td>
                         <td className="p-2 text-gray-700">
-                          {contact.message.substring(0, 50)}...
+                          {/* {contact.message.substring(0, 50)}... */}
+                          {contact.message}
                         </td>
                       </tr>
                     ))}
