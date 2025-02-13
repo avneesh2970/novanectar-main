@@ -85,15 +85,15 @@ body {
   margin-bottom: 0.5rem;
 }
 
+.paused {
+  animation-play-state: paused !important;
+}
+
 @keyframes scroll {
   0% {
     transform: translateX(0);
   }
   100% {
-    transform: translateX(calc(-1 * var(--scroll-width) / 2));
+    transform: translateX(-50%);
   }
-}
-
-.paused {
-  animation-play-state: paused !important;
 }

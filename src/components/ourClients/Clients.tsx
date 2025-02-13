@@ -15,64 +15,104 @@ import { DMSans } from "@/fonts/font"
 import Button from "./Button"
 
 export default function Clients() {
-  const [scrollPosition, setScrollPosition] = useState(0)
-  const [isTransitioning, setIsTransitioning] = useState(false)
+  const [isAnimationPaused, setIsAnimationPaused] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
-  const intervalRef = useRef<NodeJS.Timeout | null>(null)
+  const animationRef = useRef<HTMLDivElement>(null)
 
   const images = [img1, img2, img3, img4, img5, img6, img7, img8, img9]
   const imageSizes = [
-    { width: 250, height: 250 },
+    { width: 210, height: 210 },
+    { width: 210, height: 210 },
+    { width: 270, height: 270 },
+    { width: 210, height: 210 },
+    { width: 270, height: 270 },
+    { width: 210, height: 200 },
+    { width: 210, height: 200 },
     { width: 210, height: 200 },
     { width: 250, height: 250 },
-    { width: 210, height: 200 },
-    { width: 250, height: 250 },
-    { width: 210, height: 200 },
-    { width: 210, height: 200 },
-    { width: 210, height: 200 },
-    { width: 300, height: 300 },
   ]
 
   const totalWidth = imageSizes.reduce((sum, size) => sum + size.width, 0) + (imageSizes.length - 1) * 16 // 16px for gap
 
   const scroll = useCallback(
     (direction: "left" | "right") => {
-      if (isTransitioning) return
+      if (containerRef.current) {
+        const scrollAmount = totalWidth / 4 // Scroll by 1/4 of the total width
+        const currentScroll = containerRef.current.scrollLeft
+        let newScroll: number
 
-      setIsTransitioning(true)
-      const scrollAmount = totalWidth / 4 // Scroll by 1/4 of the total width
-      const newPosition = direction === "left" ? scrollPosition + scrollAmount : scrollPosition - scrollAmount
-
-      setScrollPosition(newPosition)
-
-      // Reset scroll position for seamless looping
-      setTimeout(() => {
-        setIsTransitioning(false)
-        if (newPosition <= -totalWidth) {
-          setScrollPosition(0)
-        } else if (newPosition > 0) {
-          setScrollPosition(-totalWidth + scrollAmount)
+        if (direction === "left") {
+          newScroll = currentScroll - scrollAmount
+          if (newScroll < 0) {
+            newScroll = totalWidth + newScroll
+          }
+        } else {
+          newScroll = currentScroll + scrollAmount
+          if (newScroll >= totalWidth) {
+            newScroll = newScroll - totalWidth
+          }
         }
-      }, 500) // This should match the transition duration in CSS
+
+        containerRef.current.scrollTo({
+          left: newScroll,
+          behavior: "smooth",
+        })
+      }
     },
-    [isTransitioning, scrollPosition, totalWidth],
+    [totalWidth],
   )
 
+  const pauseAnimation = useCallback(() => {
+    setIsAnimationPaused(true)
+  }, [])
+
+  const resumeAnimation = useCallback(() => {
+    setIsAnimationPaused(false)
+  }, [])
+
   useEffect(() => {
-    // Start the interval for automatic scrolling
-    intervalRef.current = setInterval(() => {
-      scroll("right")
-    }, 5000) // Scroll every 5 seconds
+    if (animationRef.current) {
+      animationRef.current.style.animationPlayState = isAnimationPaused ? "paused" : "running"
+    }
+  }, [isAnimationPaused])
+
+  useEffect(() => {
+    const handleContextMenu = (e: MouseEvent) => {
+      e.preventDefault() // Prevent the default context menu
+    }
+
+    document.addEventListener("contextmenu", handleContextMenu)
 
     return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current)
-      }
+      document.removeEventListener("contextmenu", handleContextMenu)
     }
-  }, [scroll])
+  }, [])
+
+  useEffect(() => {
+    const container = containerRef.current
+    if (container) {
+      const handleScroll = () => {
+        if (container.scrollLeft === 0) {
+          container.scrollLeft = totalWidth
+        } else if (container.scrollLeft === totalWidth * 2) {
+          container.scrollLeft = totalWidth
+        }
+      }
+
+      container.addEventListener("scroll", handleScroll)
+      return () => container.removeEventListener("scroll", handleScroll)
+    }
+  }, [totalWidth])
 
   return (
-    <section className="w-full py-14 px-4 bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 relative">
+    <section
+      className="w-full py-14 px-4 bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 relative"
+      onMouseDown={pauseAnimation}
+      onMouseUp={resumeAnimation}
+      onMouseLeave={resumeAnimation}
+      onTouchStart={pauseAnimation}
+      onTouchEnd={resumeAnimation}
+    >
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCI+CjxyZWN0IHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgZmlsbD0iI2ZmZiIvPgo8Y2lyY2xlIGN4PSIzMCIgY3k9IjMwIiByPSIxLjUiIGZpbGw9IiNjY2MiLz4KPC9zdmc+')] opacity-75"></div>
       <div className="max-w-[1400px] mx-auto relative z-10">
         <h2 className={`font-medium text-gray-900 text-4xl mb-14 text-center underline pt-8 ${DMSans.className}`}>
@@ -83,21 +123,26 @@ export default function Clients() {
           <Button
             onClick={() => scroll("left")}
             className="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-white bg-opacity-50 hover:bg-opacity-75 transition-colors duration-300"
-            disabled={isTransitioning}
           >
             &#8249;
           </Button>
 
-          <div className="overflow-hidden">
+          <div
+            ref={containerRef}
+            className="overflow-hidden scroll-smooth"
+            style={{
+              width: `${totalWidth}px`,
+            }}
+          >
             <div
-              ref={containerRef}
-              className="flex items-center gap-4 transition-transform duration-500 ease-in-out"
+              ref={animationRef}
+              className="flex items-center gap-4"
               style={{
-                width: `${totalWidth * 2}px`,
-                transform: `translateX(${scrollPosition}px)`,
+                width: `${totalWidth * 3}px`,
+                animation: `scroll ${totalWidth / 50}s linear infinite`,
               }}
             >
-              {[...images, ...images].map((src, index) => {
+              {[...images, ...images, ...images].map((src, index) => {
                 const size = imageSizes[index % imageSizes.length]
                 return (
                   <div
@@ -124,7 +169,6 @@ export default function Clients() {
           <Button
             onClick={() => scroll("right")}
             className="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-white bg-opacity-50 hover:bg-opacity-75 transition-colors duration-300"
-            disabled={isTransitioning}
           >
             &#8250;
           </Button>
