@@ -8,6 +8,7 @@ import img5 from "@/assets/clients/5.png"
 import img6 from "@/assets/clients/6.png"
 import img7 from "@/assets/clients/7.png"
 import img8 from "@/assets/clients/8.png"
+import img9 from "@/assets/clients/9.png"
 import { useRef, useEffect, useState, useCallback } from "react"
 import Image from "next/image"
 import { DMSans } from "@/fonts/font"
@@ -19,7 +20,7 @@ export default function Clients() {
   const containerRef = useRef<HTMLDivElement>(null)
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
 
-  const images = [img1, img2, img3, img4, img5, img6, img7, img8]
+  const images = [img1, img2, img3, img4, img5, img6, img7, img8, img9]
   const imageSizes = [
     { width: 250, height: 250 },
     { width: 210, height: 200 },
@@ -29,6 +30,7 @@ export default function Clients() {
     { width: 210, height: 200 },
     { width: 210, height: 200 },
     { width: 210, height: 200 },
+    { width: 300, height: 300 },
   ]
 
   const totalWidth = imageSizes.reduce((sum, size) => sum + size.width, 0) + (imageSizes.length - 1) * 16 // 16px for gap
