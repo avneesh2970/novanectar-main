@@ -23,11 +23,11 @@ export default function Clients() {
   const imageSizes = [
     { width: 210, height: 210 },
     { width: 210, height: 210 },
-    { width: 270, height: 270 },
+    { width: 280, height: 280 },
     { width: 210, height: 210 },
-    { width: 270, height: 270 },
-    { width: 210, height: 200 },
-    { width: 210, height: 200 },
+    { width: 300, height: 300 },
+    { width: 230, height: 230 },
+    { width: 250, height: 250 },
     { width: 210, height: 200 },
     { width: 250, height: 250 },
   ]
@@ -150,12 +150,12 @@ export default function Clients() {
                     className="flex-shrink-0 flex items-center justify-center"
                     style={{ width: size.width, height: size.height }}
                   >
-                    <div className="relative w-full h-full">
+                    <div className="relative w-full h-full hover-shake">
                       <Image
                         src={src || "/placeholder.svg"}
                         alt={`Client logo ${(index % images.length) + 1}`}
                         fill
-                        className="object-contain drop-shadow-lg"
+                        className="object-contain drop-shadow-lg transition-transform duration-300 ease-in-out hover:scale-110"
                         sizes={`${Math.max(size.width, size.height)}px`}
                         priority={index < images.length}
                       />
