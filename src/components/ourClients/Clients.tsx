@@ -12,6 +12,10 @@ import img9 from "@/assets/clients/9.png";
 import img10 from "@/assets/clients/10.png";
 import img11 from "@/assets/clients/11.png";
 import img12 from "@/assets/clients/12.png";
+import img13 from "@/assets/clients/13.png";
+import img14 from "@/assets/clients/14.png";
+import img15 from "@/assets/clients/15.png";
+
 import { useRef, useEffect, useState, useCallback } from "react";
 import Image from "next/image";
 import { DMSans } from "@/fonts/font";
@@ -35,20 +39,26 @@ export default function Clients() {
     img10,
     img11,
     img12,
+    img13,
+    img14,
+    img15
   ];
   const imageSizes = [
-    { width: 210, height: 210 },
-    { width: 210, height: 210 },
+    { width: 190, height: 190 },
+    { width: 190, height: 190 },
     { width: 280, height: 280 },
     { width: 210, height: 210 },
     { width: 300, height: 300 },
     { width: 230, height: 230 },
     { width: 250, height: 250 },
     { width: 210, height: 200 },
+    { width: 280, height: 280 },
+    { width: 210, height: 210 },
+    { width: 350, height: 350 },
     { width: 250, height: 250 },
-    { width: 250, height: 250 },
-    { width: 250, height: 250 },
-    { width: 250, height: 250 },
+    { width: 190, height: 190 },
+    { width: 180, height: 180 },
+    { width: 180, height: 180 },
   ];
 
   const totalWidth =
