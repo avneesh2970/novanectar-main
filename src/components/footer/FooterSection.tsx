@@ -176,7 +176,8 @@ const FooterSection = () => {
             <div className="hidden sm:block">
               <h3 className="text-sm font-medium mb-4">LEGAL</h3>
               <ul className="space-y-2">
-                {["Privacy Policy", "Terms of Service"].map((item) => (
+                {/* {["Privacy Policy", "Terms of Service"].map((item) => ( */}
+                {["Privacy Policy", ""].map((item) => (
                   <motion.li
                     key={item}
                     variants={linkVariants}
@@ -184,7 +185,7 @@ const FooterSection = () => {
                     className="text-sm"
                   >
                     <Link
-                      href="#"
+                      href="/privacy"
                       className="text-gray-400 hover:text-white transition-colors"
                     >
                       {item}
@@ -218,7 +219,8 @@ const FooterSection = () => {
           <div className="sm:hidden">
             <h3 className="text-sm font-medium mb-4">LEGAL</h3>
             <ul className="space-y-2">
-              {["Privacy Policy", "Terms of Service"].map((item) => (
+              {/* {["Privacy Policy", "Terms of Service"].map((item) => ( */}
+              {["Privacy Policy", ""].map((item) => (
                 <motion.li
                   key={item}
                   variants={linkVariants}
@@ -226,7 +228,7 @@ const FooterSection = () => {
                   className="text-sm"
                 >
                   <Link
-                    href="#"
+                    href="/privacy"
                     className="text-gray-400 hover:text-white transition-colors"
                   >
                     {item}
@@ -282,7 +284,9 @@ const FooterSection = () => {
         </div>
       </div>
       <div className="text-center mt-8">
-      <p className="text-gray-400 text-xs sm:text-base">© All Rights Reserved {new Date().getFullYear()}. Novenectar</p>
+        <p className="text-gray-400 text-xs sm:text-base">
+          © All Rights Reserved {new Date().getFullYear()}. Novenectar
+        </p>
       </div>
     </footer>
   );
