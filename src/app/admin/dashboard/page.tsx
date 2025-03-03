@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { format, parseISO } from "date-fns";
 import { jsPDF } from "jspdf";
@@ -47,6 +47,12 @@ export default function AdminDashboard() {
   const [dateFilter, setDateFilter] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Add pagination state variables after the existing state declarations
+  const [appointmentsPage, setAppointmentsPage] = useState(1)
+  const [contactsPage, setContactsPage] = useState(1)
+  const [jobApplicationsPage, setJobApplicationsPage] = useState(1)
+  const [itemsPerPage, setItemsPerPage] = useState(5)
 
   useEffect(() => {
     const isLoggedIn = sessionStorage.getItem("adminLoggedIn");
@@ -114,6 +120,130 @@ export default function AdminDashboard() {
     "email",
     "jobId",
   ]);
+
+
+  // Add pagination logic after the filtering functions
+  // Paginate function to slice the data based on current page
+  const paginateData = (data: any[], currentPage: number) => {
+    const startIndex = (currentPage - 1) * itemsPerPage
+    const endIndex = startIndex + itemsPerPage
+    return data.slice(startIndex, endIndex)
+  }
+
+  // Paginated data for each section
+  const paginatedAppointments = paginateData(filteredAppointments, appointmentsPage)
+  const paginatedContacts = paginateData(filteredContacts, contactsPage)
+  const paginatedJobApplications = paginateData(filteredJobApplications, jobApplicationsPage)
+
+  // Function to generate pagination controls
+  const PaginationControls = ({
+    totalItems,
+    currentPage,
+    setPage,
+  }: {
+    totalItems: number
+    currentPage: number
+    setPage: (page: number) => void
+  }) => {
+    const totalPages = Math.ceil(totalItems / itemsPerPage)
+
+    return (
+      <div className="flex items-center justify-between mt-4">
+        <div className="text-sm text-gray-700">
+          Showing <span className="font-medium">{Math.min((currentPage - 1) * itemsPerPage + 1, totalItems)}</span> to{" "}
+          <span className="font-medium">{Math.min(currentPage * itemsPerPage, totalItems)}</span> of{" "}
+          <span className="font-medium">{totalItems}</span> results
+        </div>
+        <div className="flex space-x-2">
+          <button
+            onClick={() => setPage(Math.max(1, currentPage - 1))}
+            disabled={currentPage === 1}
+            className={`px-3 py-1 rounded ${
+              currentPage === 1
+                ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                : "bg-gray-200 hover:bg-gray-300 text-gray-700"
+            }`}
+          >
+            Previous
+          </button>
+          {totalPages <= 5 ? (
+            // Show all pages if 5 or fewer
+            [...Array(totalPages)].map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setPage(i + 1)}
+                className={`px-3 py-1 rounded ${
+                  currentPage === i + 1 ? "bg-blue-500 text-white" : "bg-gray-200 hover:bg-gray-300 text-gray-700"
+                }`}
+              >
+                {i + 1}
+              </button>
+            ))
+          ) : (
+            // Show limited pages with ellipsis for many pages
+            <>
+              {[...Array(Math.min(3, currentPage))].map((_, i) => {
+                const pageNum = i + 1
+                return pageNum < currentPage - 1 && i === 0 ? (
+                  <React.Fragment key={pageNum}>
+                    <button
+                      onClick={() => setPage(pageNum)}
+                      className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 text-gray-700"
+                    >
+                      {pageNum}
+                    </button>
+                    {currentPage > 3 && <span className="px-2">...</span>}
+                  </React.Fragment>
+                ) : pageNum >= currentPage - 1 ? (
+                  <button
+                    key={pageNum}
+                    onClick={() => setPage(pageNum)}
+                    className={`px-3 py-1 rounded ${
+                      currentPage === pageNum ? "bg-blue-500 text-white" : "bg-gray-200 hover:bg-gray-300 text-gray-700"
+                    }`}
+                  >
+                    {pageNum}
+                  </button>
+                ) : null
+              })}
+              {currentPage < totalPages - 1 && (
+                <>
+                  {currentPage < totalPages - 2 && <span className="px-2">...</span>}
+                  <button
+                    onClick={() => setPage(totalPages)}
+                    className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 text-gray-700"
+                  >
+                    {totalPages}
+                  </button>
+                </>
+              )}
+            </>
+          )}
+          <button
+            onClick={() => setPage(Math.min(totalPages, currentPage + 1))}
+            disabled={currentPage === totalPages}
+            className={`px-3 py-1 rounded ${
+              currentPage === totalPages
+                ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                : "bg-gray-200 hover:bg-gray-300 text-gray-700"
+            }`}
+          >
+            Next
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // Update the itemsPerPage handler
+  const handleItemsPerPageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setItemsPerPage(Number(e.target.value))
+    // Reset to first page when changing items per page
+    setAppointmentsPage(1)
+    setContactsPage(1)
+    setJobApplicationsPage(1)
+  } 
+
 
   // Function to download data as CSV
   const downloadCSV = (data: any[], filename: string) => {
@@ -215,7 +345,7 @@ export default function AdminDashboard() {
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredAppointments.map((appointment) => (
+                    {paginatedAppointments.map((appointment) => (
                       <tr key={appointment._id} className="border-b">
                         <td className="p-2 text-gray-700">
                           {format(new Date(appointment.date), "yyyy-MM-dd")}
@@ -236,6 +366,27 @@ export default function AdminDashboard() {
                     ))}
                   </tbody>
                 </table>
+              </div>
+              <div className="mt-4 flex justify-between items-center">
+                <div className="flex items-center space-x-2">
+                  <span className="text-sm text-gray-700">Show</span>
+                  <select
+                    value={itemsPerPage}
+                    onChange={handleItemsPerPageChange}
+                    className="border rounded p-1 text-sm"
+                  >
+                    <option value={5}>5</option>
+                    <option value={10}>10</option>
+                    <option value={25}>25</option>
+                    <option value={50}>50</option>
+                  </select>
+                  <span className="text-sm text-gray-700">entries</span>
+                </div>
+                <PaginationControls
+                  totalItems={filteredAppointments.length}
+                  currentPage={appointmentsPage}
+                  setPage={setAppointmentsPage}
+                />
               </div>
             </section>
 
@@ -272,7 +423,7 @@ export default function AdminDashboard() {
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredContacts.map((contact) => (
+                    {paginatedContacts.map((contact) => (
                       <tr key={contact._id} className="border-b">
                         <td className="p-2 text-gray-700">
                           {format(new Date(contact.createdAt), "yyyy-MM-dd")}
@@ -288,6 +439,13 @@ export default function AdminDashboard() {
                     ))}
                   </tbody>
                 </table>
+              </div>
+              <div className="mt-4">
+                <PaginationControls
+                  totalItems={filteredContacts.length}
+                  currentPage={contactsPage}
+                  setPage={setContactsPage}
+                />
               </div>
             </section>
 
@@ -331,7 +489,7 @@ export default function AdminDashboard() {
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredJobApplications.map((application) => (
+                    {paginatedJobApplications.map((application) => (
                       <tr key={application._id} className="border-b">
                         <td className="p-2 text-gray-700">
                           {format(
@@ -364,6 +522,13 @@ export default function AdminDashboard() {
                     ))}
                   </tbody>
                 </table>
+              </div>
+              <div className="mt-4">
+                <PaginationControls
+                  totalItems={filteredJobApplications.length}
+                  currentPage={jobApplicationsPage}
+                  setPage={setJobApplicationsPage}
+                />
               </div>
             </section>
           </>

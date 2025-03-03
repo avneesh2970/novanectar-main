@@ -98,7 +98,7 @@ body {
   }
 }
 
-@keyframes shake {
+/* @keyframes shake {
   0% {
     transform: translate(1px, 1px) rotate(0deg);
   }
@@ -132,7 +132,7 @@ body {
   100% {
     transform: translate(1px, -2px) rotate(-1deg);
   }
-}
+} */
 
 .hover-shake:hover {
   animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
