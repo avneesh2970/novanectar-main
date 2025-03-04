@@ -15,6 +15,17 @@ import img12 from "@/assets/clients/12.png";
 import img13 from "@/assets/clients/13.png";
 import img14 from "@/assets/clients/14.png";
 import img15 from "@/assets/clients/15.png";
+import img16 from "@/assets/clients/16.png";
+import img17 from "@/assets/clients/17.png";
+import img18 from "@/assets/clients/18.png";
+import img19 from "@/assets/clients/19.png";
+import img20 from "@/assets/clients/20.png";
+import img21 from "@/assets/clients/21.png";
+import img22 from "@/assets/clients/22.png";
+import img23 from "@/assets/clients/23.png";
+import img24 from "@/assets/clients/24.png";
+
+
 
 import { useRef, useEffect, useState, useCallback } from "react";
 import Image from "next/image";
@@ -41,7 +52,16 @@ export default function Clients() {
     img12,
     img13,
     img14,
-    img15
+    img15,
+    img16,
+    img17,
+    img18,
+    img19,
+    img20,
+    img21,
+    img22,
+    img23,
+    img24,
   ];
   const imageSizes = [
     { width: 190, height: 190 },
@@ -59,6 +79,17 @@ export default function Clients() {
     { width: 190, height: 190 },
     { width: 180, height: 180 },
     { width: 180, height: 180 },
+
+    { width: 300, height: 300 },
+    { width: 280, height: 280 },
+    { width: 280, height: 280 },
+    { width: 280, height: 280 },
+    { width: 280, height: 280 },
+    { width: 280, height: 280 },
+    { width: 280, height: 280 },
+    { width: 280, height: 280 },
+    { width: 280, height: 280 },
+
   ];
 
   const totalWidth =
