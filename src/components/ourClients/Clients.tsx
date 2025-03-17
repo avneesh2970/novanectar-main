@@ -182,7 +182,7 @@ export default function Clients() {
         <h2
           className={`font-medium text-gray-900 text-4xl mb-14 text-center underline pt-8 ${DMSans.className}`}
         >
-          Our Trusted Partners
+          Our Trusted Clients
         </h2>
 
         <div className="relative overflow-hidden">
