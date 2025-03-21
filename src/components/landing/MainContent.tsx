@@ -10,6 +10,7 @@ import { DMSans, WorkSans } from "@/fonts/font";
 import Navbar from "../navbar/Navbar";
 import { ContactPopup } from "../contact/ContactPopup";
 import { AppointmentPicker } from "../appointment/appointent-picker";
+import ImagePopup from "../popups/image-popup";
 
 export const MainContent = () => {
   // const [isOpen, setIsOpen] = useState(false);
@@ -140,6 +141,7 @@ export const MainContent = () => {
                 Building Success Stories for
                 <span className="text-blue-500"> 200+ Trusted Clients</span>
               </p>
+              <ImagePopup />
             </div>
           </FloatingTechLayout>
           <AboutSection />
