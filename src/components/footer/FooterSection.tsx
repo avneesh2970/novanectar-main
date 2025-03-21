@@ -96,7 +96,7 @@ const FooterSection = () => {
             <div className="mt-4 hidden md:block">
               <p className="text-sm text-gray-400">VISIT US</p>
               <p className="text-sm text-gray-400">GMS Road Dehradun</p>
-              <p className="text-sm text-gray-400">Uttarakhand, India</p>
+              <p className="text-sm text-gray-400">Uttarakhand, India - 248001</p>
             </div>
           </div>
 
@@ -280,7 +280,7 @@ const FooterSection = () => {
           <p className="text-sm text-gray-400">
             GMS Road Dehradun, Kamla Palace Chowk
           </p>
-          <p className="text-sm text-gray-400">Uttarakhand, India</p>
+          <p className="text-sm text-gray-400">Uttarakhand, India - 248001</p>
         </div>
       </div>
       <div className="text-center mt-8">

@@ -24,14 +24,16 @@ import img21 from "@/assets/clients/21.png";
 import img22 from "@/assets/clients/22.png";
 import img23 from "@/assets/clients/23.png";
 import img24 from "@/assets/clients/24.png";
-
-
+import img25 from "@/assets/clients/25.png";
+import img26 from "@/assets/clients/26.png";
+import img27 from "@/assets/clients/27.png";
+import img28 from "@/assets/clients/28.png";
+import img29 from "@/assets/clients/29.png";
 
 import { useRef, useEffect, useState, useCallback } from "react";
 import Image from "next/image";
 import { DMSans } from "@/fonts/font";
 import Button from "./Button";
-
 export default function Clients() {
   const [isAnimationPaused, setIsAnimationPaused] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -62,34 +64,42 @@ export default function Clients() {
     img22,
     img23,
     img24,
+    img25,
+    img26,
+    img27,
+    img28,
+    img29,
   ];
   const imageSizes = [
-    { width: 190, height: 190 },
-    { width: 190, height: 190 },
-    { width: 280, height: 280 },
-    { width: 210, height: 210 },
-    { width: 300, height: 300 },
-    { width: 230, height: 230 },
-    { width: 250, height: 250 },
-    { width: 210, height: 200 },
-    { width: 280, height: 280 },
-    { width: 210, height: 210 },
-    { width: 350, height: 350 },
-    { width: 250, height: 250 },
-    { width: 190, height: 190 },
-    { width: 180, height: 180 },
-    { width: 180, height: 180 },
-
-    { width: 300, height: 300 },
-    { width: 280, height: 280 },
-    { width: 280, height: 280 },
-    { width: 280, height: 280 },
-    { width: 280, height: 280 },
-    { width: 280, height: 280 },
-    { width: 280, height: 280 },
-    { width: 280, height: 280 },
-    { width: 280, height: 280 },
-
+    {id:1, width: 190, height: 190 },
+    {id:2, width: 190, height: 190 },
+    {id:3, width: 280, height: 280 },
+    {id:4, width: 210, height: 210 },
+    {id:5, width: 300, height: 300 },
+    {id:6, width: 230, height: 230 },
+    {id:7, width: 250, height: 250 },
+    {id:8, width: 210, height: 200 },
+    {id:9, width: 280, height: 280 },
+    {id:10, width: 210, height: 210 },
+    {id:11, width: 350, height: 350 },
+    {id:12, width: 250, height: 250 },
+    {id:13, width: 190, height: 190 },
+    {id:14, width: 180, height: 180 },
+    {id:15, width: 180, height: 180 },
+    {id:16, width: 300, height: 300 },
+    {id:17, width: 280, height: 280 },
+    {id:18, width: 280, height: 280 },
+    {id:19, width: 280, height: 280 },
+    {id:20, width: 280, height: 280 },
+    {id:21, width: 280, height: 280 },
+    {id:22, width: 280, height: 280 },
+    {id:23, width: 280, height: 280 },
+    {id:24, width: 280, height: 280 },
+    {id:25, width: 280, height: 280 },
+    {id:26, width: 280, height: 280 },
+    {id:27, width: 280, height: 280 },
+    {id:28, width: 280, height: 280 },
+    {id:29, width: 200, height: 200 },
   ];
 
   const totalWidth =
