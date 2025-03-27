@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react"
 import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
-import powerBi1 from "../../assets/popups/powerbi1.png" // Portrait for mobile
-import powerBi from "../../assets/popups/powerbi.png" // Landscape for desktop
+import powerBi1 from "../../assets/popups/pythonMobile.png" // Portrait for mobile
+import powerBi from "../../assets/popups/pythonDesktop.png" // Landscape for desktop
 
 export default function ImagePopup() {
   const [isOpen, setIsOpen] = useState(false)
@@ -206,7 +206,7 @@ export default function ImagePopup() {
                 whileTap={{ scale: 0.95 }}
                 onClick={() =>
                   window.open(
-                    "https://docs.google.com/forms/d/e/1FAIpQLScoiS8PEIPIA7P3CL3Nq0NZjyhfAg8FECPZCfO9LasczAFU0g/viewform",
+                    "https://docs.google.com/forms/d/e/1FAIpQLScdNSpbMCCHHkABOw5cFQlHLK0pFqFNr0JZl7RqInkou1eTuA/viewform",
                     "_blank",
                   )
                 }
