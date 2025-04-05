@@ -59,6 +59,7 @@ const navItems: NavItem[] = [
     ],
   },
   { href: "/career", label: "Career" },
+  { href: "/blog", label: "Blog" }, 
 ];
 
 export default function Navbar() {
@@ -156,7 +157,7 @@ export default function Navbar() {
                 e.preventDefault();
                 toggleContactPopup();
               }}
-              className="hidden lg:block px-6 py-2 rounded-md bg-[#4169E1] text-white font-medium hover:bg-blue-600 transition-colors"
+              className="hidden lg:block px-4 py-2 rounded-md bg-[#4169E1] text-white font-medium hover:bg-blue-600 transition-colors"
             >
               Contact
             </button>
@@ -346,7 +347,7 @@ function NavItem({
         className="flex items-center space-x-1 py-2 text-gray-800 hover:text-blue-600 transition-colors"
         onClick={handleClick}
       >
-        <span>{item.label}</span>
+        <span className="whitespace-nowrap">{item.label}</span>
         {item.items && (
           <motion.div
             animate={{ rotate: isHovered ? 180 : 0 }}
