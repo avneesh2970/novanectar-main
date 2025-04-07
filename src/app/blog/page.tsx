@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import outsourceImage from "@/assets/blog/blog1/outsourcing.jpg";
+import effectiveInterviewImage from "@/assets/blog/blog2/effectiveConversation.jpeg";
 import { DMSans } from "@/fonts/font";
 
 export default function BlogPage() {
@@ -16,6 +17,17 @@ export default function BlogPage() {
       image: outsourceImage,
       slug: "outsourcing-it-services",
       categories: ["Technology", "Business", "IT Services"],
+    },
+    {
+      title:
+        "What Makes an Effective Interviewer? Tips for Conducting Successful Interviews",
+      excerpt:
+        "Interviews are a vital part of the hiring process, helping you identify the best candidates for your team—whether you're hiring a web developer, content creator, or any other role.",
+      author: "Amit Bhetwal",
+      date: "07-04-25",
+      image: effectiveInterviewImage,
+      slug: "effective-interviewer-tips",
+      categories: ["Business", "Hiring", "Human Resources"],
     },
   ];
 
