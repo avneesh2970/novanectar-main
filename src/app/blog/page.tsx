@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import outsourceImage from "@/assets/blog/blog1/outsourcing.jpg";
-import effectiveInterviewImage from "@/assets/blog/blog2/effectiveConversation.jpeg";
+import effectiveInterviewImage from "@/assets/blog/blog2/effectiveInterviews.jpeg";
 import { DMSans } from "@/fonts/font";
 
 export default function BlogPage() {
