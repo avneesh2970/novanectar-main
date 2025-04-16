@@ -10,7 +10,7 @@ import { toast } from "react-hot-toast"
 import BlogEditor from "@/components/blogs/blog-editor"
 import Image from "next/image"
 
-export default function EditBlogPost({ params }: { params: { id: string } | Promise<{ id: string }> }) {
+export default function EditBlogPost({ params }: any) {
   // Unwrap params using React.use with proper typing
   const unwrappedParams = params instanceof Promise ? use(params) : params
   const id = unwrappedParams.id
