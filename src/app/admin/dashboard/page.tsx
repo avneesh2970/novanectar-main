@@ -49,11 +49,10 @@ export default function AdminDashboard() {
   const [error, setError] = useState<string | null>(null);
 
   // Add pagination state variables after the existing state declarations
-  const [appointmentsPage, setAppointmentsPage] = useState(1)
-  const [contactsPage, setContactsPage] = useState(1)
-  const [jobApplicationsPage, setJobApplicationsPage] = useState(1)
-  const [itemsPerPage, setItemsPerPage] = useState(5)
-
+  const [appointmentsPage, setAppointmentsPage] = useState(1);
+  const [contactsPage, setContactsPage] = useState(1);
+  const [jobApplicationsPage, setJobApplicationsPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
   useEffect(() => {
     const isLoggedIn = sessionStorage.getItem("adminLoggedIn");
     if (!isLoggedIn) {
@@ -121,19 +120,24 @@ export default function AdminDashboard() {
     "jobId",
   ]);
 
-
   // Add pagination logic after the filtering functions
   // Paginate function to slice the data based on current page
   const paginateData = (data: any[], currentPage: number) => {
-    const startIndex = (currentPage - 1) * itemsPerPage
-    const endIndex = startIndex + itemsPerPage
-    return data.slice(startIndex, endIndex)
-  }
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return data.slice(startIndex, endIndex);
+  };
 
   // Paginated data for each section
-  const paginatedAppointments = paginateData(filteredAppointments, appointmentsPage)
-  const paginatedContacts = paginateData(filteredContacts, contactsPage)
-  const paginatedJobApplications = paginateData(filteredJobApplications, jobApplicationsPage)
+  const paginatedAppointments = paginateData(
+    filteredAppointments,
+    appointmentsPage
+  );
+  const paginatedContacts = paginateData(filteredContacts, contactsPage);
+  const paginatedJobApplications = paginateData(
+    filteredJobApplications,
+    jobApplicationsPage
+  );
 
   // Function to generate pagination controls
   const PaginationControls = ({
@@ -141,18 +145,24 @@ export default function AdminDashboard() {
     currentPage,
     setPage,
   }: {
-    totalItems: number
-    currentPage: number
-    setPage: (page: number) => void
+    totalItems: number;
+    currentPage: number;
+    setPage: (page: number) => void;
   }) => {
-    const totalPages = Math.ceil(totalItems / itemsPerPage)
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
 
     return (
       <div className="flex items-center justify-between mt-4">
         <div className="text-sm text-gray-700">
-          Showing <span className="font-medium">{Math.min((currentPage - 1) * itemsPerPage + 1, totalItems)}</span> to{" "}
-          <span className="font-medium">{Math.min(currentPage * itemsPerPage, totalItems)}</span> of{" "}
-          <span className="font-medium">{totalItems}</span> results
+          Showing{" "}
+          <span className="font-medium">
+            {Math.min((currentPage - 1) * itemsPerPage + 1, totalItems)}
+          </span>{" "}
+          to{" "}
+          <span className="font-medium">
+            {Math.min(currentPage * itemsPerPage, totalItems)}
+          </span>{" "}
+          of <span className="font-medium">{totalItems}</span> results
         </div>
         <div className="flex space-x-2">
           <button
@@ -173,7 +183,9 @@ export default function AdminDashboard() {
                 key={i}
                 onClick={() => setPage(i + 1)}
                 className={`px-3 py-1 rounded ${
-                  currentPage === i + 1 ? "bg-blue-500 text-white" : "bg-gray-200 hover:bg-gray-300 text-gray-700"
+                  currentPage === i + 1
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-200 hover:bg-gray-300 text-gray-700"
                 }`}
               >
                 {i + 1}
@@ -183,7 +195,7 @@ export default function AdminDashboard() {
             // Show limited pages with ellipsis for many pages
             <>
               {[...Array(Math.min(3, currentPage))].map((_, i) => {
-                const pageNum = i + 1
+                const pageNum = i + 1;
                 return pageNum < currentPage - 1 && i === 0 ? (
                   <React.Fragment key={pageNum}>
                     <button
@@ -199,16 +211,20 @@ export default function AdminDashboard() {
                     key={pageNum}
                     onClick={() => setPage(pageNum)}
                     className={`px-3 py-1 rounded ${
-                      currentPage === pageNum ? "bg-blue-500 text-white" : "bg-gray-200 hover:bg-gray-300 text-gray-700"
+                      currentPage === pageNum
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-200 hover:bg-gray-300 text-gray-700"
                     }`}
                   >
                     {pageNum}
                   </button>
-                ) : null
+                ) : null;
               })}
               {currentPage < totalPages - 1 && (
                 <>
-                  {currentPage < totalPages - 2 && <span className="px-2">...</span>}
+                  {currentPage < totalPages - 2 && (
+                    <span className="px-2">...</span>
+                  )}
                   <button
                     onClick={() => setPage(totalPages)}
                     className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 text-gray-700"
@@ -232,18 +248,19 @@ export default function AdminDashboard() {
           </button>
         </div>
       </div>
-    )
-  }
+    );
+  };
 
   // Update the itemsPerPage handler
-  const handleItemsPerPageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setItemsPerPage(Number(e.target.value))
+  const handleItemsPerPageChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setItemsPerPage(Number(e.target.value));
     // Reset to first page when changing items per page
-    setAppointmentsPage(1)
-    setContactsPage(1)
-    setJobApplicationsPage(1)
-  } 
-
+    setAppointmentsPage(1);
+    setContactsPage(1);
+    setJobApplicationsPage(1);
+  };
 
   // Function to download data as CSV
   const downloadCSV = (data: any[], filename: string) => {
