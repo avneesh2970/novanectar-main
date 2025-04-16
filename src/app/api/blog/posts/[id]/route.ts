@@ -1,12 +1,13 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { connectToDatabase } from "@/lib/mongodb"
+// import { connectToDatabase } from "@/lib/mongodb"
+import { connectDB } from "@/lib/dbConnect"
 import { BlogPost } from "@/models/BlogPost"
 import { isAuthenticated } from "@/lib/auth"
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params
-    await connectToDatabase()
+    await connectDB()
     const post = await BlogPost.findById(id)
 
     if (!post) {
@@ -28,7 +29,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    await connectToDatabase()
+    await connectDB()
     const data = await request.json()
 
     // Validate required fields
@@ -69,7 +70,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    await connectToDatabase()
+    await connectDB()
     const deletedPost = await BlogPost.findByIdAndDelete(id)
 
     if (!deletedPost) {
