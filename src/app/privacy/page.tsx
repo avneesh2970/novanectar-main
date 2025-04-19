@@ -67,9 +67,9 @@ export default function Page() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
         {/* Existing content starts here */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4 bg-white p-6 rounded-lg shadow-sm">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 transition-all duration-300">
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 transition-all duration-300">
             Company Policy Norms
-          </h2>
+          </h1>
           <p className="text-sm font-medium bg-gray-100 p-2 rounded-md shadow-sm hover:shadow-md transition-all duration-300">
             CIN No: U47410UT2024PTC017142
           </p>
@@ -79,7 +79,7 @@ export default function Page() {
         <div className="mb-8 bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-all duration-300">
           <p className="text-justify text-base md:text-lg leading-relaxed text-gray-700">
             Welcome to{" "}
-            <span className="text-red-600 font-medium">NovaNectar</span>{" "}
+            <span className="text-[#55C0FA] font-medium">NovaNectar</span>{" "}
             Services Private Limited! As a growing IT Company, we are committed
             to fostering an innovative, inclusive, professional and secure work
             environment. This document outlines our key policies, expectations,
@@ -123,7 +123,7 @@ export default function Page() {
             <SubSection title="2.1 Recruitment & Onboarding">
               <ul className="list-disc pl-5 space-y-3">
                 <li className="policy-item">
-                  <span className="text-red-600 font-medium">NovaNectar</span>{" "}
+                  <span className="text-[#55C0FA] font-medium">NovaNectar</span>{" "}
                   hires based on merit, skills, and cultural fit.
                 </li>
                 <li className="policy-item">
@@ -137,7 +137,9 @@ export default function Page() {
                 <li className="policy-item">
                   All intellectual property created during employment or
                   contractual work with{" "}
-                  <span className="text-red-600 font-medium">NovaNectar</span>{" "}
+                  <span className="text-[#55C0FA]  font-medium">
+                    NovaNectar
+                  </span>{" "}
                   is the sole property of the company.
                 </li>
               </ul>
@@ -255,7 +257,9 @@ export default function Page() {
                 <li className="policy-item">
                   All intellectual property created during employment or
                   contractual work with{" "}
-                  <span className="text-red-600 font-medium">NovaNectar</span>{" "}
+                  <span className="text-[#55C0FA]  font-medium">
+                    NovaNectar
+                  </span>{" "}
                   is the sole property of the company.
                 </li>
                 <li className="policy-item">
@@ -349,7 +353,7 @@ export default function Page() {
                 being final and binding.
               </li>
               <li className="policy-item">
-                <span className="text-red-600 font-medium">NovaNectar</span>{" "}
+                <span className="text-[#55C0FA]  font-medium">NovaNectar</span>{" "}
                 follows all tax and legal compliance guidelines as per
                 jurisdiction laws.
               </li>
@@ -397,7 +401,9 @@ export default function Page() {
                 title="Involuntary Termination"
                 description={
                   <>
-                    <span className="text-red-600 font-medium">NovaNectar</span>{" "}
+                    <span className="text-[#55C0FA]  font-medium">
+                      NovaNectar
+                    </span>{" "}
                     may terminate employment due to misconduct, policy
                     violations or under performance. Written notice will be
                     provided when applicable.
@@ -420,10 +426,12 @@ export default function Page() {
             <ul className="list-disc pl-5 space-y-3">
               <li className="policy-item">
                 By engaging with{" "}
-                <span className="text-red-600 font-medium">NovaNectar</span>{" "}
-                services Private Limited, you agree to comply with these
-                policies. We reserve the right to update these terms as required
-                by evolving business or legal needs.
+                <span className="text-green-500  font-medium">
+                  NovaNectar services Private{" "}
+                </span>{" "}
+                Limited, you agree to comply with these policies. We reserve the
+                right to update these terms as required by evolving business or
+                legal needs.
               </li>
               <li className="policy-item">
                 Employees will be notified of any changes in a timely manner.
