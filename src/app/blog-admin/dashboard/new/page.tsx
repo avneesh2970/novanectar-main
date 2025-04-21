@@ -365,7 +365,7 @@ export default function NewBlogPost() {
 
                 <div>
                   <label htmlFor="slug" className="block text-sm font-medium text-gray-700 mb-1">
-                    Slug <span className="text-red-500">*</span>
+                    custom url <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
