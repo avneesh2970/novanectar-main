@@ -104,6 +104,7 @@ export default function RootLayout({
               "https://www.instagram.com/novanectar_services_pvt.ltd?igsh=MXRoaHN3MGM5czYxZw==",
               "https://t.me/novanectarservices",
               "https://youtube.com/@novanectarservicespvt.ltd.?si=NVJY1MQc_NfoVoSi",
+              "https://x.com/nova_necta80067",
             ],
             contactPoint: {
               "@type": "ContactPoint",
