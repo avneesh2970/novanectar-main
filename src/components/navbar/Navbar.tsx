@@ -9,6 +9,7 @@ import HamburgerIcon from "./HambergerIcon";
 import { gsap } from "gsap";
 import { ContactPopup } from "../contact/ContactPopup";
 import { DMSans } from "@/fonts/font";
+import { scrollToSection } from "@/helpers/utils";
 
 interface NavItem {
   label: string;
@@ -69,13 +70,6 @@ export default function Navbar() {
   const mobileMenuRef = useRef<HTMLDivElement>(null);
 
   const [isContactPopupOpen, setIsContactPopupOpen] = useState(false);
-
-  const scrollToSection = (sectionId: string) => {
-    const section = document.getElementById(sectionId);
-    if (section) {
-      section.scrollIntoView({ behavior: "smooth" });
-    }
-  };
 
   useEffect(() => {
     if (isOpen) {

@@ -55,13 +55,13 @@ export const metadata: Metadata = {
     locale: "en_US",
     type: "website",
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "Novanectar Services - Fueling Progress with Smart IT Solutions",
-    description:
-      "Empowering businesses with powerful IT solutions that aims your success.",
-    images: ["https://novanectar.co.in/twitter-image.jpg"],
-  },
+  // twitter: {
+  //   card: "summary_large_image",
+  //   title: "Novanectar Services - Fueling Progress with Smart IT Solutions",
+  //   description:
+  //     "Empowering businesses with powerful IT solutions that aims your success.",
+  //   images: ["https://novanectar.co.in/twitter-image.jpg"],
+  // },
   robots: {
     index: true,
     follow: true,
@@ -74,7 +74,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: "your-google-verification-code", // Add your Google Search Console verification code
+    google: "your-google-verification-code",
   },
   alternates: {
     canonical: "https://novanectar.co.in",

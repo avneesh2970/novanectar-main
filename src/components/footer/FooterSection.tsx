@@ -5,8 +5,9 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import gsap from "gsap";
 import ellipse from "@/assets/footer/ellipse.png";
-import { Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
+import { Facebook, Instagram, Linkedin, Youtube, Twitter } from "lucide-react";
 import { DMSans } from "@/fonts/font";
+// import { scrollToSection } from "@/helpers/utils";
 
 const FooterSection = () => {
   const footerRef = useRef<HTMLElement>(null);
@@ -58,6 +59,11 @@ const FooterSection = () => {
       icon: Youtube,
       href: "https://youtube.com/@novanectarservicespvt.ltd.?si=NVJY1MQc_NfoVoSi",
     },
+    {
+      name: "Twitter",
+      icon: Twitter,
+      href: "https://x.com/nova_necta80067",
+    },
   ];
 
   return (
@@ -96,7 +102,9 @@ const FooterSection = () => {
             <div className="mt-4 hidden md:block">
               <p className="text-sm text-gray-400">VISIT US</p>
               <p className="text-sm text-gray-400">GMS Road Dehradun</p>
-              <p className="text-sm text-gray-400">Uttarakhand, India - 248001</p>
+              <p className="text-sm text-gray-400">
+                Uttarakhand, India - 248001
+              </p>
             </div>
           </div>
 
@@ -104,18 +112,23 @@ const FooterSection = () => {
           <div className="md:text-start">
             <h3 className="text-sm font-medium mb-4">QUICK LINKS</h3>
             <ul className="space-y-2">
-              {["Home", "About", "Services"].map((item) => (
+              {[
+                { name: "Home", id: "home-section" },
+                { name: "About", id: "about-section" },
+                { name: "Services", id: "services-section" },
+              ].map((item) => (
                 <motion.li
-                  key={item}
+                  key={item.id}
                   variants={linkVariants}
                   whileHover="hover"
                   className="text-sm"
                 >
                   <Link
-                    href="#"
+                  href={`#${item.id}`}
                     className="text-gray-400 hover:text-white transition-colors"
+                    // onClick={() => scrollToSection(item.id)}
                   >
-                    {item}
+                    {item.name}
                   </Link>
                 </motion.li>
               ))}
@@ -127,24 +140,24 @@ const FooterSection = () => {
             <h3 className="text-sm font-medium mb-4">SOLUTIONS</h3>
             <ul className="space-y-2">
               {[
-                "Web Development",
-                "App Development",
-                "UI/UX Design",
-                "Graphic Design",
-                "SEO",
-                "Digital Marketing",
+                {name: "Web Development", id: "web-development"},
+                {name: "App Development", id: "mobile-development"},
+                {name: "Graphic Design", id: "graphic-design"},
+                {name: "Digital Marketing", id: "digital-marketing"},
+                {name: "E-Commerce", id: "ecommerce"},
+                {name: "SEO", id: "seo"},
               ].map((item) => (
                 <motion.li
-                  key={item}
+                  key={item.id}
                   variants={linkVariants}
                   whileHover="hover"
                   className="text-sm"
                 >
                   <Link
-                    href="#"
+                    href={`/services/${item.id}`}
                     className="text-gray-400 hover:text-white transition-colors"
                   >
-                    {item}
+                    {item.name}
                   </Link>
                 </motion.li>
               ))}
@@ -174,10 +187,10 @@ const FooterSection = () => {
               </ul>
             </div>
             <div className="hidden sm:block">
-              <h3 className="text-sm font-medium mb-4">LEGAL</h3>
+              <h4 className="text-sm font-medium mb-4">LEGAL</h4>
               <ul className="space-y-2">
                 {/* {["Privacy Policy", "Terms of Service"].map((item) => ( */}
-                {["Privacy Policy", ""].map((item) => (
+                {["Privacy Policy"].map((item) => (
                   <motion.li
                     key={item}
                     variants={linkVariants}
@@ -198,7 +211,7 @@ const FooterSection = () => {
 
           {/* Follow Us */}
           <div className="hidden sm:block col-span-1 sm:col-span-2 md:col-span-1 md:text-start">
-            <h3 className="text-sm font-medium mb-4">FOLLOW US</h3>
+            <h4 className="text-sm font-medium mb-4">FOLLOW US</h4>
             <div className="flex flex-wrap gap-4">
               {socialIcons.map((social) => (
                 <motion.a
@@ -237,25 +250,6 @@ const FooterSection = () => {
               ))}
             </ul>
           </div>
-
-          {/* <div className="hidden sm:block col-span-1 sm:col-span-2 md:col-span-1 md:text-start">
-            <h3 className="text-sm font-medium mb-4">FOLLOW USs</h3>
-            <div className="flex flex-wrap gap-4">
-              {socialIcons.map((social) => (
-                <motion.a
-                  key={social.name}
-                  href={social.href}
-                  target="_blank"
-                  variants={linkVariants}
-                  whileHover="hover"
-                  className="text-gray-400 hover:text-white transition-colors"
-                >
-                  <social.icon className="w-6 h-6" />
-                  <span className="sr-only">{social.name}</span>
-                </motion.a>
-              ))}
-            </div>
-          </div> */}
           <div className="sm:hidden col-span-1 sm:col-span-2 md:col-span-1 md:text-start">
             <h3 className="text-sm font-medium mb-4">FOLLOW US</h3>
             <div className="flex flex-wrap gap-4">

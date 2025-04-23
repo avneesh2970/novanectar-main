@@ -1,8 +1,8 @@
-"use client"
-import React, { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { Plus } from "lucide-react"
-import { DMSans } from "@/fonts/font"
+"use client";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Plus } from "lucide-react";
+import { DMSans } from "@/fonts/font";
 
 const faqs = [
   {
@@ -41,9 +41,16 @@ const faqs = [
     answer:
       "We specialize in SEO, social media marketing, pay-per-click advertising, content marketing, email marketing, and comprehensive digital strategy development to boost brand visibility and achieve your business goals.",
   },
-]
+];
 
-const FAQItem = ({ faq, isOpen, onClick, isHovered, onHover, onHoverEnd }: any) => {
+const FAQItem = ({
+  faq,
+  isOpen,
+  onClick,
+  isHovered,
+  onHover,
+  onHoverEnd,
+}: any) => {
   return (
     <motion.div
       className="border-t border-gray-400/30 py-4"
@@ -51,7 +58,10 @@ const FAQItem = ({ faq, isOpen, onClick, isHovered, onHover, onHoverEnd }: any) 
       onMouseEnter={onHover}
       onMouseLeave={onHoverEnd}
     >
-      <motion.div className="flex justify-between items-center cursor-pointer group" onClick={onClick}>
+      <motion.div
+        className="flex justify-between items-center cursor-pointer group"
+        onClick={onClick}
+      >
         <h3 className="text-white text-base pr-8">{faq.question}</h3>
         <motion.div
           animate={{
@@ -98,17 +108,19 @@ const FAQItem = ({ faq, isOpen, onClick, isHovered, onHover, onHoverEnd }: any) 
             }}
             className="overflow-hidden"
           >
-            <p className="text-gray-300 text-start mt-3 text-sm leading-relaxed pr-8">{faq.answer}</p>
+            <p className="text-gray-300 text-start mt-3 text-sm leading-relaxed pr-8">
+              {faq.answer}
+            </p>
           </motion.div>
         )}
       </AnimatePresence>
     </motion.div>
-  )
-}
+  );
+};
 
 const FAQSection = () => {
-  const [openId, setOpenId] = useState<any>(null)
-  const [hoveredId, setHoveredId] = useState<any>(null)
+  const [openId, setOpenId] = useState<any>(null);
+  const [hoveredId, setHoveredId] = useState<any>(null);
 
   return (
     <div className={`bg-[#0B2341] px-4 py-12 ${DMSans.className}`}>
@@ -141,9 +153,28 @@ const FAQSection = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
             >
-              At Novanectar Services, we believe in transforming ideas into impactful IT Solutions. From website
-              development to app creation, SEO, graphic design, UI/UX, and digital marketing, we specialize in crafting
-              tailored strategies to meet your goals.
+              At <strong className="font-normal">Novanectar Services</strong>,
+              we believe in transforming ideas into impactful
+              <strong className="font-normal"> IT Solutions</strong>. From{" "}
+              <strong className="font-normal">website development</strong> to
+              <strong className="font-normal"> app creation</strong>,{" "}
+              <strong className="font-normal">SEO</strong>,{" "}
+              <strong className="font-normal">graphic design</strong>,
+              <strong className="font-normal"> UI/UX</strong>, and{" "}
+              <strong className="font-normal">digital marketing</strong>, we
+              specialize in crafting tailored strategies to meet your goals.
+            </motion.p>
+
+            <motion.p
+              className="text-gray-300 text-sm mt-6 leading-relaxed text-start max-w-xl"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+            >
+              Let&apos;s make something awesome together! Whether you need a
+              dynamic website, a feature-rich app, or a creative marketing
+              campaign, our team ensures quality, innovation, and seamless
+              execution.
             </motion.p>
             <motion.p
               className="text-gray-300 text-sm mt-6 leading-relaxed text-start max-w-xl"
@@ -151,17 +182,10 @@ const FAQSection = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
             >
-              Let&apos;s make something awesome together! Whether you need a dynamic website, a feature-rich app, or a
-              creative marketing campaign, our team ensures quality, innovation, and seamless execution.
-            </motion.p>
-            <motion.p
-              className="text-gray-300 text-sm mt-6 leading-relaxed text-start max-w-xl"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-            >
-              Got questions? Explore our services, timelines, or processes in our FAQ section. Together, we&apos;ll build
-              exceptional solutions that elevate your brand and achieve remarkable results. Reach out today!
+              Got questions? Explore our services, timelines, or processes in
+              our FAQ section. Together, we&apos;ll build exceptional solutions
+              that elevate your brand and achieve remarkable results. Reach out
+              today!
             </motion.p>
           </div>
 
@@ -187,8 +211,7 @@ const FAQSection = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default FAQSection
-
+export default FAQSection;

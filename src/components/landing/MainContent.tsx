@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import ServicesSection from "../services/ServicesSection";
 import FloatingTechLayout from "./FloatingIcons";
 import AboutSection from "../about/AboutSection";
+import { scrollToSection } from "@/helpers/utils";
 
 //fonts
 import { DMSans, WorkSans } from "@/fonts/font";
@@ -73,16 +74,16 @@ export const MainContent = () => {
 
   const toggleContactPopup = () => setIsContactPopupOpen(!isContactPopupOpen);
 
-  const scrollToSection = (sectionId: string) => {
-    const section = document.getElementById(sectionId);
-    if (section) {
-      section.scrollIntoView({ behavior: "smooth" });
-    }
-  };
+  // const scrollToSection = (sectionId: string) => {
+  //   const section = document.getElementById(sectionId);
+  //   if (section) {
+  //     section.scrollIntoView({ behavior: "smooth" });
+  //   }
+  // };
 
   return (
     <>
-      <div className="">
+      <div id="home-section">
         <Navbar />
         <div className="relative w-full bg-white pt-16">
           {/* Base grid */}

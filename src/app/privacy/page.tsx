@@ -2,6 +2,8 @@ import Navbar from "@/components/navbar/Navbar";
 import { DMSans } from "@/fonts/font";
 import { GlobeIcon, MailIcon, MapPinIcon, PhoneIcon } from "lucide-react";
 import Image from "next/image";
+// import type { Metadata } from "next"
+// import Link from "next/link"
 
 export default function Page() {
   return (
