@@ -1,16 +1,27 @@
 import BlogPostContent from "@/components/blogs/blog-post-content"
-import { Metadata } from 'next'
+import type { Metadata } from "next"
 
-// Add this function to generate metadata
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+// Updated function to generate metadata with proper params handling
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }> | { slug: string }
+}): Promise<Metadata> {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || ''}/api/blog/posts?slug=${params.slug}`)
+    // Await the params before accessing the slug property
+    const resolvedParams = await params
+
+    // Construct the URL with the resolved slug
+    const url = new URL("/api/blog/posts", process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000")
+    url.searchParams.append("slug", resolvedParams.slug)
+
+    const response = await fetch(url.toString())
     const post = await response.json()
 
     if (!post) {
       return {
-        title: 'Blog Post Not Found',
-        description: 'The requested blog post could not be found.'
+        title: "Blog Post Not Found",
+        description: "The requested blog post could not be found.",
       }
     }
 
@@ -21,19 +32,19 @@ export async function generateMetadata({ params }: { params: { slug: string } })
         title: post.metaTitle || post.title,
         description: post.metaDescription || post.excerpt,
         images: post.featuredImage ? [{ url: post.featuredImage }] : [],
-        type: 'article',
+        type: "article",
       },
     }
   } catch (error) {
-    console.log("error", error);
+    console.log("error", error)
     return {
-      title: 'Blog',
-      description: 'Read our latest blog posts'
+      title: "Blog",
+      description: "Read our latest blog posts",
     }
   }
 }
 
-export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
+export default async function Page({ params }: { params: Promise<{ slug: string }> | { slug: string } }) {
   // Await the params before accessing the slug property
   const resolvedParams = await params
 
