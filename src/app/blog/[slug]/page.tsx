@@ -1,28 +1,31 @@
-import BlogPostContent from "@/components/blogs/blog-post-content"
-import type { Metadata } from "next"
+import BlogPostContent from "@/components/blogs/blog-post-content";
+import type { Metadata } from "next";
 
 // Updated function to generate metadata with proper params handling
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }> | { slug: string }
+  params: Promise<{ slug: string }> | { slug: string };
 }): Promise<Metadata> {
   try {
     // Await the params before accessing the slug property
-    const resolvedParams = await params
+    const resolvedParams = await params;
 
     // Construct the URL with the resolved slug
-    const url = new URL("/api/blog/posts", process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000")
-    url.searchParams.append("slug", resolvedParams.slug)
+    const url = new URL(
+      "/api/blog/posts",
+      process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
+    );
+    url.searchParams.append("slug", resolvedParams.slug);
 
-    const response = await fetch(url.toString())
-    const post = await response.json()
+    const response = await fetch(url.toString());
+    const post = await response.json();
 
     if (!post) {
       return {
         title: "Blog Post Not Found",
         description: "The requested blog post could not be found.",
-      }
+      };
     }
 
     return {
@@ -34,19 +37,19 @@ export async function generateMetadata({
         images: post.featuredImage ? [{ url: post.featuredImage }] : [],
         type: "article",
       },
-    }
+    };
   } catch (error) {
-    console.log("error", error)
+    console.log("error", error);
     return {
       title: "Blog",
       description: "Read our latest blog posts",
-    }
+    };
   }
 }
 
-export default async function Page({ params }: { params: Promise<{ slug: string }> | { slug: string } }) {
+export default async function Page({ params }:any) {
   // Await the params before accessing the slug property
-  const resolvedParams = await params
+  const resolvedParams = await params;
 
-  return <BlogPostContent slug={resolvedParams.slug} />
+  return <BlogPostContent slug={resolvedParams.slug} />;
 }
