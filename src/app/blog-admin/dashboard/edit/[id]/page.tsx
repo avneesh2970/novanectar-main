@@ -53,6 +53,7 @@ export default function EditBlogPost({ params }: any) {
     if (postId) {
       fetchPost();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router, postId]);
 
   const fetchPost = async () => {
