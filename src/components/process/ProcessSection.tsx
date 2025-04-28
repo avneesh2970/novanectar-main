@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import Image from "next/image";
-import bgImage from "@/assets/pocess/bg.png";
+// import Image from "next/image";
+// import bgImage from "@/assets/pocess/bg.png";
 import { DMSans, DMSans400, DMSans500 } from "@/fonts/font";
 
 const ServiceCard = ({ title, description, icon }: any) => {
@@ -224,7 +224,7 @@ export default function ProcessSection() {
           isMobile ? "" : "sticky top-0"
         } h-screen flex flex-col items-start justify-center overflow-hidden`}
       >
-        <Image
+        {/* <Image
           alt="Process"
           src={bgImage || "/placeholder.svg"}
           placeholder="blur"
@@ -236,7 +236,7 @@ export default function ProcessSection() {
             objectPosition: "center",
           }}
           className="opacity-50"
-        />
+        /> */}
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-gray-900/100 to-gray-900"></div>
 
         <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8">

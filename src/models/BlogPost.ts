@@ -8,6 +8,8 @@ export interface IBlogPost extends Document {
   author: string
   featuredImage?: string
   categories: string[]
+  metaTitle?: string // New field
+  metaDescription?: string // New field
   createdAt: Date
   updatedAt: Date
 }
@@ -45,6 +47,14 @@ const BlogPostSchema = new Schema<IBlogPost>(
     categories: {
       type: [String],
       default: [],
+    },
+    metaTitle: { // New field
+      type: String,
+      trim: true,
+    },
+    metaDescription: { // New field
+      type: String,
+      trim: true,
     },
   },
   { timestamps: true },
