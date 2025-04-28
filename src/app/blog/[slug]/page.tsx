@@ -2,11 +2,7 @@ import BlogPostContent from "@/components/blogs/blog-post-content";
 import type { Metadata } from "next";
 
 // Updated function to generate metadata with proper params handling
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }> | { slug: string };
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: any): Promise<Metadata> {
   try {
     // Await the params before accessing the slug property
     const resolvedParams = await params;
@@ -47,7 +43,7 @@ export async function generateMetadata({
   }
 }
 
-export default async function Page({ params }:any) {
+export default async function Page({ params }: any) {
   // Await the params before accessing the slug property
   const resolvedParams = await params;
 
