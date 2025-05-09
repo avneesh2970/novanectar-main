@@ -5,7 +5,7 @@ export const jobListings: any = [
       name: "NovaNectar",
       logo: "https://novanectar.co.in/logo.png",
     },
-    position: "B.D.E (Business Development Executive)",
+    position: "Business Development Executive",
     location: "Dehradun",
     experience: "Fresher Or 1 Year Experience",
     details: {
