@@ -92,7 +92,7 @@ export const WhyChooseUs = () => {
   )
 }
 
-const FeatureCard = ({ feature }) => {
+const FeatureCard = ({ feature }:any) => {
   return (
     <motion.div
       className="bg-[#F0F4F9] rounded-3xl p-6 flex flex-col h-full relative overflow-hidden"
