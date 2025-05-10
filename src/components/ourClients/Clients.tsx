@@ -10,7 +10,7 @@ import img7 from "@/assets/clients/7.png";
 import img8 from "@/assets/clients/8.png";
 import img9 from "@/assets/clients/9.png";
 import img10 from "@/assets/clients/10.png";
-import img11 from "@/assets/clients/11.png";
+// import img11 from "@/assets/clients/11.png";
 import img12 from "@/assets/clients/12.png";
 import img13 from "@/assets/clients/13.png";
 import img14 from "@/assets/clients/14.png";
@@ -22,7 +22,7 @@ import img19 from "@/assets/clients/19.png";
 import img20 from "@/assets/clients/20.png";
 import img21 from "@/assets/clients/21.png";
 import img22 from "@/assets/clients/22.png";
-import img23 from "@/assets/clients/23.png";
+// import img23 from "@/assets/clients/23.png";
 import img24 from "@/assets/clients/24.png";
 import img25 from "@/assets/clients/25.png";
 import img26 from "@/assets/clients/26.png";
@@ -50,7 +50,7 @@ export default function Clients() {
     img8,
     img9,
     img10,
-    img11,
+    // img11,
     img12,
     img13,
     img14,
@@ -62,7 +62,7 @@ export default function Clients() {
     img20,
     img21,
     img22,
-    img23,
+    // img23,
     img24,
     img25,
     img26,
@@ -71,35 +71,33 @@ export default function Clients() {
     img29,
   ];
   const imageSizes = [
-    {id:1, width: 190, height: 190 },
-    {id:2, width: 190, height: 190 },
-    {id:3, width: 280, height: 280 },
-    {id:4, width: 210, height: 210 },
-    {id:5, width: 300, height: 300 },
-    {id:6, width: 230, height: 230 },
-    {id:7, width: 250, height: 250 },
-    {id:8, width: 210, height: 200 },
-    {id:9, width: 280, height: 280 },
-    {id:10, width: 210, height: 210 },
-    {id:11, width: 350, height: 350 },
-    {id:12, width: 250, height: 250 },
-    {id:13, width: 190, height: 190 },
-    {id:14, width: 180, height: 180 },
-    {id:15, width: 180, height: 180 },
-    {id:16, width: 300, height: 300 },
-    {id:17, width: 280, height: 280 },
-    {id:18, width: 280, height: 280 },
-    {id:19, width: 280, height: 280 },
-    {id:20, width: 280, height: 280 },
-    {id:21, width: 280, height: 280 },
-    {id:22, width: 280, height: 280 },
-    {id:23, width: 280, height: 280 },
-    {id:24, width: 280, height: 280 },
-    {id:25, width: 280, height: 280 },
-    {id:26, width: 280, height: 280 },
-    {id:27, width: 280, height: 280 },
-    {id:28, width: 280, height: 280 },
-    {id:29, width: 200, height: 200 },
+    {id:1, width: 150, height: 120 },
+    {id:2, width: 150, height: 120 },
+    {id:3, width: 150, height: 120 },
+    {id:4, width: 150, height: 120 },
+    {id:5, width: 150, height: 120 },
+    {id:6, width: 150, height: 120 },
+    {id:7, width: 150, height: 120 },
+    {id:8, width: 150, height: 120 },
+    {id:9, width: 150, height: 120 },
+    {id:10, width: 150, height: 120 },
+    {id:12, width: 150, height: 120 },
+    {id:13, width: 150, height: 120 },
+    {id:14, width: 150, height: 120 },
+    {id:15, width: 150, height: 120 },
+    {id:16, width: 150, height: 120 },
+    {id:17, width: 150, height: 120 },
+    {id:18, width: 150, height: 120 },
+    {id:19, width: 150, height: 120 },
+    {id:20, width: 150, height: 120 },
+    {id:21, width: 150, height: 120 },
+    {id:22, width: 150, height: 120 },
+    {id:24, width: 150, height: 120 },
+    {id:25, width: 150, height: 120 },
+    {id:26, width: 150, height: 120 },
+    {id:27, width: 150, height: 120 },
+    {id:28, width: 150, height: 120 },
+    {id:29, width: 150, height: 120 },
   ];
 
   const totalWidth =

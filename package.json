@@ -17,15 +17,17 @@
     "@tiptap/extension-underline": "^2.11.7",
     "@tiptap/react": "^2.11.7",
     "@tiptap/starter-kit": "^2.11.7",
+    "bcryptjs": "^3.0.2",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "framer-motion": "^11.16.4",
     "gsap": "^3.12.5",
+    "jose": "^6.0.11",
     "jspdf": "^2.5.2",
     "jspdf-autotable": "^3.8.4",
     "lucide-react": "^0.469.0",
     "mini-svg-data-uri": "^1.4.4",
-    "mongoose": "^8.9.5",
+    "mongoose": "^8.14.2",
     "next": "15.1.4",
     "react": "^19.0.0",
     "react-datepicker": "^8.0.0",
@@ -36,7 +38,8 @@
     "react-scroll-trigger": "^0.6.14",
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.1",
-    "tailwind-merge": "^2.6.0"
+    "tailwind-merge": "^2.6.0",
+    "ua-parser-js": "^2.0.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
