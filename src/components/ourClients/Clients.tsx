@@ -178,14 +178,14 @@ export default function Clients() {
 
   return (
     <section
-      className="w-full py-14 px-4 bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 relative"
+      className="w-full py-14 px-4 bg-white relative"
       onMouseDown={pauseAnimation}
       onMouseUp={resumeAnimation}
       onMouseLeave={resumeAnimation}
       onTouchStart={pauseAnimation}
       onTouchEnd={resumeAnimation}
     >
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCI+CjxyZWN0IHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgZmlsbD0iI2ZmZiIvPgo8Y2lyY2xlIGN4PSIzMCIgY3k9IjMwIiByPSIxLjUiIGZpbGw9IiNjY2MiLz4KPC9zdmc+')] opacity-75"></div>
+      <div className=""></div>
       <div className="max-w-[1400px] mx-auto relative z-10">
         <h2
           className={`font-medium text-gray-900 text-4xl mb-14 text-center underline pt-8 ${DMSans.className}`}
