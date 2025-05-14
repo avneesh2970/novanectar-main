@@ -1,12 +1,7 @@
 import BlogPostContent from "@/components/blogs/blog-post-content";
-import type { Metadata } from "next";
 
 // Updated function to generate metadata with proper params handling
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string };
-}): Promise<Metadata> {
+export async function generateMetadata({ params }:any) {
   try {
     // Construct the URL with the slug
     const url = new URL(
@@ -99,9 +94,9 @@ export async function generateMetadata({
       alternates: {
         canonical: `${process.env.NEXT_PUBLIC_APP_URL}/blog/${post.slug}`,
       },
-       other: {
-      "script:ld+json": JSON.stringify(jsonLd),
-    },
+      other: {
+        "script:ld+json": JSON.stringify(jsonLd),
+      },
     };
   } catch (error) {
     console.error("Error generating metadata:", error);
