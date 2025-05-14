@@ -23,7 +23,7 @@ interface BlogPost {
   excerpt?: string;
 }
 
-export default function BlogPostContent({ slug }: { slug: string }) {
+export default function BlogPostContent({ slug }: any) {
   const [post, setPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
