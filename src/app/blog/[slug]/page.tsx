@@ -112,6 +112,6 @@ export async function generateMetadata({
   }
 }
 
-export default async function Page({ params }: { params: { slug: string } }) {
+export default async function Page({ params }: any) {
   return <BlogPostContent slug={params.slug} />;
 }
