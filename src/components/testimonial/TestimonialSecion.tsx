@@ -26,7 +26,7 @@ const TestimonialCard = ({
       className={`relative bg-white rounded-xl p-6 shadow-lg h-full flex flex-col ${DMSans.className}`}
     >
       {/* Quote icon */}
-      <div className="absolute -top-3 -left-2 bg-[#3DBBFA] text-white p-2 rounded-full shadow-md">
+      <div className="absolute -top-[17] -left-0 bg-[#3DBBFA] text-white p-2 rounded-full shadow-md">
         <Quote className="w-5 h-5" />
       </div>
 
@@ -382,7 +382,7 @@ const TestimonialSection = () => {
   return (
     <div
       ref={sectionRef}
-      className="relative w-full min-h-screen overflow-hidden bg-gradient-to-br from-gray-50 to-gray-200"
+      className="relative w-full min-h-screen overflow-hidden bg-[#f6f4f0]"
     >
       {/* Background Elements */}
       <div className="absolute top-0 left-0 w-64 h-64 bg-green-300 rounded-full blur-3xl opacity-30" />
@@ -403,9 +403,9 @@ const TestimonialSection = () => {
         </div>
 
         {/* Title with animation */}
-        <div className="relative z-10 text-center mb-12 px-4 mt-16">
+        <div className="relative z-10 text-center mb-12 px-4 mt-28">  
           <h2
-            className={`text-4xl md:text-5xl font-bold text-gray-800 mb-3 ${DMSans.className}`}
+            className={`text-3xl sm:text-4xl md:text-5xl font-semibold text-gray-800 mb-3 ${DMSans.className}`}
           >
             <span className="inline-block relative">
               Client
@@ -426,7 +426,7 @@ const TestimonialSection = () => {
           role="region"
           aria-label="Testimonial Carousel"
           aria-roledescription="carousel"
-          className="relative z-10 w-full px-16 max-w-7xl mx-auto"
+          className="relative z-10 w-full sm:px-16 px-4 max-w-7xl mx-auto"
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
@@ -446,7 +446,7 @@ const TestimonialSection = () => {
               prevPage();
             }}
             disabled={isAnimating}
-            className="absolute left-2 top-1/3 -translate-y-1/2 z-20 bg-white hover:bg-gray-100 text-gray-800 p-2.5 rounded-full shadow-lg transition-all disabled:opacity-50 hover:scale-110 hover:shadow-xl focus:outline-none overflow-hidden"
+            className="absolute sm:left-2 left-8 top-60 -translate-y-1/2 z-20 bg-white opacity-80 hover:bg-gray-100 text-gray-800 p-2.5 rounded-full shadow-lg transition-all disabled:opacity-50 hover:scale-110 hover:shadow-xl focus:outline-none overflow-hidden"
             aria-label="Previous testimonials"
             onMouseEnter={pauseAutoplay}
             onMouseLeave={resumeAutoplay}
@@ -462,7 +462,7 @@ const TestimonialSection = () => {
               nextPage();
             }}
             disabled={isAnimating}
-            className="absolute right-2 top-1/3 -translate-y-1/2 z-20 bg-white hover:bg-gray-100 text-gray-800 p-2.5 rounded-full shadow-lg transition-all disabled:opacity-50 hover:scale-110 hover:shadow-xl focus:outline-none overflow-hidden"
+            className="absolute sm:right-2 right-8 top-60 -translate-y-1/2 z-20 bg-white opacity-80 hover:bg-gray-100 text-gray-800 p-2.5 rounded-full shadow-lg transition-all disabled:opacity-50 hover:scale-110 hover:shadow-xl focus:outline-none overflow-hidden"
             aria-label="Next testimonials"
             onMouseEnter={pauseAutoplay}
             onMouseLeave={resumeAutoplay}
@@ -471,7 +471,7 @@ const TestimonialSection = () => {
           </button>
 
           {/* Carousel Container with overflow hidden */}
-          <div className="relative overflow-hidden px-2">
+          <div className="relative overflow-hidden sm:px-2">
             {/* Slides Container */}
             <div
               ref={carouselRef}

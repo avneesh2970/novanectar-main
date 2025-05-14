@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { DMSans } from "@/fonts/font";
-import { FloatingShapes } from "./FloatingShapes";
+// import { FloatingShapes } from "./FloatingShapes";
 import { AnimatedInput } from "./AnimatedInput";
 
 interface IFormInput {
@@ -62,9 +62,9 @@ const ContactForm = () => {
 
   return (
     <div
-      className={`relative w-full h-full bg-gradient-to-br from-blue-50 to-purple-50 overflow-hidden p-2 sm:p-4 pb-8 ${DMSans.className}`}
+      className={`relative w-full h-full bg-[#f6f4f0] overflow-hidden p-2 sm:p-4 pb-8 ${DMSans.className}`}
     >
-      <FloatingShapes />
+      {/* <FloatingShapes /> */}
       <div className="max-w-6xl mx-auto relative z-10 pt-16">
         <motion.h1
           className="text-3xl md:text-4xl font-bold text-center mb-10"

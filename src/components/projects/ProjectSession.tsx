@@ -76,7 +76,7 @@ const ProjectCard = ({ item, index }: any) => {
 
   return (
     <motion.div
-      className="group relative bg-blue-200 rounded-2xl overflow-hidden"
+      className="group relative bg-[#fff2f2] rounded-2xl overflow-hidden"
       variants={cardVariants}
       initial="hidden"
       animate="visible"
@@ -85,18 +85,18 @@ const ProjectCard = ({ item, index }: any) => {
     >
       <div className="aspect-[14/9] relative overflow-hidden">
         <motion.div
-          className="w-full h-full overflow-hidden bg-blue-500"
+          className="w-full h-full overflow-hidden"
           whileHover="hover"
         >
           <motion.div
             variants={imageVariants}
-            className="w-full h-full relative overflow-hidden bg-blue-200"
+            className="w-full h-full relative overflow-hidden"
           >
             <Image
               src={item.image}
               alt={item.title}
               fill
-              className="object-contain overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out bg-blue-200"
+              className="object-contain overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               priority={index < 2}
             />
@@ -123,18 +123,27 @@ const ProjectCard = ({ item, index }: any) => {
 
 const ProjectSession = () => {
   return (
-    <div className="min-h-screen bg-blue-200 px-4 py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#fff2f2] px-4 py-12 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <h2
+          {/* <h2
             className={`font-medium text-gray-900 text-4xl mb-4 text-center underline pt-8 ${DMSans.className}`}
           >
             Projects
-          </h2>
+          </h2> */}
+          <h2
+          className={`text-3xl sm:text-4xl md:text-5xl text-center font-semibold text-gray-800 mb-14 ${DMSans.className}`}
+        >
+          <span className="inline-block relative">
+            Projects
+            <span className="absolute -bottom-2 left-0 w-full h-1 bg-[#3DBBFA]"></span>
+          </span>{" "}
+          {/* <span className="inline-block">Trusted Clients</span> */}
+        </h2>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">

@@ -6,7 +6,6 @@ import Link from "next/link";
 import { ArrowLeft, Calendar } from "lucide-react";
 import { DMSans } from "@/fonts/font";
 import { format } from "date-fns";
-import Head from "next/head";
 
 interface BlogPost {
   _id: string;
@@ -17,6 +16,7 @@ interface BlogPost {
   createdAt: string;
   updatedAt?: string;
   featuredImage?: string;
+  featuredImageAlt?: string; // Add this field
   categories: string[];
   metaTitle?: string;
   metaDescription?: string;
@@ -27,9 +27,10 @@ export default function BlogPostContent({ slug }: { slug: string }) {
   const [post, setPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const metaTitle = post?.metaTitle || post?.title || "Blog Post";
-  const metaDescription =
-    post?.metaDescription || post?.excerpt || "Read our latest blog post";
+
+  // const metaTitle = post?.metaTitle || post?.title || "Blog Post";
+  // const metaDescription =
+  //   post?.metaDescription || post?.excerpt || "Read our latest blog post";
 
   useEffect(() => {
     async function fetchPost() {
@@ -98,16 +99,6 @@ export default function BlogPostContent({ slug }: { slug: string }) {
 
   return (
     <>
-      <Head>
-        <title>{metaTitle}</title>
-        <meta name="description" content={metaDescription} />
-        <meta property="og:title" content={metaTitle} />
-        <meta property="og:description" content={metaDescription} />
-        {post?.featuredImage && (
-          <meta property="og:image" content={post.featuredImage} />
-        )}
-      </Head>
-      {/* Rest of your component */}
       <main className={`${DMSans.className} min-h-screen bg-gray-50 mt-20`}>
         <article className="pt-14 max-w-4xl mx-auto px-4 sm:px-6 pb-16">
           <Link
@@ -126,7 +117,7 @@ export default function BlogPostContent({ slug }: { slug: string }) {
                     post.featuredImage ||
                     "/placeholder.svg?height=400&width=600&query=blog"
                   }
-                  alt={post.title}
+                 alt={post.featuredImageAlt || post.title || "Featured image for blog post"}
                   fill
                   className="object-contain"
                   priority

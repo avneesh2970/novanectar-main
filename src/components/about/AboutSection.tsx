@@ -28,20 +28,29 @@ export default function AboutPage() {
   }, [isMobile]);
 
   return (
-    <div className="w-full mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 bg-[#f6f4f0] pt-16">
       <div className="space-y-8 text-center">
-        <h2
+        {/* <h2
         id="about-section"
           className={`text-4xl font-medium text-gray-800 underline text-center ${DMSans.className}`}
         >
           About Us
+        </h2> */}
+         <h2
+          className={`text-3xl sm:text-4xl md:text-5xl text-center font-semibold text-gray-800 mb-14 ${DMSans.className}`}
+        >
+          <span className="inline-block relative">
+            About
+            <span className="absolute -bottom-2 left-0 w-full h-1 bg-[#3DBBFA]"></span>
+          </span>{" "}
+          <span className="inline-block">Us</span>
         </h2>
 
         <div className="max-w-6xl mx-auto">
           <h1
-            className={`text-xl md:text-3xl text-black text-start font-medium leading-tight mb-[10px] ${DMSans400.className}`}
+            className={`text-2xl sm:text-3xl md:text-[2.5rem] text-black text-start font-medium leading-tight mb-[10px] ${DMSans400.className}`}
           >
-            We provide smart IT solutions to help your business grow.
+            We provide smart IT Solutions to help your Business grow.
           </h1>
 
           <p

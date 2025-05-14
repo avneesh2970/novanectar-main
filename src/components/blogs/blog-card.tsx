@@ -24,7 +24,7 @@ export default function BlogCard({ post, index }: BlogCardProps) {
           <div className="relative h-48 w-full overflow-hidden">
             <Image
               src={post.image || "/placeholder.svg"}
-              alt={post.title}
+                alt={post.featuredImageAlt || post.title || "Blog post featured image"}
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-105"
             />
@@ -32,7 +32,7 @@ export default function BlogCard({ post, index }: BlogCardProps) {
 
           <div className="p-5 flex flex-col flex-grow">
             <div className="text-sm text-gray-500 mb-2">
-              {post.author} • {post.date}
+                {post.author} • {post.date || new Date(post.createdAt).toLocaleDateString()}
             </div>
 
             <div className="flex justify-between items-start mb-2">

@@ -1,17 +1,18 @@
-import mongoose, { Schema, type Document } from "mongoose"
+import mongoose, { Schema, type Document } from "mongoose";
 
 export interface IBlogPost extends Document {
-  title: string
-  slug: string
-  excerpt: string
-  content: string
-  author: string
-  featuredImage?: string
-  categories: string[]
-  metaTitle?: string // New field
-  metaDescription?: string // New field
-  createdAt: Date
-  updatedAt: Date
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: string;
+  author: string;
+  featuredImage?: string;
+  featuredImageAlt?: string;
+  categories: string[];
+  metaTitle?: string; // New field
+  metaDescription?: string; // New field
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const BlogPostSchema = new Schema<IBlogPost>(
@@ -39,25 +40,33 @@ const BlogPostSchema = new Schema<IBlogPost>(
     author: {
       type: String,
       required: true,
-      default: "Amit Bhetwal",
+      default: "Novanectar",
     },
     featuredImage: {
       type: String,
+    },
+     featuredImageAlt: {
+      type: String,
+      trim: true,
     },
     categories: {
       type: [String],
       default: [],
     },
-    metaTitle: { // New field
+    metaTitle: {
+      // New field
       type: String,
       trim: true,
     },
-    metaDescription: { // New field
+    metaDescription: {
+      // New field
       type: String,
       trim: true,
     },
   },
-  { timestamps: true },
-)
+  { timestamps: true }
+);
 
-export const BlogPost = mongoose.models.BlogPost || mongoose.model<IBlogPost>("BlogPost", BlogPostSchema)
+export const BlogPost =
+  mongoose.models.BlogPost ||
+  mongoose.model<IBlogPost>("BlogPost", BlogPostSchema);

@@ -363,3 +363,20 @@ body {
 .blog-content a:hover {
   color: #1d4ed8 !important; /* blue-700 */
 }
+
+
+/* //////////////////project section //////////////////////////////////// */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-out forwards;
+}

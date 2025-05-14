@@ -1,7 +1,6 @@
 "use client";
 
 import type React from "react";
-
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
@@ -27,6 +26,7 @@ export default function NewBlogPost() {
   const [isUploading, setIsUploading] = useState(false);
   const [metaTitle, setMetaTitle] = useState("");
   const [metaDescription, setMetaDescription] = useState("");
+  const [imageAltText, setImageAltText] = useState<any>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -164,6 +164,12 @@ export default function NewBlogPost() {
       return;
     }
 
+    // Validate alt text if image is present
+    if (featuredImage && !imageAltText.trim()) {
+      toast.error("Please provide alt text for the featured image");
+      return;
+    }
+
     setSaving(true);
 
     try {
@@ -212,6 +218,7 @@ export default function NewBlogPost() {
         author, // Include author in post data
         categories,
         featuredImage: imageUrl,
+        featuredImageAlt: imageAltText,
         metaTitle, // Add this
         metaDescription, // Add this
       };
@@ -281,7 +288,7 @@ export default function NewBlogPost() {
                 <div className="relative w-full h-64 mb-6">
                   <Image
                     src={imagePreview || "/placeholder.svg"}
-                    alt="Preview"
+                    alt={imageAltText || title || "Blog post featured image"}
                     fill
                     className="object-contain bg-gray-50 rounded-lg"
                   />
@@ -334,7 +341,7 @@ export default function NewBlogPost() {
                 <div className="relative">
                   <Image
                     src={imagePreview || "/placeholder.svg"}
-                    alt="Preview"
+                    alt={imageAltText || title || "Featured image for blog"}
                     width={500}
                     height={256}
                     className="w-full h-64 object-cover rounded-lg"
@@ -368,6 +375,26 @@ export default function NewBlogPost() {
                 accept="image/jpeg,image/png,image/webp,image/gif"
                 className="hidden"
               />
+
+              {imagePreview && (
+                <div className="mt-4">
+                  <label htmlFor="imageAltText" className="block text-sm font-medium text-gray-700 mb-1">
+                    Image Alt Text <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="imageAltText"
+                    value={imageAltText}
+                    onChange={(e) => setImageAltText(e.target.value)}
+                    placeholder="Describe the image for accessibility and SEO"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-700"
+                    required
+                  />
+                  <p className="mt-1 text-xs text-gray-500">
+                    A clear description of the image content for screen readers and search engines
+                  </p>
+                </div>
+              )}
 
               {isUploading && (
                 <div className="mt-4">

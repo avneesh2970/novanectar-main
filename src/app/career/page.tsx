@@ -1,29 +1,33 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-"use client"
+"use client";
 
 // import { useState } from "react"
-import { motion } from "framer-motion"
-import Image from "next/image"
-import { MapPin, Clock } from "lucide-react"
-import { useRouter } from "next/navigation"
-import { jobListings } from "@/data/jobsData"
-import Navbar from "@/components/navbar/Navbar"
-import FooterSection from "@/components/footer/FooterSection"
-import { useState } from "react"
-import { DMSans } from "@/fonts/font"
+import { motion } from "framer-motion";
+import Image from "next/image";
+import { MapPin, Clock } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { jobListings } from "@/data/jobsData";
+import Navbar from "@/components/navbar/Navbar";
+import FooterSection from "@/components/footer/FooterSection";
+import { useState } from "react";
+import { DMSans } from "@/fonts/font";
 
 export default function Jobs() {
-  const [searchQuery, setSearchQuery] = useState("")
-  const [locationQuery, setLocationQuery] = useState("")
-  const router = useRouter()
+  const [searchQuery, setSearchQuery] = useState("");
+  const [locationQuery, setLocationQuery] = useState("");
+  const router = useRouter();
 
-  const filteredJobs = jobListings.filter((job:any) => {
+  const filteredJobs = jobListings.filter((job: any) => {
     const matchesSearch =
       job.position.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      job.details.summary.toLowerCase().includes(searchQuery.toLowerCase())
-    const matchesLocation = job.location.toLowerCase().includes(locationQuery.toLowerCase())
-    return (!searchQuery || matchesSearch) && (!locationQuery || matchesLocation)
-  })
+      job.details.summary.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesLocation = job.location
+      .toLowerCase()
+      .includes(locationQuery.toLowerCase());
+    return (
+      (!searchQuery || matchesSearch) && (!locationQuery || matchesLocation)
+    );
+  });
 
   return (
     <div className={`bg-[#f6f6f6] min-h-screen ${DMSans.className}`}>
@@ -46,8 +50,9 @@ export default function Jobs() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              Working at Novanectar is a unique opportunity to help founders build their companies at all stages, and
-              offers unprecedented insight into the greater startup ecosystem.
+              Working at Novanectar is a unique opportunity to help founders
+              build their companies at all stages, and offers unprecedented
+              insight into the greater startup ecosystem.
             </motion.p>
           </div>
 
@@ -58,7 +63,13 @@ export default function Jobs() {
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
             >
-              <Image src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Careers Illustration" fill className="object-contain" priority />
+              <Image
+                src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                alt="Careers Illustration"
+                fill
+                className="object-contain"
+                priority
+              />
             </motion.div>
           </div>
         </div>
@@ -66,19 +77,26 @@ export default function Jobs() {
 
       <div className="max-w-7xl mx-auto p-6">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold text-indigo-900">Open Positions ({filteredJobs.length})</h2>
+          <h2 className="text-xl font-semibold text-indigo-900">
+            Open Positions ({filteredJobs.length})
+          </h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {filteredJobs.map((job:any) => (
+          {filteredJobs.map((job: any) => (
             <div
               key={job.id}
-              className="bg-white p-4 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow"
+              className="bg-white p-4 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow flex flex-col h-full"
             >
-              <div className="flex items-center justify-between gap-3 mb-3">
-                <h3 className="font-semibold text-gray-900">{job.position}</h3>
-                <h3 className="text-xs text-[#3F89EA] border px-2 rounded-md border-blue-400 bg-[#EFF6FF] font-medium">Full-time</h3>
+              <div className="flex flex-wrap items-start justify-between gap-3 mb-3">
+                <h3 className="font-semibold text-gray-900 flex-1 min-w-0">
+                  {job.position}
+                </h3>
+                <h3 className="text-xs text-[#3F89EA] border px-2 rounded-md border-blue-400 bg-[#EFF6FF] font-medium whitespace-nowrap">
+                  Full-time
+                </h3>
               </div>
+
               <div className="flex items-center text-gray-600 mb-2">
                 <MapPin className="h-4 w-4 mr-1 text-blue-500" />
                 <span className="text-sm">{job.location}</span>
@@ -87,12 +105,19 @@ export default function Jobs() {
                 <Clock className="h-4 w-4 mr-1 text-blue-500" />
                 <span className="text-sm">{job.experience}</span>
               </div>
-              <button
-                className="w-full text-white border bg-blue-500 border-blue-500 rounded-md px-4 py-1.5 transition-colors hover:bg-white hover:text-blue-500"
-                onClick={() => router.push(`/career/${job.id}`)}
-              >
-                View Details
-              </button>
+              <div className="flex items-center text-gray-600 text-sm mb-4 pl-4">
+                {job.job_bio}
+              </div>
+
+              {/* Push button to the bottom */}
+              <div className="mt-auto pt-2">
+                <button
+                  className="w-full text-white border bg-blue-500 border-blue-500 rounded-md px-4 py-1.5 transition-colors hover:bg-white hover:text-blue-500"
+                  onClick={() => router.push(`/career/${job.id}`)}
+                >
+                  View Details
+                </button>
+              </div>
             </div>
           ))}
         </div>
@@ -100,6 +125,5 @@ export default function Jobs() {
 
       <FooterSection />
     </div>
-  )
+  );
 }
-

@@ -42,6 +42,7 @@ export const jobListings: any = [
       salary:
         " ₹10,000 - ₹20,000 per month (₹10,000 fixed + performance incentives).",
     },
+    job_bio: "Looking for a dynamic BDE to identify new business opportunities and build strong client relationships."
   },
   {
     id: "it-sales",
@@ -86,6 +87,7 @@ export const jobListings: any = [
       salary:
         " ₹10,000 - ₹20,000 per month (₹10,000 fixed + performance incentives).",
     },
+    job_bio:"We’re looking for a target-driven IT Sales Executive to generate leads and close deals in the tech space."
   },
   {
     id: "ui-ux",
@@ -129,6 +131,7 @@ export const jobListings: any = [
       salary:
         " ₹10,000 - ₹20,000 per month (₹10,000 fixed + performance incentives).",
     },
+    job_bio:"We’re hiring a passionate UI/UX Designer to craft seamless user experiences and engaging product designs."
   },
   {
     id: "graphic-designer",
@@ -170,6 +173,7 @@ export const jobListings: any = [
       salary:
         "₹10,000 – ₹20,000 per month (₹10,000 fixed + performance incentives).",
     },
+    job_bio:"Exciting opportunity for a Graphic Designer to work on digital ads, print designs, and promotional content."
   },
   {
     id: "social-media-executive",
@@ -213,6 +217,7 @@ export const jobListings: any = [
       salary:
         " ₹10,000 - ₹20,000 per month (₹10,000 fixed + performance incentives).",
     },
+    job_bio:"Passionate about social media? Join us to shape brand voice, manage content calendars, and engage audiences."
   },
   {
     id: "video-editor",
@@ -256,5 +261,6 @@ export const jobListings: any = [
       salary:
         "₹12,000 – ₹25,000 per month (₹12,000 fixed + performance incentives).",
     },
+    job_bio:"We’re looking for a skilled Video Editor to turn raw footage into polished, high-quality videos with storytelling impact."
   },
 ];

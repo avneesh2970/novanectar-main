@@ -1,57 +1,60 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import Link from "next/link"
-import Image from "next/image"
-import { ArrowRight, Search, Calendar } from "lucide-react"
-import { DMSans } from "@/fonts/font"
-import { format } from "date-fns"
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { ArrowRight, Search, Calendar } from "lucide-react";
+import { DMSans } from "@/fonts/font";
+import { format } from "date-fns";
 
 interface BlogPost {
-  _id: string
-  title: string
-  slug: string
-  excerpt: string
-  author: string
-  createdAt: string
-  featuredImage?: string
-  categories: string[]
+  _id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  author: string;
+  createdAt: string;
+  featuredImage?: string;
+  featuredImageAlt?: string;
+  categories: string[];
 }
 
 export default function BlogPage() {
-  const [posts, setPosts] = useState<BlogPost[]>([])
-  const [loading, setLoading] = useState(true)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [error, setError] = useState(false)
+  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     async function fetchPosts() {
       try {
-        const response = await fetch("/api/blog/posts")
+        const response = await fetch("/api/blog/posts");
         if (response.ok) {
-          const data = await response.json()
-          setPosts(data)
+          const data = await response.json();
+          setPosts(data);
         } else {
-          setError(true)
+          setError(true);
         }
       } catch (error) {
-        console.error("Error fetching posts:", error)
-        setError(true)
+        console.error("Error fetching posts:", error);
+        setError(true);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     }
 
-    fetchPosts()
-  }, [])
+    fetchPosts();
+  }, []);
 
   // Filter posts based on search term
   const filteredPosts = posts.filter(
     (post) =>
       post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       post.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      post.categories.some((category) => category.toLowerCase().includes(searchTerm.toLowerCase())),
-  )
+      post.categories.some((category) =>
+        category.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+  );
 
   // Function to get category color classes
   const getCategoryColorClasses = (index: number) => {
@@ -65,19 +68,22 @@ export default function BlogPage() {
       "bg-yellow-100 text-yellow-700",
       "bg-red-100 text-red-700",
       "bg-teal-100 text-teal-700",
-    ]
+    ];
 
-    return colorCombinations[index % colorCombinations.length]
-  }
+    return colorCombinations[index % colorCombinations.length];
+  };
 
   return (
     <main className={`${DMSans.className} min-h-screen bg-gray-50 mt-20`}>
       {/* Hero Section with Search */}
       <div className="bg-gradient-to-r from-purple-50 to-blue-50 py-12 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Our Blog</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            Our Blog
+          </h1>
           <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-            Insights, guides, and expert opinions on technology, business, and more.
+            Insights, guides, and expert opinions on technology, business, and
+            more.
           </p>
           <div className="relative max-w-md mx-auto">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -102,19 +108,31 @@ export default function BlogPage() {
         ) : error ? (
           <div className="text-center py-16 bg-white rounded-xl shadow-sm">
             <div className="max-w-md mx-auto">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-2">Unable to load blog posts</h2>
-              <p className="text-gray-600 mb-6">There was an error loading the blog posts. Please try again later.</p>
+              <h2 className="text-2xl font-semibold text-gray-800 mb-2">
+                Unable to load blog posts
+              </h2>
+              <p className="text-gray-600 mb-6">
+                There was an error loading the blog posts. Please try again
+                later.
+              </p>
             </div>
           </div>
         ) : filteredPosts.length === 0 ? (
           <div className="text-center py-16 bg-white rounded-xl shadow-sm">
             <div className="max-w-md mx-auto">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-2">No blog posts found</h2>
+              <h2 className="text-2xl font-semibold text-gray-800 mb-2">
+                No blog posts found
+              </h2>
               <p className="text-gray-600 mb-6">
-                {searchTerm ? `No posts match "${searchTerm}"` : "Check back soon for new content!"}
+                {searchTerm
+                  ? `No posts match "${searchTerm}"`
+                  : "Check back soon for new content!"}
               </p>
               {searchTerm && (
-                <button onClick={() => setSearchTerm("")} className="text-purple-600 hover:text-purple-800 font-medium">
+                <button
+                  onClick={() => setSearchTerm("")}
+                  className="text-purple-600 hover:text-purple-800 font-medium"
+                >
                   Clear search
                 </button>
               )}
@@ -132,9 +150,15 @@ export default function BlogPage() {
                   <div className="relative w-full h-48 overflow-hidden bg-gray-50">
                     <Image
                       src={
-                        post.featuredImage || "/placeholder.svg?height=400&width=600&query=blog" || "/placeholder.svg"
+                        post.featuredImage ||
+                        "/placeholder.svg?height=400&width=600&query=blog" ||
+                        "/placeholder.svg"
                       }
-                      alt={post.title}
+                      alt={
+                        post.featuredImageAlt ||
+                        post.title ||
+                        `Blog post: ${post.title}`
+                      }
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
@@ -146,7 +170,9 @@ export default function BlogPage() {
                   <div className="p-4">
                     <div className="flex items-center text-sm text-gray-500 mb-2">
                       <Calendar className="h-4 w-4 mr-1" />
-                      <span>{format(new Date(post.createdAt), "dd MMM yyyy")}</span>
+                      <span>
+                        {format(new Date(post.createdAt), "dd MMM yyyy")}
+                      </span>
                     </div>
 
                     <div className="flex justify-between items-start mb-2">
@@ -157,15 +183,26 @@ export default function BlogPage() {
                     </div>
 
                     {/* Author */}
-                    {post.author && <p className="text-sm text-gray-500 mb-2">By {post.author}</p>}
+                    {post.author && (
+                      <p className="text-sm text-gray-500 mb-2">
+                        By {post.author}
+                      </p>
+                    )}
 
                     {/* Truncated Excerpt */}
-                    <p className="text-gray-600 text-sm line-clamp-2">{post.excerpt}</p>
+                    <p className="text-gray-600 text-sm line-clamp-2">
+                      {post.excerpt}
+                    </p>
 
                     {/* Categories */}
                     <div className="flex flex-wrap gap-2 mt-3">
                       {post.categories.map((category, i) => (
-                        <span key={i} className={`text-xs px-3 py-1 rounded-full ${getCategoryColorClasses(i)}`}>
+                        <span
+                          key={i}
+                          className={`text-xs px-3 py-1 rounded-full ${getCategoryColorClasses(
+                            i
+                          )}`}
+                        >
                           {category}
                         </span>
                       ))}
@@ -178,5 +215,5 @@ export default function BlogPage() {
         )}
       </div>
     </main>
-  )
+  );
 }

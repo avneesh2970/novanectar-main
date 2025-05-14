@@ -82,6 +82,9 @@ export default function BlogEditor({ content, onChange }: BlogEditorProps) {
   const [htmlContent, setHtmlContent] = useState(content || "")
   const [linkUrl, setLinkUrl] = useState("")
   const [showLinkModal, setShowLinkModal] = useState(false)
+  const [imageAltText, setImageAltText] = useState("") // Add state for image alt text
+  const [showImageModal, setShowImageModal] = useState(false) // Add state for image modal
+  const [imageFile, setImageFile] = useState<File | null>(null) // Add state for image file
 
   // Initialize the editor with proper HTML content
   const editor = useEditor({
@@ -114,7 +117,11 @@ export default function BlogEditor({ content, onChange }: BlogEditorProps) {
           class: "text-blue-600 no-underline",
         },
       }),
-      Image,
+      Image.configure({
+        HTMLAttributes: {
+          class: "max-w-full rounded-lg my-4",
+        },
+      }),
       TextAlign.configure({
         types: ["heading", "paragraph"],
       }),
@@ -142,8 +149,8 @@ export default function BlogEditor({ content, onChange }: BlogEditorProps) {
     }
   }, [content, editor])
 
-  // Handle image upload
-  const handleImageUpload = useCallback(async () => {
+  // Handle image selection
+  const handleImageSelect = useCallback(() => {
     if (!editor) return
 
     const input = document.createElement("input")
@@ -161,37 +168,57 @@ export default function BlogEditor({ content, onChange }: BlogEditorProps) {
           return
         }
 
-        try {
-          // Create FormData for upload
-          const formData = new FormData()
-          formData.append("file", file)
-          formData.append("upload_preset", process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "")
-          formData.append("cloud_name", process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || "")
-
-          // Upload to Cloudinary
-          const response = await fetch(
-            `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/upload`,
-            {
-              method: "POST",
-              body: formData,
-            },
-          )
-
-          if (!response.ok) {
-            throw new Error("Upload failed")
-          }
-
-          const data = await response.json()
-
-          // Insert image into editor
-          editor.chain().focus().setImage({ src: data.secure_url }).run()
-        } catch (error) {
-          console.error("Error uploading image:", error)
-          alert("Failed to upload image. Please try again.")
-        }
+        setImageFile(file)
+        setShowImageModal(true)
       }
     }
   }, [editor])
+
+  // Handle image upload with alt text
+  const uploadImage = useCallback(async () => {
+    if (!editor || !imageFile) return
+
+    try {
+      // Create FormData for upload
+      const formData = new FormData()
+      formData.append("file", imageFile)
+      formData.append("upload_preset", process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "")
+      formData.append("cloud_name", process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || "")
+
+      // Upload to Cloudinary
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/upload`,
+        {
+          method: "POST",
+          body: formData,
+        },
+      )
+
+      if (!response.ok) {
+        throw new Error("Upload failed")
+      }
+
+      const data = await response.json()
+
+      // Insert image into editor with alt text
+      editor
+        .chain()
+        .focus()
+        .setImage({
+          src: data.secure_url,
+          alt: imageAltText || imageFile.name, // Use alt text or fallback to filename
+        })
+        .run()
+
+      // Reset state
+      setShowImageModal(false)
+      setImageAltText("")
+      setImageFile(null)
+    } catch (error) {
+      console.error("Error uploading image:", error)
+      alert("Failed to upload image. Please try again.")
+    }
+  }, [editor, imageFile, imageAltText])
 
   // Handle link insertion
   const openLinkModal = useCallback(() => {
@@ -329,6 +356,52 @@ export default function BlogEditor({ content, onChange }: BlogEditorProps) {
         </div>
       )}
 
+      {/* Image Modal */}
+      {showImageModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-xl">
+            <h3 className="text-lg font-medium mb-4 text-gray-800">Insert Image</h3>
+            <div className="mb-4">
+              <label htmlFor="image-alt" className="block text-sm font-medium text-gray-700 mb-1">
+                Alt Text <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="image-alt"
+                value={imageAltText}
+                onChange={(e) => setImageAltText(e.target.value)}
+                placeholder="Describe the image for accessibility and SEO"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-700"
+                autoFocus
+              />
+              <p className="mt-1 text-xs text-gray-500">
+                A clear description of the image content for screen readers and search engines
+              </p>
+            </div>
+            <div className="flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowImageModal(false)
+                  setImageFile(null)
+                  setImageAltText("")
+                }}
+                className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 text-gray-700 font-medium"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={uploadImage}
+                className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 font-medium"
+              >
+                Upload & Insert
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Toolbar - Fixed at the top of the editor container */}
       <div className="flex-shrink-0 text-gray-900 bg-gray-50 border-b border-gray-300 p-2 flex flex-wrap gap-1 justify-between">
         {!previewMode && (
@@ -421,7 +494,7 @@ export default function BlogEditor({ content, onChange }: BlogEditorProps) {
               type="button"
               onClick={() => {
                 focusEditor()
-                handleImageUpload()
+                handleImageSelect()
               }}
               className="p-2 rounded hover:bg-gray-200"
               title="Insert Image"
@@ -522,7 +595,8 @@ export default function BlogEditor({ content, onChange }: BlogEditorProps) {
                          [&>ul]:list-disc [&>ul]:pl-6 [&>ul]:my-4 [&>ul]:text-gray-700
                          [&>ol]:list-decimal [&>ol]:pl-6 [&>ol]:my-4 [&>ol]:text-gray-700
                          [&>li]:mb-2 [&>li]:text-gray-700 [&>li>p]:my-1
-                         [&>blockquote]:border-l-4 [&>blockquote]:border-gray-300 [&>blockquote]:pl-4 [&>blockquote]:py-2 [&>blockquote]:my-4 [&>blockquote]:italic [&>blockquote]:text-gray-600"
+                         [&>blockquote]:border-l-4 [&>blockquote]:border-gray-300 [&>blockquote]:pl-4 [&>blockquote]:py-2 [&>blockquote]:my-4 [&>blockquote]:italic [&>blockquote]:text-gray-600
+                         [&>img]:max-w-full [&>img]:rounded-lg [&>img]:my-4"
               dangerouslySetInnerHTML={{ __html: htmlContent }}
             />
           </div>

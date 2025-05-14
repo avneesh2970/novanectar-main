@@ -1,3 +1,4 @@
+"use client"
 import { gsap } from "@/lib/gsapUtils";
 // import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -11,6 +12,7 @@ import { DMSans, WorkSans } from "@/fonts/font";
 import Navbar from "../navbar/Navbar";
 import { ContactPopup } from "../contact/ContactPopup";
 import { AppointmentPicker } from "../appointment/appointent-picker";
+import ServiceScroll from "../services/servicesScroll/ServiceScroll";
 // import ImagePopup from "../popups/image-popup";
 
 export const MainContent = () => {
@@ -87,17 +89,17 @@ export const MainContent = () => {
         <Navbar />
         <div className="relative w-full bg-white pt-16">
           {/* Base grid */}
-          <div className="absolute inset-0 dark:bg-grid-white/[0.2] bg-grid-black/[0.2]" />
+          <div className="absolute inset-0 dark:bg-grid-white/[0.2] sm:bg-grid-black/[0.2]" />
 
           {/* Hover effect layer */}
           <div
-            className="absolute inset-0 dark:bg-grid-hover-white/[0.4] bg-grid-hover-black/[0.4] opacity-0 transition-opacity duration-300"
+            className="absolute inset-0 dark:bg-grid-hover-white/[0.4] sm:bg-grid-hover-black/[0.4] opacity-0 transition-opacity duration-300"
             id="grid-hover-layer"
           />
           {/* //landing page// */}
           <FloatingTechLayout>
-            <div className="h-[34rem] md:h-[40rem] flex flex-col items-center justify-center">
-              <div className="w-5xl px-2 pl-5 sm:text-center text-start">
+            <div className="h-[34rem] md:h-[40rem] flex flex-col items-center justify-center -mt-2">
+              <div className="w-5xl px-2 pl-5 text-center">
                 <h1
                   className={`text-black text-2xl md:text-5xl sm:text-4xl max-w-4xl mx-auto font-bold ${WorkSans.className}`}
                 >
@@ -107,7 +109,7 @@ export const MainContent = () => {
                   </span>
                 </h1>
               </div>
-              <div className="pt-10 text-center px-2 max-w-xl mx-auto">
+              <div className="pt-8 sm:pt-14 text-center px-2 max-w-xl mx-auto">
                 <p
                   className={`text-black text-center font-medium text-sm md:text-base lg:text-lg ${DMSans.className}`}
                 >
@@ -145,16 +147,26 @@ export const MainContent = () => {
               {/* <ImagePopup /> */}
             </div>
           </FloatingTechLayout>
-          <AboutSection />
-          <div className="bg-[#f5f5fa] bg-opacity-50 pt-16 text-black text-3xl text-center">
-            <h1
-              className={`font-medium text-gray-800 underline text-4xl ${DMSans.className}`}
-            >
-              Services
-            </h1>
-            <div id="services-section">
-              <ServicesSection />
-            </div>
+        </div>
+        <ServiceScroll />
+        <AboutSection />
+        <div className="bg-[#fbebf6] pt-16 text-black text-3xl text-center">
+          {/* <h1
+            className={`font-medium text-gray-800 underline text-4xl ${DMSans.className}`}
+          >
+            Services
+          </h1> */}
+           <h2
+          className={`text-3xl sm:text-4xl md:text-5xl text-center font-semibold text-gray-800 mb- ${DMSans.className}`}
+        >
+          <span className="inline-block relative">
+            Services
+            <span className="absolute -bottom-2 left-0 w-full h-1 bg-[#3DBBFA]"></span>
+          </span>{" "}
+          {/* <span className="inline-block">Trusted Clients</span> */}
+        </h2>
+          <div id="services-section">
+            <ServicesSection />
           </div>
         </div>
         <ContactPopup

@@ -71,33 +71,33 @@ export default function Clients() {
     img29,
   ];
   const imageSizes = [
-    {id:1, width: 150, height: 120 },
-    {id:2, width: 150, height: 120 },
-    {id:3, width: 150, height: 120 },
-    {id:4, width: 150, height: 120 },
-    {id:5, width: 150, height: 120 },
-    {id:6, width: 150, height: 120 },
-    {id:7, width: 150, height: 120 },
-    {id:8, width: 150, height: 120 },
-    {id:9, width: 150, height: 120 },
-    {id:10, width: 150, height: 120 },
-    {id:12, width: 150, height: 120 },
-    {id:13, width: 150, height: 120 },
-    {id:14, width: 150, height: 120 },
-    {id:15, width: 150, height: 120 },
-    {id:16, width: 150, height: 120 },
-    {id:17, width: 150, height: 120 },
-    {id:18, width: 150, height: 120 },
-    {id:19, width: 150, height: 120 },
-    {id:20, width: 150, height: 120 },
-    {id:21, width: 150, height: 120 },
-    {id:22, width: 150, height: 120 },
-    {id:24, width: 150, height: 120 },
-    {id:25, width: 150, height: 120 },
-    {id:26, width: 150, height: 120 },
-    {id:27, width: 150, height: 120 },
-    {id:28, width: 150, height: 120 },
-    {id:29, width: 150, height: 120 },
+    { id: 1, width: 150, height: 120 },
+    { id: 2, width: 150, height: 120 },
+    { id: 3, width: 150, height: 120 },
+    { id: 4, width: 150, height: 120 },
+    { id: 5, width: 150, height: 120 },
+    { id: 6, width: 150, height: 120 },
+    { id: 7, width: 150, height: 120 },
+    { id: 8, width: 150, height: 120 },
+    { id: 9, width: 150, height: 120 },
+    { id: 10, width: 150, height: 120 },
+    { id: 12, width: 150, height: 120 },
+    { id: 13, width: 150, height: 120 },
+    { id: 14, width: 150, height: 120 },
+    { id: 15, width: 150, height: 120 },
+    { id: 16, width: 150, height: 120 },
+    { id: 17, width: 150, height: 120 },
+    { id: 18, width: 150, height: 120 },
+    { id: 19, width: 150, height: 120 },
+    { id: 20, width: 150, height: 120 },
+    { id: 21, width: 150, height: 120 },
+    { id: 22, width: 150, height: 120 },
+    { id: 24, width: 150, height: 120 },
+    { id: 25, width: 150, height: 120 },
+    { id: 26, width: 150, height: 120 },
+    { id: 27, width: 150, height: 120 },
+    { id: 28, width: 150, height: 120 },
+    { id: 29, width: 150, height: 120 },
   ];
 
   const totalWidth =
@@ -178,7 +178,7 @@ export default function Clients() {
 
   return (
     <section
-      className="w-full py-14 px-4 bg-white relative"
+      className="w-full py-14 px-4 bg-[white] relative"
       onMouseDown={pauseAnimation}
       onMouseUp={resumeAnimation}
       onMouseLeave={resumeAnimation}
@@ -187,10 +187,19 @@ export default function Clients() {
     >
       <div className=""></div>
       <div className="max-w-[1400px] mx-auto relative z-10">
-        <h2
+        {/* <h2
           className={`font-medium text-gray-900 text-4xl mb-14 text-center underline pt-8 ${DMSans.className}`}
         >
           Our Trusted Clients
+        </h2> */}
+        <h2
+          className={`text-3xl sm:text-4xl md:text-5xl text-center font-semibold text-gray-800 mb-14 ${DMSans.className}`}
+        >
+          <span className="inline-block relative">
+            Our
+            <span className="absolute -bottom-2 left-0 w-full h-1 bg-[#3DBBFA]"></span>
+          </span>{" "}
+          <span className="inline-block">Trusted Clients</span>
         </h2>
 
         <div className="relative overflow-hidden">

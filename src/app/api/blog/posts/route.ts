@@ -64,6 +64,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
+     // Validate alt text if image is present
+    if (data.featuredImage && !data.featuredImageAlt) {
+      // If no alt text is provided but image is, use the title as fallback
+      data.featuredImageAlt = data.title
+    }
+
     const newPost = new BlogPost(data);
     await newPost.save();
 
