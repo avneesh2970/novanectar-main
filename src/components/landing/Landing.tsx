@@ -1,10 +1,7 @@
 "use client"
 import { useEffect, useRef, useState } from "react"
-import gsap from "gsap"
-
-import landing from "@/assets/landing/landing.png"
-import { MainContent } from "./MainContent"
 import Image from "next/image"
+import { MainContent } from "./MainContent"
 
 // Add this function at the top of the file, outside of the Landing component
 function shouldPlayAnimation() {
@@ -18,24 +15,34 @@ function shouldPlayAnimation() {
 }
 
 const Landing = () => {
-  const [hasAnimationPlayed, setHasAnimationPlayed] = useState(false)
+  const [hasAnimationPlayed, setHasAnimationPlayed] = useState(true) // Default to true for initial render
   const [shouldShowAnimation, setShouldShowAnimation] = useState(false)
+  const [isClient, setIsClient] = useState(false)
+
+  // Use refs for animation elements
   const containerRef = useRef<HTMLDivElement>(null)
   const titleRef = useRef<HTMLDivElement>(null)
   const portalRef = useRef<HTMLImageElement>(null)
   const mainContentRef = useRef<HTMLDivElement>(null)
 
+  // Handle client-side initialization
   useEffect(() => {
+    setIsClient(true)
+
     // Check if the animation should play
     const shouldPlay = shouldPlayAnimation()
     setShouldShowAnimation(shouldPlay)
+
     if (!shouldPlay) {
       setHasAnimationPlayed(true)
+    } else {
+      setHasAnimationPlayed(false)
     }
   }, [])
 
+  // Handle animation after client-side rendering
   useEffect(() => {
-    if (!shouldShowAnimation) return
+    if (!isClient || !shouldShowAnimation) return
 
     const container = containerRef.current
     const title = titleRef.current
@@ -44,67 +51,63 @@ const Landing = () => {
 
     if (!container || !title || !portal || !mainContent) return
 
-    // Show main content immediately if we're not animating
-    if (!shouldShowAnimation) {
-      gsap.set(mainContent, { y: 0, opacity: 1 })
-      gsap.set(container, { opacity: 1, backgroundColor: "white" })
-      return
-    }
+    // Dynamically import GSAP only when needed for animation
+    import("@/lib/gsapUtils").then(({ gsap, initGSAP }) => {
+      initGSAP().then(() => {
+        // Initial setup
+        gsap.set(mainContent, { y: 100, opacity: 0 })
+        gsap.set(container, { opacity: 0 })
 
-    const tl = gsap.timeline({
-      defaults: { ease: "power2.inOut" },
-      onComplete: () => {
-        setHasAnimationPlayed(true)
-      },
-    })
+        // Create animation timeline
+        const tl = gsap.timeline({
+          defaults: { ease: "power2.inOut" },
+          onComplete: () => {
+            setHasAnimationPlayed(true)
+          },
+        })
 
-    // Initial setup
-    gsap.set(mainContent, { y: 100, opacity: 0 })
-    gsap.set(container, { opacity: 0 })
-
-    // Animation sequence
-    tl.to(container, {
-      opacity: 1,
-      duration: 1,
-    })
-      .to(title, {
-        y: "-40vh",
-        scale: 0.5,
-        duration: 1,
-      })
-      .to(
-        portal,
-        {
-          scale: 5,
-          opacity: 0,
-          duration: 1.5,
-        },
-        "-=0.5",
-      )
-      .to(
-        container,
-        {
-          backgroundColor: "white",
-          duration: 1,
-        },
-        "-=1",
-      )
-      .to(
-        mainContent,
-        {
-          y: 0,
+        // Animation sequence
+        tl.to(container, {
           opacity: 1,
           duration: 1,
-        },
-        "-=0.5",
-      )
+        })
+          .to(title, {
+            y: "-40vh",
+            scale: 0.5,
+            duration: 1,
+          })
+          .to(
+            portal,
+            {
+              scale: 5,
+              opacity: 0,
+              duration: 1.5,
+            },
+            "-=0.5",
+          )
+          .to(
+            container,
+            {
+              backgroundColor: "white",
+              duration: 1,
+            },
+            "-=1",
+          )
+          .to(
+            mainContent,
+            {
+              y: 0,
+              opacity: 1,
+              duration: 1,
+            },
+            "-=0.5",
+          )
+      })
+    })
+  }, [isClient, shouldShowAnimation])
 
-    return () => {
-      tl.kill()
-    }
-  }, [shouldShowAnimation])
-
-  if (hasAnimationPlayed) {
+  // Render optimized content
+  if (isClient && hasAnimationPlayed) {
     return (
       <div className="relative bg-white">
         <div className="w-full">
@@ -116,7 +119,7 @@ const Landing = () => {
 
   return (
     <div ref={containerRef} className="relative min-h-screen">
-      {shouldShowAnimation ? (
+      {isClient && shouldShowAnimation ? (
         <main className="relative h-screen w-full overflow-hidden">
           <div className="relative w-full h-full">
             <div
@@ -130,7 +133,7 @@ const Landing = () => {
               }}
             >
               <Image
-                src={landing || "/placeholder.svg"}
+                src="/assets/landing/landing.png"
                 alt="Portal background"
                 fill
                 style={{ objectFit: "cover" }}
@@ -156,4 +159,3 @@ const Landing = () => {
 }
 
 export default Landing
-
