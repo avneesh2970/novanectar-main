@@ -102,14 +102,8 @@ export const MainContent = () => {
               <div className="w-5xl px-2 pl-5 text-center">
                 <h1
                   className={`text-black text-2xl md:text-5xl sm:text-4xl max-w-4xl mx-auto font-bold ${WorkSans.className}`}
-                  data-fetchpriority="high"
+                  fetchPriority="high"
                   style={{ textRendering: "optimizeSpeed" }}
-                  ref={(el) => {
-                    if (el) {
-                      // Set the fetchpriority attribute directly on the DOM element
-                      el.setAttribute("fetchpriority", "high");
-                    }
-                  }}
                 >
                   <span className="inline-block">
                     Fueling Progress with Smart{" "}
@@ -122,9 +116,13 @@ export const MainContent = () => {
               <div className="pt-8 sm:pt-14 text-center px-2 max-w-xl mx-auto">
                 <p
                   className={`text-black text-center font-medium text-sm md:text-base lg:text-lg ${DMSans.className}`}
+                  fetchPriority="high"
+                  style={{ textRendering: "optimizeSpeed" }}
                 >
-                  We empower your business with powerful IT solutions that aims
-                  your success.
+                  <span className="inline-block">
+                    We empower your business with powerful IT solutions that
+                    aims your success.
+                  </span>
                 </p>
               </div>
               <div className="flex pt-10 px-2 justify-center gap-4">
