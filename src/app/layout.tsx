@@ -1,19 +1,25 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { inter, roboto_mono, playfair, DMSans } from "@/fonts/font";
-import "./globals.css";
-import { Toaster } from "react-hot-toast";
-import Script from "next/script";
+import type React from "react"
+import type { Metadata } from "next"
+import { Geist, Geist_Mono } from "next/font/google"
+import { inter, roboto_mono, playfair, DMSans } from "@/fonts/font"
+import "./globals.css"
+import { Toaster } from "react-hot-toast"
+import Script from "next/script"
 
+// Optimize font loading
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
-});
+  display: "swap",
+  preload: true,
+})
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
-});
+  display: "swap",
+  preload: false, // Not critical for initial render
+})
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://novanectar.co.in"),
@@ -40,8 +46,7 @@ export const metadata: Metadata = {
   publisher: "Novanectar Services Pvt. Ltd.",
   openGraph: {
     title: "Novanectar Services - Fueling Progress with Smart IT Solutions",
-    description:
-      "Empowering businesses with powerful IT solutions that aims your success.",
+    description: "Empowering businesses with powerful IT solutions that aims your success.",
     url: "https://novanectar.co.in",
     siteName: "Novanectar Services Pvt. Ltd.",
     images: [
@@ -79,18 +84,33 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://novanectar.co.in",
   },
-};
+}
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className="light">
+      <head>
+        {/* Preconnect to external domains */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+
+        {/* Preload critical CSS */}
+        <link rel="preload" href="/globals.css" as="style" />
+
+        {/* Preload critical images */}
+        <link rel="preload" href="/assets/landing/icons/node.png" as="image" />
+        <link rel="preload" href="/assets/landing/icons/js.png" as="image" />
+
+        {/* Meta tags for performance */}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+      </head>
+
+      {/* Structured data for SEO */}
       <Script
         id="novanectar-schema"
         type="application/ld+json"
+        strategy="afterInteractive" // Defer script loading
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",
@@ -114,13 +134,28 @@ export default function RootLayout({
           }),
         }}
       />
+
+      {/* Google Analytics or other analytics (load after page load) */}
+      <Script
+        strategy="afterInteractive"
+        id="google-analytics"
+        dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-YOUR-MEASUREMENT-ID');
+          `,
+        }}
+      />
+
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${roboto_mono.variable} ${playfair.variable} ${DMSans} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${roboto_mono.variable} ${playfair.variable} ${DMSans.variable} antialiased`}
       >
         <main>{children}</main>
         <div id="portal-root" />
         <Toaster />
       </body>
     </html>
-  );
+  )
 }
