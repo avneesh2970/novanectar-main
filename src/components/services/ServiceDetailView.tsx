@@ -1,31 +1,27 @@
-"use client";
+"use client"
 
-import { useEffect, useRef } from "react";
-import Image, { StaticImageData } from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
-import { gsap, cleanupGSAP } from '@/lib/gsapUtils';
+import { useEffect, useRef } from "react"
+import Image, { type StaticImageData } from "next/image"
+import { motion, AnimatePresence } from "framer-motion"
+import { gsap, cleanupGSAP } from "@/lib/gsapUtils"
 
 interface ServiceDetailViewProps {
-  isOpen: boolean;
-  onClose: () => void;
+  isOpen: boolean
+  onClose: () => void
   service: {
-    title: string;
-    description: string;
-    image: StaticImageData;
-    detailedDescription?: string;
-  };
+    title: string
+    description: string
+    image: StaticImageData
+    detailedDescription?: string
+  }
 }
 
-export default function ServiceDetailView({
-  isOpen,
-  onClose,
-  service,
-}: ServiceDetailViewProps) {
-  const modalRef = useRef<HTMLDivElement>(null);
+export default function ServiceDetailView({ isOpen, onClose, service }: ServiceDetailViewProps) {
+  const modalRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = "hidden";
+      document.body.style.overflow = "hidden"
 
       // GSAP animation for content
       gsap.from(".service-content", {
@@ -34,9 +30,9 @@ export default function ServiceDetailView({
         duration: 0.6,
         delay: 0.3,
         ease: "power3.out",
-      });
+      })
     } else {
-      document.body.style.overflow = "unset";
+      document.body.style.overflow = "unset"
     }
     const ctx = gsap.context(() => {
       gsap.from(".service-content", {
@@ -45,20 +41,20 @@ export default function ServiceDetailView({
         duration: 0.6,
         delay: 0.3,
         ease: "power3.out",
-      });
-    }, modalRef);
+      })
+    }, modalRef)
     return () => {
-      document.body.style.overflow = "unset";
-      ctx.kill();
-    };
-  }, [isOpen]);
+      document.body.style.overflow = "unset"
+      ctx.kill()
+    }
+  }, [isOpen])
 
   // Add an unmount cleanup
-useEffect(() => {
-  return () => {
-    cleanupGSAP();
-  };
-}, []);
+  useEffect(() => {
+    return () => {
+      cleanupGSAP()
+    }
+  }, [])
 
   const detailedDescription =
     service.detailedDescription ||
@@ -67,7 +63,7 @@ useEffect(() => {
     expectations. Whether you're envisioning a dynamic business platform, an interactive experience, 
     or a seamless user interface, we're here to turn your concepts into compelling, user-centric 
     realities. Join us on a voyage where technology meets imagination, and together, we'll shape 
-    the future of digital solutions.`;
+    the future of digital solutions.`
 
   return (
     <AnimatePresence>
@@ -91,7 +87,7 @@ useEffect(() => {
             {/* Header Image Section */}
             <div className="relative h-[300px] w-full">
               <Image
-                src={service.image}
+                src={service.image || "/placeholder.svg"}
                 alt={service.title}
                 fill
                 className="object-cover"
@@ -106,18 +102,14 @@ useEffect(() => {
 
             {/* Content Section */}
             <div className="service-content p-8 bg-[#f5f7ff]">
-              <h3 className="text-2xl font-bold text-gray-800 mb-4">
-                {service.title}
-              </h3>
+              <h3 className="text-2xl font-bold text-gray-800 mb-4">{service.title}</h3>
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="prose prose-lg">
-                  <p className="text-gray-600 leading-relaxed">
-                    {detailedDescription}
-                  </p>
+                  <p className="text-gray-600 leading-relaxed">{detailedDescription}</p>
                 </div>
                 <div className="relative h-[300px] rounded-lg overflow-hidden">
                   <Image
-                    src={service.image}
+                    src={service.image || "/placeholder.svg"}
                     alt={`${service.title} detail`}
                     fill
                     className="object-cover"
@@ -138,5 +130,5 @@ useEffect(() => {
         </motion.div>
       )}
     </AnimatePresence>
-  );
+  )
 }
