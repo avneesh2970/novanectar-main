@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { gsap } from "@/lib/gsapUtils";
 // import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -102,9 +102,19 @@ export const MainContent = () => {
               <div className="w-5xl px-2 pl-5 text-center">
                 <h1
                   className={`text-black text-2xl md:text-5xl sm:text-4xl max-w-4xl mx-auto font-bold ${WorkSans.className}`}
+                  data-fetchpriority="high"
+                  style={{ textRendering: "optimizeSpeed" }}
+                  ref={(el) => {
+                    if (el) {
+                      // Set the fetchpriority attribute directly on the DOM element
+                      el.setAttribute("fetchpriority", "high");
+                    }
+                  }}
                 >
-                  Fueling Progress with Smart{" "}
-                  <span className="text-blue-500 sm:text-black">
+                  <span className="inline-block">
+                    Fueling Progress with Smart{" "}
+                  </span>
+                  <span className="inline-block text-blue-500 sm:text-black">
                     IT Solutions
                   </span>
                 </h1>
@@ -156,15 +166,15 @@ export const MainContent = () => {
           >
             Services
           </h1> */}
-           <h2
-          className={`text-3xl sm:text-4xl md:text-5xl text-center font-semibold text-gray-800 mb- ${DMSans.className}`}
-        >
-          <span className="inline-block relative">
-            Services
-            <span className="absolute -bottom-2 left-0 w-full h-1 bg-[#3DBBFA]"></span>
-          </span>{" "}
-          {/* <span className="inline-block">Trusted Clients</span> */}
-        </h2>
+          <h2
+            className={`text-3xl sm:text-4xl md:text-5xl text-center font-semibold text-gray-800 mb- ${DMSans.className}`}
+          >
+            <span className="inline-block relative">
+              Services
+              <span className="absolute -bottom-2 left-0 w-full h-1 bg-[#3DBBFA]"></span>
+            </span>{" "}
+            {/* <span className="inline-block">Trusted Clients</span> */}
+          </h2>
           <div id="services-section">
             <ServicesSection />
           </div>
