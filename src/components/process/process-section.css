@@ -152,12 +152,8 @@ p {
   .process-sticky-container {
     position: relative;
     height: auto;
-    /* min-height: fit-content; */
-    /* Remove max-height to allow content to determine height */
-    /* max-height: none; */
-    /* padding: 2rem 0; */
-    /* Add contain property to prevent layout shifts */
-    /* contain: layout; */
+    min-height: fit-content;
+    padding: 0;
   }
 }
 
@@ -171,12 +167,20 @@ p {
 @media (max-width: 767px) {
   .process-cards-container {
     height: auto;
-    /* min-height: 400px; */
-    /* Remove max-height to allow content to determine height */
-    /* max-height: none; */
-    /* padding-bottom: 1rem; */
-    /* margin-bottom: 2rem; Add space at bottom on mobile */
+    min-height: 400px;
+    padding-bottom: 1rem;
   }
+}
+
+/* Card wrapper to ensure consistent dimensions */
+.card-wrapper {
+  display: block;
+  width: 280px;
+  height: 400px;
+  /* Make sure cards are visible immediately */
+  opacity: 1 !important;
+  /* No transitions on opacity to prevent delays */
+  transition: none !important;
 }
 
 .process-cards-row {
@@ -185,6 +189,8 @@ p {
   height: 100%;
   will-change: transform;
   transform: translateZ(0);
+  /* Make sure cards are visible immediately */
+  opacity: 1 !important;
 }
 
 @media (min-width: 640px) {

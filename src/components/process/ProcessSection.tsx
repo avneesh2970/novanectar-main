@@ -1,7 +1,6 @@
 "use client"
 import { useRef, useEffect, useCallback, useState } from "react"
 import React from "react"
-import { motion } from "framer-motion"
 import { DMSans, DMSans400, DMSans500 } from "@/fonts/font"
 import { services, SVG_ICONS } from "./services"
 import { SVGIcon } from "./svg-icon"
@@ -234,7 +233,7 @@ export default function ProcessSection() {
       data-allow-shifts
     >
       <div className="process-sticky-container">
-        {/* <div className="absolute inset-0 bg-gradient-to-b from-transparent via-gray-900/100 to-gray-900"></div> */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-gray-900/100 to-gray-900"></div>
 
         <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8">
           <h2
@@ -260,30 +259,26 @@ export default function ProcessSection() {
             >
               {services.map((service, index) =>
                 isClient ? (
-                  <motion.div
+                  <div
                     key={index}
-                    viewport={{ once: true, amount: 0.2 }}
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    // Add style to reserve space before content loads
+                    className="card-wrapper"
                     style={{
                       width: "280px",
                       height: "400px",
+                      opacity: 1, // Make visible immediately
                     }}
-                    // Add onLoad event to update container height
-                    onLoad={updateMobileContainerHeight}
                   >
                     <ServiceCard {...service} />
-                  </motion.div>
+                  </div>
                 ) : (
                   <div
                     key={index}
-                    className="opacity-0"
+                    className="card-wrapper"
                     // Reserve space during SSR to prevent layout shifts
                     style={{
                       width: "280px",
                       height: "400px",
+                      opacity: 0,
                     }}
                   >
                     <ServiceCard {...service} />
