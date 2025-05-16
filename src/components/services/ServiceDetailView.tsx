@@ -1,61 +1,117 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useCallback, memo } from "react"
 import Image, { type StaticImageData } from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
 import { gsap, cleanupGSAP } from "@/lib/gsapUtils"
 
+// Types
+interface ServiceDetails {
+  title: string
+  description: string
+  image: StaticImageData
+  detailedDescription?: string
+}
+
 interface ServiceDetailViewProps {
   isOpen: boolean
   onClose: () => void
-  service: {
-    title: string
-    description: string
-    image: StaticImageData
-    detailedDescription?: string
-  }
+  service: ServiceDetails
 }
 
-export default function ServiceDetailView({ isOpen, onClose, service }: ServiceDetailViewProps) {
+// Define a type that matches what your gsap.from() returns
+type GsapAnimation = {
+  kill: () => void
+}
+
+// Memoized Header component to prevent unnecessary re-renders
+const ServiceHeader = memo(({ image, title }: Pick<ServiceDetails, "image" | "title">) => (
+  <div className="relative h-[300px] w-full">
+    <Image
+      src={image || "/placeholder.svg"}
+      alt={title}
+      fill
+      className="object-cover"
+      sizes="(max-width: 1200px) 100vw, 1200px"
+      priority // Load header image with priority
+    />
+    <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-black/30" />
+    <div className="absolute bottom-0 left-0 p-8 text-white">
+      <h2 className="text-5xl font-bold mb-2" id="service-title">
+        {title}
+      </h2>
+      <p className="text-xl tracking-wider">DISCUSS YOUR PROJECT →</p>
+    </div>
+  </div>
+))
+
+ServiceHeader.displayName = "ServiceHeader"
+
+// Memoized Content component
+const ServiceContent = memo(({ title, detailedDescription, image }: ServiceDetails) => (
+  <div className="service-content p-8 bg-[#f5f7ff]">
+    <h3 className="text-2xl font-bold text-gray-800 mb-4">{title}</h3>
+    <div className="grid md:grid-cols-2 gap-8">
+      <div className="prose prose-lg">
+        <p className="text-gray-600 leading-relaxed">{detailedDescription}</p>
+      </div>
+      <div className="relative h-[300px] rounded-lg overflow-hidden">
+        <Image
+          src={image || "/placeholder.svg"}
+          alt={`${title} detail`}
+          fill
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          loading="lazy" // Lazy load the secondary image
+        />
+      </div>
+    </div>
+  </div>
+))
+
+ServiceContent.displayName = "ServiceContent"
+
+// Close button component
+const CloseButton = memo(({ onClose }: { onClose: () => void }) => (
+  <button
+    onClick={onClose}
+    aria-label="Close details"
+    className="absolute top-4 right-4 text-white w-10 h-10 rounded-full bg-black/50 flex items-center justify-center hover:bg-black/70 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2"
+  >
+    ✕
+  </button>
+))
+
+CloseButton.displayName = "CloseButton"
+
+// Main component
+function ServiceDetailView({ isOpen, onClose, service }: ServiceDetailViewProps) {
   const modalRef = useRef<HTMLDivElement>(null)
+  const animationRef = useRef<GsapAnimation | null>(null)
 
+  // Memoize the onClose callback to prevent unnecessary re-renders
+  const handleClose = useCallback(() => {
+    onClose()
+  }, [onClose])
+
+  // Handle escape key press
   useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        handleClose()
+      }
+    }
+
     if (isOpen) {
-      document.body.style.overflow = "hidden"
-
-      // GSAP animation for content
-      gsap.from(".service-content", {
-        y: 100,
-        opacity: 0,
-        duration: 0.6,
-        delay: 0.3,
-        ease: "power3.out",
-      })
-    } else {
-      document.body.style.overflow = "unset"
+      window.addEventListener("keydown", handleKeyDown)
     }
-    const ctx = gsap.context(() => {
-      gsap.from(".service-content", {
-        y: 100,
-        opacity: 0,
-        duration: 0.6,
-        delay: 0.3,
-        ease: "power3.out",
-      })
-    }, modalRef)
+
     return () => {
-      document.body.style.overflow = "unset"
-      ctx.kill()
+      window.removeEventListener("keydown", handleKeyDown)
     }
-  }, [isOpen])
+  }, [isOpen, handleClose])
 
-  // Add an unmount cleanup
-  useEffect(() => {
-    return () => {
-      cleanupGSAP()
-    }
-  }, [])
-
+  // Process service data
   const detailedDescription =
     service.detailedDescription ||
     `Embark on a journey of digital innovation with 
@@ -65,70 +121,132 @@ export default function ServiceDetailView({ isOpen, onClose, service }: ServiceD
     realities. Join us on a voyage where technology meets imagination, and together, we'll shape 
     the future of digital solutions.`
 
+  const serviceWithDescription = {
+    ...service,
+    detailedDescription,
+  }
+
+  // Handle modal open/close effects
+  useEffect(() => {
+    // Skip if not in browser
+    if (typeof window === "undefined") return
+
+    if (isOpen) {
+      // Lock body scroll
+      document.body.style.overflow = "hidden"
+
+      // Focus the modal for accessibility
+      modalRef.current?.focus()
+
+      // Find the service-content element within our modal
+      const serviceContent = modalRef.current?.querySelector(".service-content")
+
+      if (serviceContent) {
+        // Kill any existing animation
+        if (animationRef.current) {
+          animationRef.current.kill()
+        }
+
+        // Create new animation with optimized parameters
+        animationRef.current = gsap.from(serviceContent, {
+          y: 50, // Reduced distance for better performance
+          opacity: 0,
+          duration: 0.5, // Slightly faster animation
+          delay: 0.2, // Slightly faster start
+          ease: "power2.out", // Simpler easing function
+        })
+      }
+    } else {
+      // Restore body scroll
+      document.body.style.overflow = ""
+
+      // Kill animation when modal closes
+      if (animationRef.current) {
+        animationRef.current.kill()
+        animationRef.current = null
+      }
+    }
+
+    // Cleanup function
+    return () => {
+      // Restore body scroll
+      document.body.style.overflow = ""
+
+      // Kill animation on cleanup
+      if (animationRef.current) {
+        animationRef.current.kill()
+        animationRef.current = null
+      }
+    }
+  }, [isOpen])
+
+  // Final cleanup on unmount
+  useEffect(() => {
+    return () => {
+      cleanupGSAP()
+    }
+  }, [])
+
+  // Framer Motion variants for consistent animations
+  const overlayVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1 },
+    exit: { opacity: 0 },
+  }
+
+  const modalVariants = {
+    hidden: { scale: 0.95, opacity: 0 },
+    visible: {
+      scale: 1,
+      opacity: 1,
+      transition: { type: "spring", damping: 25, stiffness: 300 },
+    },
+    exit: {
+      scale: 0.95,
+      opacity: 0,
+      transition: { duration: 0.2 },
+    },
+  }
+
   return (
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4"
-          onClick={onClose}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+          variants={overlayVariants}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4 backdrop-blur-sm"
+          onClick={handleClose}
           ref={modalRef}
+          tabIndex={-1} // Make div focusable but not in tab order
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="service-title"
         >
           <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
-            transition={{ type: "spring", damping: 20 }}
-            className="relative w-full max-w-4xl bg-white rounded-lg overflow-hidden"
+            variants={modalVariants}
+            className="relative w-full max-w-4xl bg-white rounded-lg overflow-hidden shadow-2xl"
             onClick={(e) => e.stopPropagation()}
+            style={{
+              transform: "translate3d(0, 0, 0)", // Force GPU acceleration
+              backfaceVisibility: "hidden", // Prevent flickering
+            }}
           >
             {/* Header Image Section */}
-            <div className="relative h-[300px] w-full">
-              <Image
-                src={service.image || "/placeholder.svg"}
-                alt={service.title}
-                fill
-                className="object-cover"
-                sizes="(max-width: 1200px) 100vw, 1200px"
-              />
-              <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-black/30" />
-              <div className="absolute bottom-0 left-0 p-8 text-white">
-                <h2 className="text-5xl font-bold mb-2">{service.title}</h2>
-                <p className="text-xl tracking-wider">DISCUSS YOUR PROJECT →</p>
-              </div>
-            </div>
+            <ServiceHeader image={service.image} title={service.title} />
 
             {/* Content Section */}
-            <div className="service-content p-8 bg-[#f5f7ff]">
-              <h3 className="text-2xl font-bold text-gray-800 mb-4">{service.title}</h3>
-              <div className="grid md:grid-cols-2 gap-8">
-                <div className="prose prose-lg">
-                  <p className="text-gray-600 leading-relaxed">{detailedDescription}</p>
-                </div>
-                <div className="relative h-[300px] rounded-lg overflow-hidden">
-                  <Image
-                    src={service.image || "/placeholder.svg"}
-                    alt={`${service.title} detail`}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
-                </div>
-              </div>
-            </div>
+            <ServiceContent {...serviceWithDescription} />
 
             {/* Close Button */}
-            <button
-              onClick={onClose}
-              className="absolute top-4 right-4 text-white w-10 h-10 rounded-full bg-black/50 flex items-center justify-center hover:bg-black/70 transition-colors"
-            >
-              ✕
-            </button>
+            <CloseButton onClose={handleClose} />
           </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
   )
 }
+
+// Export memoized component to prevent unnecessary re-renders
+export default memo(ServiceDetailView)
