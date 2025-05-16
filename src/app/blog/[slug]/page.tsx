@@ -3,6 +3,8 @@ import BlogPostContent from "@/components/blogs/blog-post-content";
 // Updated function to generate metadata with proper params handling
 export async function generateMetadata({ params }:any) {
   try {
+     // Await params before accessing its properties
+    const { slug } = await params
     // Construct the URL with the slug
     const url = new URL(
       "/api/blog/posts",
@@ -10,7 +12,7 @@ export async function generateMetadata({ params }:any) {
         "https://novanectar.co.in" ||
         "http://localhost:3000"
     );
-    url.searchParams.append("slug", params.slug);
+    url.searchParams.append("slug", slug);  
 
     const response = await fetch(url.toString(), {
       next: { revalidate: 3600 },
@@ -108,5 +110,6 @@ export async function generateMetadata({ params }:any) {
 }
 
 export default async function Page({ params }: any) {
-  return <BlogPostContent slug={params.slug} />;
+    const { slug } = await params
+  return <BlogPostContent slug={slug} />;
 }

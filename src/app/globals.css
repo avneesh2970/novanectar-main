@@ -5,36 +5,17 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --border: #e5e7eb;
-  --animation-duration-slow: 2s;
-  --animation-duration-fast: 0.5s;
 }
+
 
 html {
   scroll-behavior: smooth;
-  font-display: swap;
-  text-rendering: optimizeSpeed;
-  -webkit-font-smoothing: antialiased;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
-  .animate-float,
-  .animate-fadeIn,
-  [class*="animate-"] {
-    animation: none !important;
-    transition: none !important;
-  }
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
-    --border: #374151;
   }
 }
 
@@ -45,6 +26,7 @@ body {
 }
 
 @layer utilities {
+
   /* Hide scrollbar for Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
     display: none;
@@ -52,27 +34,10 @@ body {
 
   /* Hide scrollbar for IE, Edge and Firefox */
   .no-scrollbar {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
-  }
-
-  .animate-float {
-    animation-name: float;
-    animation-timing-function: ease-in-out;
-    animation-iteration-count: infinite;
-    animation-duration: var(--animation-duration-slow);
-    will-change: transform;
-  }
-
-  .content-visibility-auto {
-    content-visibility: auto;
-    contain-intrinsic-size: 0 500px;
-  }
-
-  .hardware-accelerated {
-    transform: translateZ(0);
-    backface-visibility: hidden;
-    perspective: 1000px;
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
   }
 }
 
@@ -81,6 +46,7 @@ body {
   -webkit-user-drag: none; /* Disable dragging in WebKit browsers */
   pointer-events: none; /* Disable all pointer interactions */
 }
+
 
 .react-datepicker {
   font-family: inherit;
@@ -134,38 +100,6 @@ body {
   }
   100% {
     transform: translateX(-33.33%);
-  }
-}
-
-@keyframes float {
-  0% {
-    transform: translate(0, 0);
-  }
-  50% {
-    transform: translate(10px, 10px);
-  }
-  100% {
-    transform: translate(0, 0);
-  }
-}
-
-@keyframes shake {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
-  10%,
-  30%,
-  50%,
-  70%,
-  90% {
-    transform: translate3d(-2px, 0, 0);
-  }
-  20%,
-  40%,
-  60%,
-  80% {
-    transform: translate3d(2px, 0, 0);
   }
 }
 
@@ -309,6 +243,7 @@ body {
   margin-top: 1em !important;
 }
 
+
 /* Style for blog content in preview and display modes */
 .blog-content h1 {
   font-size: 1.875rem !important; /* text-3xl */
@@ -393,6 +328,7 @@ body {
   color: #1d4ed8 !important; /* blue-700 */
 }
 
+
 /* //////////////////project section //////////////////////////////////// */
 @keyframes fadeIn {
   from {
@@ -407,5 +343,4 @@ body {
 
 .animate-fadeIn {
   animation: fadeIn 0.5s ease-out forwards;
-  will-change: opacity, transform;
 }
