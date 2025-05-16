@@ -13,8 +13,19 @@ export const SVGIcon: React.FC<SVGIconProps> = ({ svgString, className = "", wid
   return (
     <div
       className={className}
-      style={{ width: width ? `${width}px` : "100%", height: height ? `${height}px` : "100%" }}
+      style={{
+        width: width ? `${width}px` : "100%",
+        height: height ? `${height}px` : "100%",
+        // Add contain property to prevent layout shifts
+        contain: "strict",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        // Add aspect ratio to prevent layout shifts
+        aspectRatio: width && height ? `${width} / ${height}` : undefined,
+      }}
       dangerouslySetInnerHTML={{ __html: svgString }}
+      aria-hidden="true" // Add for accessibility since these are decorative
     />
   )
 }
