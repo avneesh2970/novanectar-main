@@ -7,7 +7,7 @@ import { services, SVG_ICONS } from "./services"
 import { SVGIcon } from "./svg-icon"
 import "./process-section.css" // Import the CSS file directly
 
-// Update the ServiceCard component to prevent layout shifts
+// Memoized ServiceCard component to prevent unnecessary re-renders
 const ServiceCard = React.memo(({ title, description, iconKey }: any) => {
   return (
     <div className="service-card">
@@ -27,10 +27,26 @@ const ServiceCard = React.memo(({ title, description, iconKey }: any) => {
         <div className="service-card-content">
           <h3
             className={`text-center pt-8 text-lg sm:text-xl font-medium text-white mb-2 sm:mb-3 tracking-wider ${DMSans500.className}`}
+            style={{
+              // Set explicit line height to prevent layout shifts
+              lineHeight: 1.5,
+              // Reserve space for text to prevent layout shifts
+              minHeight: "2em",
+            }}
           >
             {title}
           </h3>
-          <p className={`text-gray-200 text-center leading-tight text-base ${DMSans400.className}`}>{description}</p>
+          <p
+            className={`text-gray-200 text-center leading-tight text-base ${DMSans400.className}`}
+            style={{
+              // Set explicit line height to prevent layout shifts
+              lineHeight: 1.5,
+              // Reserve space for text to prevent layout shifts
+              minHeight: "6em",
+            }}
+          >
+            {description}
+          </p>
         </div>
       </div>
     </div>
@@ -102,7 +118,6 @@ export default function ProcessSection() {
     return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2
   }
 
-  // Add a useLayoutEffect to set initial dimensions before rendering
   useEffect(() => {
     // Check if we're in the browser environment to avoid hydration errors
     if (typeof window === "undefined") return
@@ -154,6 +169,12 @@ export default function ProcessSection() {
         <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8">
           <h2
             className={`sm:pt-12 text-white text-4xl font-medium mb-8 sm:mb-12 text-center underline ${DMSans.className}`}
+            style={{
+              // Set explicit line height to prevent layout shifts
+              lineHeight: 1.5,
+              // Reserve space for text to prevent layout shifts
+              minHeight: "1.5em",
+            }}
           >
             Process
           </h2>
@@ -170,11 +191,24 @@ export default function ProcessSection() {
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
+                    // Add style to reserve space before content loads
+                    style={{
+                      width: "280px",
+                      height: "400px",
+                    }}
                   >
                     <ServiceCard {...service} />
                   </motion.div>
                 ) : (
-                  <div key={index} className="opacity-0">
+                  <div
+                    key={index}
+                    className="opacity-0"
+                    // Reserve space during SSR to prevent layout shifts
+                    style={{
+                      width: "280px",
+                      height: "400px",
+                    }}
+                  >
                     <ServiceCard {...service} />
                   </div>
                 ),

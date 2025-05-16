@@ -1,7 +1,7 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
-import { inter, roboto_mono, playfair, DMSans } from "@/fonts/font"
+import { inter, roboto_mono, playfair, DMSans, DMSans400, DMSans500 } from "@/fonts/font"
 import "./globals.css"
 import { Toaster } from "react-hot-toast"
 import Script from "next/script"
@@ -60,13 +60,6 @@ export const metadata: Metadata = {
     locale: "en_US",
     type: "website",
   },
-  // twitter: {
-  //   card: "summary_large_image",
-  //   title: "Novanectar Services - Fueling Progress with Smart IT Solutions",
-  //   description:
-  //     "Empowering businesses with powerful IT solutions that aims your success.",
-  //   images: ["https://novanectar.co.in/twitter-image.jpg"],
-  // },
   robots: {
     index: true,
     follow: true,
@@ -97,9 +90,35 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         {/* Preload critical CSS */}
         <link rel="preload" href="/globals.css" as="style" />
 
-        {/* Preload critical images */}
-        <link rel="preload" href="/assets/landing/icons/node.png" as="image" />
-        <link rel="preload" href="/assets/landing/icons/js.png" as="image" />
+        {/* Font optimization to prevent layout shifts */}
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+              /* Font fallback system to prevent layout shifts */
+              :root {
+                --font-fallback: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+              }
+              
+              /* Set size-adjust to prevent layout shifts */
+              html {
+                font-size: 100%;
+                font-synthesis: none;
+              }
+              
+              /* Reserve space for text elements to prevent layout shifts */
+              h1, h2, h3, h4, h5, h6, p {
+                font-size-adjust: 100%;
+                font-optical-sizing: auto;
+                line-height: 1.5;
+              }
+              
+              /* Add font-display: swap to all @font-face rules */
+              @font-face {
+                font-display: swap !important;
+              }
+            `,
+          }}
+        />
 
         {/* Meta tags for performance */}
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -150,7 +169,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       />
 
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${roboto_mono.variable} ${playfair.variable} ${DMSans.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${roboto_mono.variable} ${playfair.variable} ${DMSans.variable} ${DMSans400.variable} ${DMSans500.variable} antialiased`}
       >
         <main>{children}</main>
         <div id="portal-root" />

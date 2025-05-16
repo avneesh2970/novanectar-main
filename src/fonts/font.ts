@@ -33,32 +33,37 @@ export const WorkSans = Work_Sans({
   fallback: ["Arial", "sans-serif"], // Add fallback fonts
 })
 
+// Fix: Use consistent weight values for DM Sans
 export const DMSans = DM_Sans({
   subsets: ["latin"],
   weight: ["500"],
-  style: ["normal", "italic"],
+  style: ["normal"],
   display: "swap",
   preload: true,
   variable: "--font-dm-sans",
   fallback: ["Arial", "sans-serif"],
+  adjustFontFallback: true, // Add this to adjust metrics
 })
 
+// Fix: Use correct weight values
 export const DMSans500 = DM_Sans({
   subsets: ["latin"],
-  weight: ["300"],
+  weight: ["500"], // Changed from 300 to 500 to match the variable name
   style: ["normal"],
   display: "swap",
-  preload: false,
-  variable: "--font-dm-sans-300",
+  preload: true, // Changed to true for critical font
+  variable: "--font-dm-sans-500",
   fallback: ["Arial", "sans-serif"],
+  adjustFontFallback: true, // Add this to adjust metrics
 })
 
 export const DMSans400 = DM_Sans({
   subsets: ["latin"],
-  weight: ["200"],
+  weight: ["400"], // Changed from 200 to 400 to match the variable name
   style: ["normal"],
   display: "swap",
-  preload: false,
-  variable: "--font-dm-sans-200",
+  preload: true, // Changed to true for critical font
+  variable: "--font-dm-sans-400",
   fallback: ["Arial", "sans-serif"],
+  adjustFontFallback: true, // Add this to adjust metrics
 })
