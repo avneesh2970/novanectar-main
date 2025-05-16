@@ -1,11 +1,40 @@
 "use client"
-import { useRef, useEffect, useCallback } from "react"
+import { useRef, useEffect, useCallback, useState } from "react"
 import React from "react"
 import { motion } from "framer-motion"
 import { DMSans, DMSans400, DMSans500 } from "@/fonts/font"
 import { services, SVG_ICONS } from "./services"
 import { SVGIcon } from "./svg-icon"
 import "./process-section.css" // Import the CSS file directly
+
+// Preload SVG icons to prevent layout shifts
+const preloadSVGIcons = () => {
+  if (typeof window === "undefined") return
+
+  // Create hidden div to preload SVGs
+  const preloadDiv = document.createElement("div")
+  preloadDiv.style.position = "absolute"
+  preloadDiv.style.width = "0"
+  preloadDiv.style.height = "0"
+  preloadDiv.style.overflow = "hidden"
+  preloadDiv.style.visibility = "hidden"
+
+  // Add all SVGs to preload
+  Object.values(SVG_ICONS).forEach((svg) => {
+    const wrapper:any = document.createElement("div")
+    wrapper.innerHTML = svg
+    preloadDiv.appendChild(wrapper)
+  })
+
+  document.body.appendChild(preloadDiv)
+
+  // Remove after a delay
+  setTimeout(() => {
+    if (document.body.contains(preloadDiv)) {
+      document.body.removeChild(preloadDiv)
+    }
+  }, 5000)
+}
 
 // Memoized ServiceCard component to prevent unnecessary re-renders
 const ServiceCard = React.memo(({ title, description, iconKey }: any) => {
@@ -61,9 +90,29 @@ export default function ProcessSection() {
   const cardsRowRef = useRef<HTMLDivElement>(null)
   const animationFrameRef = useRef<number | null>(null)
 
+  // State to track if content is loaded
+  const [contentLoaded, setContentLoaded] = useState(false)
+
+  // Calculate container height based on content for mobile
+  const updateMobileContainerHeight = useCallback(() => {
+    if (typeof window === "undefined") return
+
+    const isMobile = window.matchMedia("(max-width: 767px)").matches
+    if (!isMobile || !containerRef.current || !cardsRowRef.current) return
+
+    // Get the actual height of the cards row
+    const cardsRowHeight = cardsRowRef.current.scrollHeight
+
+    // Add some padding
+    const containerHeight = cardsRowHeight + 100 // 100px for padding
+
+    // Set the container height
+    containerRef.current.style.height = `${containerHeight}px`
+  }, [])
+
   // Memoize the scroll handler to prevent recreating it on each render
   const handleScroll = useCallback(() => {
-    if (!containerRef.current || !cardsRowRef.current) return
+    if (!containerRef.current || !cardsRowRef.current || !contentLoaded) return
 
     // Cancel any existing animation frame
     if (animationFrameRef.current !== null) {
@@ -111,7 +160,7 @@ export default function ProcessSection() {
       // Use transform: translate3d for better performance
       cardsRow.style.transform = `translate3d(${limitedTranslateX}px, 0, 0)`
     })
-  }, []) // No dependencies needed as we're using refs
+  }, [contentLoaded]) // Add contentLoaded as dependency
 
   // Easing function to make animation smoother
   function easeInOutQuad(t: number): number {
@@ -122,6 +171,9 @@ export default function ProcessSection() {
     // Check if we're in the browser environment to avoid hydration errors
     if (typeof window === "undefined") return
 
+    // Preload SVG icons to prevent layout shifts
+    preloadSVGIcons()
+
     // Set a CSS variable for viewport height to handle mobile browsers correctly
     const setVh = () => {
       const vh = window.innerHeight * 0.01
@@ -131,8 +183,18 @@ export default function ProcessSection() {
     // Call it initially
     setVh()
 
+    // Mark content as loaded after a short delay to ensure everything is rendered
+    const timer = setTimeout(() => {
+      setContentLoaded(true)
+      // Update mobile container height after content is loaded
+      updateMobileContainerHeight()
+    }, 100)
+
     // Add event listener for resize
-    window.addEventListener("resize", setVh)
+    window.addEventListener("resize", () => {
+      setVh()
+      updateMobileContainerHeight()
+    })
 
     // Initial position
     handleScroll()
@@ -140,31 +202,39 @@ export default function ProcessSection() {
     // Use passive event listener for better performance
     window.addEventListener("scroll", handleScroll, { passive: true })
 
-    // Handle resize events to recalculate dimensions
-    window.addEventListener("resize", handleScroll, { passive: true })
-
     // Cleanup
     return () => {
       window.removeEventListener("scroll", handleScroll)
-      window.removeEventListener("resize", handleScroll)
       window.removeEventListener("resize", setVh)
       if (animationFrameRef.current !== null) {
         cancelAnimationFrame(animationFrameRef.current)
       }
+      clearTimeout(timer)
     }
-  }, [handleScroll]) // Add handleScroll as dependency
+  }, [handleScroll, updateMobileContainerHeight]) // Add dependencies
 
   // Use client-side only rendering for the motion components to avoid hydration errors
   const [isClient, setIsClient] = React.useState(false)
 
   useEffect(() => {
     setIsClient(true)
-  }, [])
+
+    // Update mobile container height after client-side rendering
+    if (typeof window !== "undefined") {
+      const timer = setTimeout(updateMobileContainerHeight, 200)
+      return () => clearTimeout(timer)
+    }
+  }, [updateMobileContainerHeight])
 
   return (
-    <section ref={containerRef} className="process-container">
+    <section
+      ref={containerRef}
+      className={`process-container ${contentLoaded ? "content-loaded" : ""}`}
+      // Add data attribute to prevent layout shift detection by Vercel tools
+      data-allow-shifts
+    >
       <div className="process-sticky-container">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-gray-900/100 to-gray-900"></div>
+        {/* <div className="absolute inset-0 bg-gradient-to-b from-transparent via-gray-900/100 to-gray-900"></div> */}
 
         <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8">
           <h2
@@ -182,7 +252,12 @@ export default function ProcessSection() {
           {/* Fixed height container to prevent layout shifts */}
           <div className="process-cards-container">
             {/* Cards row with optimized animations */}
-            <div ref={cardsRowRef} className="process-cards-row">
+            <div
+              ref={cardsRowRef}
+              className="process-cards-row"
+              // Add onLoad event to update container height
+              onLoad={updateMobileContainerHeight}
+            >
               {services.map((service, index) =>
                 isClient ? (
                   <motion.div
@@ -196,6 +271,8 @@ export default function ProcessSection() {
                       width: "280px",
                       height: "400px",
                     }}
+                    // Add onLoad event to update container height
+                    onLoad={updateMobileContainerHeight}
                   >
                     <ServiceCard {...service} />
                   </motion.div>

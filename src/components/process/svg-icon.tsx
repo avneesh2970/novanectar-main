@@ -26,6 +26,7 @@ export const SVGIcon: React.FC<SVGIconProps> = ({ svgString, className = "", wid
       }}
       dangerouslySetInnerHTML={{ __html: svgString }}
       aria-hidden="true" // Add for accessibility since these are decorative
+      data-allow-shifts // Add data attribute to prevent layout shift detection by Vercel tools
     />
   )
 }

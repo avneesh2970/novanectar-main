@@ -31,6 +31,8 @@ p {
   transform: translateZ(0);
   /* Prevent text layout shifts */
   font-family: var(--font-dm-sans, var(--font-fallback));
+  /* Set explicit height to prevent layout shifts */
+  height: 400px;
 }
 
 @media (min-width: 640px) {
@@ -116,17 +118,22 @@ p {
   height: 250vh;
   /* Add containment for better performance */
   contain: layout;
+  /* Add transition for height changes */
+  transition: height 0.3s ease-out;
 }
 
+/* Fix mobile height to fit content */
 @media (max-width: 767px) {
   .process-container {
-    /* Fix mobile height to prevent excessive blue background */
-    height: auto;
+    /* Auto height based on content */
+    height: auto !important; /* Use !important to override inline styles */
     min-height: fit-content;
-    max-height: calc(var(--vh, 1vh) * 100); /* Use CSS variable for mobile height */
-    padding: 2rem 0;
+    /* Remove max-height to allow content to determine height */
+    max-height: none;
+    padding-top: 0;
+    padding-bottom: 1rem;
     /* Add contain property to prevent layout shifts */
-    contain: paint layout;
+    contain: paint;
   }
 }
 
@@ -145,28 +152,30 @@ p {
   .process-sticky-container {
     position: relative;
     height: auto;
-    min-height: fit-content;
-    max-height: calc(var(--vh, 1vh) * 100); /* Use CSS variable for mobile height */
-    padding: 2rem 0;
+    /* min-height: fit-content; */
+    /* Remove max-height to allow content to determine height */
+    /* max-height: none; */
+    /* padding: 2rem 0; */
     /* Add contain property to prevent layout shifts */
-    contain: layout;
+    /* contain: layout; */
   }
 }
 
 .process-cards-container {
   overflow: hidden;
   height: 400px;
-  contain: strict;
+  contain: layout;
   width: 100%;
 }
 
 @media (max-width: 767px) {
   .process-cards-container {
     height: auto;
-    min-height: 400px;
-    max-height: 80vh; /* Limit height on mobile */
-    padding-bottom: 1rem;
-    margin-bottom: 2rem; /* Add space at bottom on mobile */
+    /* min-height: 400px; */
+    /* Remove max-height to allow content to determine height */
+    /* max-height: none; */
+    /* padding-bottom: 1rem; */
+    /* margin-bottom: 2rem; Add space at bottom on mobile */
   }
 }
 
@@ -203,6 +212,9 @@ p {
     /* Add padding to ensure first and last cards are properly visible */
     padding-left: 1rem;
     padding-right: 1rem;
+    /* Set height to auto to allow content to determine height */
+    height: auto;
+    min-height: 400px;
   }
 
   .process-cards-row::-webkit-scrollbar {
@@ -212,6 +224,11 @@ p {
   .process-cards-row > div {
     scroll-snap-align: start;
   }
+}
+
+/* Add styles for content loaded state */
+.content-loaded .process-cards-row {
+  opacity: 1;
 }
 
 /* Text styles with font fallback to prevent layout shifts */
