@@ -136,9 +136,9 @@ export default function BlogPostContent({ slug }: any) {
                 </div>
               </div>
 
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-6">
                 {post.title}
-              </h1>
+              </h2>
 
               {/* Enhanced blog content with Tailwind classes */}
               <div className="blog-content prose max-w-none">

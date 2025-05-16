@@ -233,7 +233,7 @@ const FooterSection = () => {
             <h3 className="text-sm font-medium mb-4">LEGAL</h3>
             <ul className="space-y-2">
               {/* {["Privacy Policy", "Terms of Service"].map((item) => ( */}
-              {["Privacy Policy", ""].map((item) => (
+              {["Privacy Policy"].map((item) => (
                 <motion.li
                   key={item}
                   variants={linkVariants}

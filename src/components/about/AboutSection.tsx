@@ -47,11 +47,11 @@ export default function AboutPage() {
         </h2>
 
         <div className="max-w-6xl mx-auto">
-          <h1
+          <h3
             className={`text-2xl sm:text-3xl md:text-[2.5rem] text-black text-start font-medium leading-tight mb-[10px] ${DMSans400.className}`}
           >
             We provide smart IT Solutions to help your Business grow.
-          </h1>
+          </h3>
 
           <p
             className={`text-gray-600 text-base md:text-lg text-start font-medium ${DMSans400.className}`}

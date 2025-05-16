@@ -9,7 +9,7 @@ import ServiceContent from "@/components/services/ServiceContent";
 import FooterSection from "@/components/footer/FooterSection";
 import Script from "next/script";
 import Navbar from "@/components/navbar/Navbar";
-import { FloatingShapes } from "@/components/contact/FloatingShapes";
+// import { FloatingShapes } from "@/components/contact/FloatingShapes";
 import { motion, useAnimation } from "framer-motion";
 import { DMSans } from "@/fonts/font";
 import { useForm, type SubmitHandler } from "react-hook-form";
@@ -163,9 +163,9 @@ export default function ServicePage({
         <div
           className={`relative w-full h-full bg-gradient-to-br from-blue-50 to-purple-50 overflow-hidden p-2 sm:p-4 pb-8 ${DMSans.className}`}
         >
-          <FloatingShapes />
+          {/* <FloatingShapes /> */}
           <div className="max-w-6xl mx-auto relative z-10 pt-16">
-            <motion.h1
+            <motion.h2
               className="text-3xl md:text-4xl font-bold text-center mb-10"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -225,7 +225,7 @@ export default function ServicePage({
                 {" "}
                 Today!
               </motion.span>
-            </motion.h1>
+            </motion.h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
               {/* Contact Info */}

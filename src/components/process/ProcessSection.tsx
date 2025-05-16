@@ -87,7 +87,7 @@ export default function ProcessSection() {
   // Refs for scroll animation
   const containerRef = useRef<HTMLElement>(null)
   const cardsRowRef = useRef<HTMLDivElement>(null)
-  const animationFrameRef = useRef<number | null>(null)
+  const animationFrameRef:any = useRef<number | null>(null)
   const lastScrollPosition = useRef(0)
   const ticking = useRef(false)
 

@@ -144,9 +144,9 @@ const Landing = () => {
           </div>
 
           <div ref={titleRef} className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform">
-            <h1 className="text-center font-sans text-5xl font-bold tracking-widest text-[#F5F5DC] md:text-7xl lg:text-8xl">
+            <h2 className="text-center font-sans text-5xl font-bold tracking-widest text-[#F5F5DC] md:text-7xl lg:text-8xl">
               NOVANECTAR
-            </h1>
+            </h2>
           </div>
         </main>
       ) : null}

@@ -38,9 +38,9 @@ export default function ServiceContent({ service }: ServiceContentProps) {
 
       <div className="md:py-10 bg-[#bcd0f3]">
         <div className="max-w-6xl mx-auto px-4">
-          <h1 className={`text-2xl text-black md:text-4xl font-medium text-center mb-8 ${DMSans.className} underline`}>
+          <h2 className={`text-2xl text-black md:text-4xl font-medium text-center mb-8 ${DMSans.className} underline`}>
             Capability
-          </h1>
+          </h2>
           <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 pb-8 ${DMSans.className}`}>
             {service.capability.map((service, index) => (
               <div

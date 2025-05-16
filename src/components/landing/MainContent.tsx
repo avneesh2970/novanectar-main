@@ -1,125 +1,125 @@
-"use client"
-import { useEffect, useState, lazy, Suspense } from "react"
-import { scrollToSection } from "@/helpers/utils"
-import { DMSans, WorkSans } from "@/fonts/font"
-import Navbar from "../navbar/Navbar"
+"use client";
+import { useEffect, useState, lazy, Suspense } from "react";
+import { scrollToSection } from "@/helpers/utils";
+import { DMSans, WorkSans } from "@/fonts/font";
+import Navbar from "../navbar/Navbar";
 
 // Lazy load non-critical components
 const FloatingTechLayout = lazy(() =>
   import("./FloatingIcons").then((mod) => ({
     default: mod.default,
-  })),
-)
+  }))
+);
 
 const ServicesSection = lazy(() =>
   import("../services/ServicesSection").then((mod) => ({
     default: mod.default,
-  })),
-)
+  }))
+);
 
 const AboutSection = lazy(() =>
   import("../about/AboutSection").then((mod) => ({
     default: mod.default,
-  })),
-)
+  }))
+);
 
 const ServiceScroll = lazy(() =>
   import("../services/servicesScroll/ServiceScroll").then((mod) => ({
     default: mod.default,
-  })),
-)
+  }))
+);
 
 const ContactPopup = lazy(() =>
   import("../contact/ContactPopup").then((mod) => ({
     default: mod.ContactPopup,
-  })),
-)
+  }))
+);
 
 const AppointmentPicker = lazy(() =>
   import("../appointment/appointent-picker").then((mod) => ({
     default: mod.AppointmentPicker,
-  })),
-)
+  }))
+);
 
 // Loading fallback component
 const LoadingFallback = () => (
   <div className="min-h-[200px] flex items-center justify-center">
     <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
   </div>
-)
+);
 
 export const MainContent = () => {
-  const [isContactPopupOpen, setIsContactPopupOpen] = useState(false)
-  const [isOpen, setIsOpen] = useState(false)
-  const [isClient, setIsClient] = useState(false)
-  const [showGridEffect, setShowGridEffect] = useState(false)
+  const [isContactPopupOpen, setIsContactPopupOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+  const [showGridEffect, setShowGridEffect] = useState(false);
 
   // Handle client-side rendering
   useEffect(() => {
-    setIsClient(true)
+    setIsClient(true);
 
     // Delay grid effect to improve initial load
     const timer = setTimeout(() => {
-      setShowGridEffect(true)
-    }, 500)
+      setShowGridEffect(true);
+    }, 500);
 
-    return () => clearTimeout(timer)
-  }, [])
+    return () => clearTimeout(timer);
+  }, []);
 
   // Simplified grid animation using CSS instead of GSAP
   useEffect(() => {
-    if (!showGridEffect) return
+    if (!showGridEffect) return;
 
-    const gridSquares = document.querySelectorAll(".grid-square")
+    const gridSquares = document.querySelectorAll(".grid-square");
     gridSquares.forEach((square, index) => {
-      const el = square as HTMLElement
-      el.style.transitionDelay = `${index * 0.05}s`
-      el.style.opacity = "1"
-      el.style.transform = "scale(1)"
-    })
-  }, [showGridEffect])
+      const el = square as HTMLElement;
+      el.style.transitionDelay = `${index * 0.05}s`;
+      el.style.opacity = "1";
+      el.style.transform = "scale(1)";
+    });
+  }, [showGridEffect]);
 
   // Simplified mouse effect with throttling
   useEffect(() => {
-    if (!isClient || !showGridEffect) return
+    if (!isClient || !showGridEffect) return;
 
-    let lastTime = 0
-    const throttleTime = 16 // ~60fps
+    let lastTime = 0;
+    const throttleTime = 16; // ~60fps
 
     const handleMouseMove = (e: MouseEvent) => {
-      const currentTime = Date.now()
-      if (currentTime - lastTime < throttleTime) return
-      lastTime = currentTime
+      const currentTime = Date.now();
+      if (currentTime - lastTime < throttleTime) return;
+      lastTime = currentTime;
 
-      const hoverLayer = document.getElementById("grid-hover-layer")
+      const hoverLayer = document.getElementById("grid-hover-layer");
       if (hoverLayer) {
-        const x = e.clientX
-        const y = e.clientY + window.scrollY
-        const gradientValue = `radial-gradient(circle 8rem at ${x}px ${y}px, black, transparent)`
-        const element = hoverLayer as HTMLElement
-        element.style.maskImage = gradientValue
-        ;(element.style as any).WebkitMaskImage = gradientValue
-        element.style.opacity = "1"
+        const x = e.clientX;
+        const y = e.clientY + window.scrollY;
+        const gradientValue = `radial-gradient(circle 8rem at ${x}px ${y}px, black, transparent)`;
+        const element = hoverLayer as HTMLElement;
+        element.style.maskImage = gradientValue;
+        (element.style as any).WebkitMaskImage = gradientValue;
+        element.style.opacity = "1";
       }
-    }
+    };
 
     const handleMouseLeave = () => {
-      const hoverLayer = document.getElementById("grid-hover-layer")
+      const hoverLayer = document.getElementById("grid-hover-layer");
       if (hoverLayer) {
-        ;(hoverLayer as HTMLElement).style.opacity = "0"
+        (hoverLayer as HTMLElement).style.opacity = "0";
       }
-    }
+    };
 
-    document.addEventListener("mousemove", handleMouseMove, { passive: true })
-    document.addEventListener("mouseleave", handleMouseLeave)
+    document.addEventListener("mousemove", handleMouseMove, { passive: true });
+    document.addEventListener("mouseleave", handleMouseLeave);
 
     return () => {
-      document.removeEventListener("mousemove", handleMouseMove)
-      document.removeEventListener("mouseleave", handleMouseLeave)
-    }
-  }, [isClient, showGridEffect])
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseleave", handleMouseLeave);
+    };
+  }, [isClient, showGridEffect]);
 
-  const toggleContactPopup = () => setIsContactPopupOpen(!isContactPopupOpen)
+  const toggleContactPopup = () => setIsContactPopupOpen(!isContactPopupOpen);
 
   return (
     <>
@@ -144,8 +144,12 @@ export const MainContent = () => {
                     <h1
                       className={`text-black text-2xl md:text-5xl sm:text-4xl max-w-4xl mx-auto font-bold ${WorkSans.className}`}
                     >
-                      <span className="inline-block">Fueling Progress with Smart </span>
-                      <span className="inline-block text-blue-500 sm:text-black">IT Solutions</span>
+                      <span className="inline-block">
+                        Fueling Progress with Smart{" "}
+                      </span>
+                      <span className="inline-block text-blue-500 sm:text-black">
+                        IT Solutions
+                      </span>
                     </h1>
                   </div>
                   <div className="pt-8 sm:pt-14 text-center px-2 max-w-xl mx-auto">
@@ -153,7 +157,8 @@ export const MainContent = () => {
                       className={`text-black text-center font-medium text-sm md:text-base lg:text-lg ${DMSans.className}`}
                     >
                       <span className="inline-block">
-                        We empower your business with powerful IT solutions that aims your success.
+                        We empower your business with powerful IT solutions that
+                        aims your success.
                       </span>
                     </p>
                   </div>
@@ -167,8 +172,12 @@ export const MainContent = () => {
                       className={`text-black text-2xl md:text-5xl sm:text-4xl max-w-4xl mx-auto font-bold ${WorkSans.className}`}
                       style={{ textRendering: "optimizeSpeed" }}
                     >
-                      <span className="inline-block">Fueling Progress with Smart </span>
-                      <span className="inline-block text-blue-500 sm:text-black">IT Solutions</span>
+                      <span className="inline-block">
+                        Fueling Progress with Smart{" "}
+                      </span>
+                      <span className="inline-block text-blue-500 sm:text-black">
+                        IT Solutions
+                      </span>
                     </h1>
                   </div>
                   <div className="pt-8 sm:pt-14 text-center px-2 max-w-xl mx-auto">
@@ -178,28 +187,31 @@ export const MainContent = () => {
                       style={{ textRendering: "optimizeSpeed" }}
                     >
                       <span className="inline-block">
-                        We empower your business with powerful IT solutions that aims your success.
+                        We empower your business with powerful IT solutions that
+                        aims your success.
                       </span>
                     </p>
                   </div>
                   <div className="flex pt-10 px-2 justify-center gap-4">
                     <button
-                      className={`bg-blue-500 px-3 py-2 sm:px-5 sm:py-2 text-white text-xs sm:text-base rounded-md font-medium shadow-md transition-transform transform hover:scale-105 hover:bg-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none active:scale-95 ${DMSans.className}`}
+                      className={`bg-blue-700 px-3 py-2 sm:px-5 sm:py-2 text-white text-xs sm:text-base rounded-md font-medium shadow-md transition-transform transform hover:scale-105 hover:bg-blue-800 focus:ring-2 focus:ring-blue-400 focus:outline-none active:scale-95 ${DMSans.className}`}
                       onClick={(e) => {
-                        e.preventDefault()
-                        scrollToSection("services-section")
+                        e.preventDefault();
+                        scrollToSection("services-section");
                       }}
                     >
                       Get Started Today
                     </button>
                     <button
-                      className={`border border-blue-500 text-blue-500 px-3 py-3 sm:px-5 sm:py-3 text-xs sm:text-base rounded-md font-medium shadow-md transition-transform transform hover:scale-105 hover:text-white hover:bg-blue-500 focus:ring-2 focus:ring-blue-400 focus:outline-none active:scale-95 bg-white ${DMSans.className}`}
+                      className={`border border-blue-700 text-blue-700 px-3 py-3 sm:px-5 sm:py-3 text-xs sm:text-base rounded-md font-medium shadow-md transition-transform transform hover:scale-105 hover:text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-400 focus:outline-none active:scale-95 bg-white ${DMSans.className}`}
                       onClick={() => setIsOpen(true)}
                     >
                       Schedule a Free Consultation
                     </button>
                   </div>
-                  <p className={`text-black text-center pt-8 px-2 ${DMSans.className}`}>
+                  <p
+                    className={`text-black text-center pt-8 px-2 ${DMSans.className}`}
+                  >
                     Building Success Stories for
                     <span className="text-blue-500"> 200+ Trusted Clients</span>
                   </p>
@@ -213,25 +225,32 @@ export const MainContent = () => {
                 <h1
                   className={`text-black text-2xl md:text-5xl sm:text-4xl max-w-4xl mx-auto font-bold ${WorkSans.className}`}
                 >
-                  <span className="inline-block">Fueling Progress with Smart </span>
-                  <span className="inline-block text-blue-500 sm:text-black">IT Solutions</span>
+                  <span className="inline-block">
+                    Fueling Progress with Smart{" "}
+                  </span>
+                  <span className="inline-block text-blue-500 sm:text-black">
+                    IT Solutions
+                  </span>
                 </h1>
               </div>
               <div className="pt-8 sm:pt-14 text-center px-2 max-w-xl mx-auto">
-                <p className={`text-black text-center font-medium text-sm md:text-base lg:text-lg ${DMSans.className}`}>
+                <p
+                  className={`text-black text-center font-medium text-sm md:text-base lg:text-lg ${DMSans.className}`}
+                >
                   <span className="inline-block">
-                    We empower your business with powerful IT solutions that aims your success.
+                    We empower your business with powerful IT solutions that
+                    aims your success.
                   </span>
                 </p>
               </div>
               <div className="flex pt-10 px-2 justify-center gap-4">
                 <button
-                  className={`bg-blue-500 px-3 py-2 sm:px-5 sm:py-2 text-white text-xs sm:text-base rounded-md font-medium shadow-md ${DMSans.className}`}
+                  className={`bg-blue-700 px-3 py-2 sm:px-5 sm:py-2 text-white text-xs sm:text-base rounded-md font-medium shadow-md ${DMSans.className}`}
                 >
                   Get Started Today
                 </button>
                 <button
-                  className={`border border-blue-500 text-blue-500 px-3 py-3 sm:px-5 sm:py-3 text-xs sm:text-base rounded-md font-medium shadow-md bg-white ${DMSans.className}`}
+                  className={`border border-blue-700 text-blue-700 px-3 py-3 sm:px-5 sm:py-3 text-xs sm:text-base rounded-md font-medium shadow-md bg-white ${DMSans.className}`}
                 >
                   Schedule a Free Consultation
                 </button>
@@ -269,18 +288,24 @@ export const MainContent = () => {
 
             {isContactPopupOpen && (
               <Suspense fallback={<LoadingFallback />}>
-                <ContactPopup isOpen={isContactPopupOpen} onClose={toggleContactPopup} />
+                <ContactPopup
+                  isOpen={isContactPopupOpen}
+                  onClose={toggleContactPopup}
+                />
               </Suspense>
             )}
 
             {isOpen && (
               <Suspense fallback={<LoadingFallback />}>
-                <AppointmentPicker isOpen={isOpen} onClose={() => setIsOpen(false)} />
+                <AppointmentPicker
+                  isOpen={isOpen}
+                  onClose={() => setIsOpen(false)}
+                />
               </Suspense>
             )}
           </>
         )}
       </div>
     </>
-  )
-}
+  );
+};
