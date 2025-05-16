@@ -88,7 +88,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
 
         {/* Preload critical CSS */}
-        <link rel="preload" href="/globals.css" as="style" />
+        {/* <link rel="preload" href="/globals.css" as="style" /> */}
 
         {/* Font optimization to prevent layout shifts */}
         <style
