@@ -1,5 +1,5 @@
 "use client"
-import { useRef, useEffect, useCallback, useState } from "react"
+import { useRef, useEffect, useCallback } from "react"
 import React from "react"
 import { DMSans, DMSans400, DMSans500 } from "@/fonts/font"
 import { services, SVG_ICONS } from "./services"
@@ -32,7 +32,7 @@ const preloadSVGIcons = () => {
     if (document.body.contains(preloadDiv)) {
       document.body.removeChild(preloadDiv)
     }
-  }, 5000)
+  }, 2000) // Reduced timeout for better performance
 }
 
 // Memoized ServiceCard component to prevent unnecessary re-renders
@@ -88,9 +88,8 @@ export default function ProcessSection() {
   const containerRef = useRef<HTMLElement>(null)
   const cardsRowRef = useRef<HTMLDivElement>(null)
   const animationFrameRef = useRef<number | null>(null)
-
-  // State to track if content is loaded
-  const [contentLoaded, setContentLoaded] = useState(false)
+  const lastScrollPosition = useRef(0)
+  const ticking = useRef(false)
 
   // Calculate container height based on content for mobile
   const updateMobileContainerHeight = useCallback(() => {
@@ -109,62 +108,58 @@ export default function ProcessSection() {
     containerRef.current.style.height = `${containerHeight}px`
   }, [])
 
-  // Memoize the scroll handler to prevent recreating it on each render
+  // Optimized scroll handler with throttling for better performance
   const handleScroll = useCallback(() => {
-    if (!containerRef.current || !cardsRowRef.current || !contentLoaded) return
+    if (!containerRef.current || !cardsRowRef.current) return
 
-    // Cancel any existing animation frame
-    if (animationFrameRef.current !== null) {
-      cancelAnimationFrame(animationFrameRef.current)
+    // Throttle scroll events for better performance
+    if (!ticking.current) {
+      requestAnimationFrame(() => {
+        const container = containerRef.current
+        const cardsRow = cardsRowRef.current
+
+        if (!container || !cardsRow) return
+
+        // Skip on mobile - use window.matchMedia for SSR compatibility
+        const isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches
+        if (isMobile) return
+
+        // Calculate total width of all cards
+        const totalCardsWidth = cardsRow.scrollWidth
+        const containerWidth = container.clientWidth
+
+        // Add extra padding to ensure we can see all cards
+        const extraScrollPadding = 100 // pixels
+        const totalScrollNeeded = totalCardsWidth - containerWidth + extraScrollPadding
+
+        // Get container's position relative to the document
+        const containerRect = container.getBoundingClientRect()
+        const containerTop = containerRect.top + (typeof window !== "undefined" ? window.scrollY : 0)
+        const containerHeight = container.offsetHeight
+        const viewportHeight = typeof window !== "undefined" ? window.innerHeight : 0
+        const scrollTop = typeof window !== "undefined" ? window.scrollY : 0
+
+        // Calculate scroll progress
+        const scrollStart = containerTop - viewportHeight * 0.1
+        const scrollEnd = containerTop + containerHeight * 0.8
+        const scrollRange = scrollEnd - scrollStart
+        const rawScrollProgress = (scrollTop - scrollStart) / scrollRange
+        const scrollProgress = Math.max(0, Math.min(1, rawScrollProgress))
+
+        // Apply the translation with linear interpolation for better performance
+        const translateX = -scrollProgress * totalScrollNeeded * 1.5 // Speed factor
+        const limitedTranslateX = Math.max(-totalScrollNeeded * 1.1, Math.min(0, translateX))
+
+        // Use transform: translateX for better performance (no 3D transforms)
+        cardsRow.style.transform = `translateX(${limitedTranslateX}px)`
+
+        ticking.current = false
+        lastScrollPosition.current = scrollTop
+      })
+
+      ticking.current = true
     }
-
-    // Schedule new animation frame
-    animationFrameRef.current = requestAnimationFrame(() => {
-      const container = containerRef.current
-      const cardsRow = cardsRowRef.current
-
-      if (!container || !cardsRow) return
-
-      // Skip on mobile - use window.matchMedia for SSR compatibility
-      const isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches
-      if (isMobile) return
-
-      // Calculate total width of all cards
-      const totalCardsWidth = cardsRow.scrollWidth
-      const containerWidth = container.clientWidth
-
-      // Add extra padding to ensure we can see all cards
-      const extraScrollPadding = 100 // pixels
-      const totalScrollNeeded = totalCardsWidth - containerWidth + extraScrollPadding
-
-      // Get container's position relative to the document
-      const containerRect = container.getBoundingClientRect()
-      const containerTop = containerRect.top + (typeof window !== "undefined" ? window.scrollY : 0)
-      const containerHeight = container.offsetHeight
-      const viewportHeight = typeof window !== "undefined" ? window.innerHeight : 0
-      const scrollTop = typeof window !== "undefined" ? window.scrollY : 0
-
-      // Calculate scroll progress
-      const scrollStart = containerTop - viewportHeight * 0.1
-      const scrollEnd = containerTop + containerHeight * 0.8
-      const scrollRange = scrollEnd - scrollStart
-      const rawScrollProgress = (scrollTop - scrollStart) / scrollRange
-      const scrollProgress = Math.max(0, Math.min(1, rawScrollProgress))
-
-      // Apply the translation with easing
-      const easeInOutProgress = easeInOutQuad(scrollProgress)
-      const translateX = -easeInOutProgress * totalScrollNeeded * 1.5 // Speed factor
-      const limitedTranslateX = Math.max(-totalScrollNeeded * 1.1, Math.min(0, translateX))
-
-      // Use transform: translate3d for better performance
-      cardsRow.style.transform = `translate3d(${limitedTranslateX}px, 0, 0)`
-    })
-  }, [contentLoaded]) // Add contentLoaded as dependency
-
-  // Easing function to make animation smoother
-  function easeInOutQuad(t: number): number {
-    return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2
-  }
+  }, [])
 
   useEffect(() => {
     // Check if we're in the browser environment to avoid hydration errors
@@ -181,19 +176,20 @@ export default function ProcessSection() {
 
     // Call it initially
     setVh()
+    updateMobileContainerHeight()
 
-    // Mark content as loaded after a short delay to ensure everything is rendered
-    const timer = setTimeout(() => {
-      setContentLoaded(true)
-      // Update mobile container height after content is loaded
-      updateMobileContainerHeight()
-    }, 100)
+    // Throttled resize handler for better performance
+    let resizeTimeout: NodeJS.Timeout
+    const handleResize = () => {
+      clearTimeout(resizeTimeout)
+      resizeTimeout = setTimeout(() => {
+        setVh()
+        updateMobileContainerHeight()
+      }, 100)
+    }
 
-    // Add event listener for resize
-    window.addEventListener("resize", () => {
-      setVh()
-      updateMobileContainerHeight()
-    })
+    // Add event listener for resize with throttling
+    window.addEventListener("resize", handleResize)
 
     // Initial position
     handleScroll()
@@ -204,31 +200,26 @@ export default function ProcessSection() {
     // Cleanup
     return () => {
       window.removeEventListener("scroll", handleScroll)
-      window.removeEventListener("resize", setVh)
+      window.removeEventListener("resize", handleResize)
+      clearTimeout(resizeTimeout)
       if (animationFrameRef.current !== null) {
         cancelAnimationFrame(animationFrameRef.current)
       }
-      clearTimeout(timer)
     }
-  }, [handleScroll, updateMobileContainerHeight]) // Add dependencies
+  }, [handleScroll, updateMobileContainerHeight])
 
-  // Use client-side only rendering for the motion components to avoid hydration errors
+  // Use client-side only rendering to avoid hydration errors
   const [isClient, setIsClient] = React.useState(false)
 
   useEffect(() => {
     setIsClient(true)
-
-    // Update mobile container height after client-side rendering
-    if (typeof window !== "undefined") {
-      const timer = setTimeout(updateMobileContainerHeight, 200)
-      return () => clearTimeout(timer)
-    }
+    updateMobileContainerHeight()
   }, [updateMobileContainerHeight])
 
   return (
     <section
       ref={containerRef}
-      className={`process-container ${contentLoaded ? "content-loaded" : ""}`}
+      className="process-container"
       // Add data attribute to prevent layout shift detection by Vercel tools
       data-allow-shifts
     >

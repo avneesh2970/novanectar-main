@@ -22,15 +22,10 @@ p {
   border-radius: 0.75rem;
   padding: 1rem;
   overflow: hidden;
-  backdrop-filter: blur(4px);
   border: 4px solid rgb(209, 213, 219);
   flex-shrink: 0;
   /* Performance optimizations */
   contain: content;
-  will-change: transform;
-  transform: translateZ(0);
-  /* Prevent text layout shifts */
-  font-family: var(--font-dm-sans, var(--font-fallback));
   /* Set explicit height to prevent layout shifts */
   height: 400px;
 }
@@ -57,7 +52,6 @@ p {
   position: absolute;
   inset: 0;
   background-image: linear-gradient(to bottom right, rgba(37, 99, 235, 0), rgba(59, 130, 246, 0));
-  transition: background-image 0.3s;
   pointer-events: none;
   border-radius: 0.75rem;
 }
@@ -100,13 +94,13 @@ p {
 }
 
 .service-card-content {
-  transition: transform 0.3s;
   /* Reserve space for text to prevent layout shifts */
   min-height: 150px;
 }
 
+/* Removed hover animation for better performance */
 .service-card:hover .service-card-content {
-  transform: translateY(-0.25rem);
+  transform: none;
 }
 
 /* Update container heights to use the CSS variable */
@@ -118,8 +112,6 @@ p {
   height: 250vh;
   /* Add containment for better performance */
   contain: layout;
-  /* Add transition for height changes */
-  transition: height 0.3s ease-out;
 }
 
 /* Fix mobile height to fit content */
@@ -187,8 +179,6 @@ p {
   display: flex;
   gap: 1rem;
   height: 100%;
-  will-change: transform;
-  transform: translateZ(0);
   /* Make sure cards are visible immediately */
   opacity: 1 !important;
 }
@@ -210,8 +200,6 @@ p {
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
-    /* Improve scroll performance */
-    scroll-behavior: smooth;
     /* Hide scrollbar for cleaner look */
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -230,11 +218,6 @@ p {
   .process-cards-row > div {
     scroll-snap-align: start;
   }
-}
-
-/* Add styles for content loaded state */
-.content-loaded .process-cards-row {
-  opacity: 1;
 }
 
 /* Text styles with font fallback to prevent layout shifts */
