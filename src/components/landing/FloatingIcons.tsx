@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useCallback, useEffect, useRef, memo } from "react"
+import { useCallback, useEffect, useRef, memo, useState } from "react"
 import Image from "next/image"
 import js from "@/assets/landing/icons/js.png"
 import angular from "@/assets/landing/icons/angular.png"
@@ -14,7 +14,14 @@ import react from "@/assets/landing/icons/react.png"
 import view from "@/assets/landing/icons/view.png"
 import java from "@/assets/landing/icons/java.png"
 
-import { gsap } from "@/lib/gsapUtils"
+// Import GSAP directly
+import gsap from "gsap"
+import { MotionPathPlugin } from "gsap/MotionPathPlugin"
+
+// Register plugins directly
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(MotionPathPlugin)
+}
 
 // Define tech icons outside component to prevent recreation on each render
 const techIcons = [
@@ -95,15 +102,23 @@ const TechIcon = memo(
     icon,
     index,
     iconRef,
+    isVisible,
   }: {
     icon: (typeof techIcons)[0]
     index: number
     iconRef: (el: HTMLDivElement | null) => void
+    isVisible: boolean
   }) => (
     <div
       key={icon.alt}
       ref={iconRef}
-      className={`absolute ${icon.className} transition-transform will-change-transform`}
+      className={`absolute ${icon.className} transition-transform will-change-transform ${
+        !isVisible ? "opacity-0" : "opacity-100"
+      }`}
+      style={{
+        transform: "translate3d(0, 0, 0)", // Force GPU acceleration
+        backfaceVisibility: "hidden", // Prevent flickering
+      }}
     >
       <div className="relative w-full h-full">
         <Image
@@ -114,6 +129,7 @@ const TechIcon = memo(
           className="select-none"
           priority={index < 4}
           sizes="(max-width: 768px) 48px, (max-width: 1200px) 64px, 80px"
+          loading={index < 4 ? "eager" : "lazy"}
         />
       </div>
     </div>
@@ -122,96 +138,205 @@ const TechIcon = memo(
 
 TechIcon.displayName = "TechIcon"
 
+// Custom hook for detecting if element is in viewport
+const useIsInViewport = () => {
+  const [isInViewport, setIsInViewport] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!ref.current) return
+
+    // Capture the current value of ref.current
+    const currentElement = ref.current
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInViewport(entry.isIntersecting)
+      },
+      { threshold: 0.1 }, // Trigger when at least 10% is visible
+    )
+
+    observer.observe(currentElement)
+
+    return () => {
+      // Use the captured value in the cleanup
+      observer.unobserve(currentElement)
+    }
+  }, [])
+
+  return { ref, isInViewport }
+}
+
 const FloatingTechLayout: React.FC<FloatingTechLayoutProps> = ({ children }) => {
   const iconRefs = useRef<(HTMLDivElement | null)[]>([])
+  const animationsActive = useRef(false)
+  const animationTweens = useRef<gsap.core.Tween[]>([])
+  const { ref: containerRef, isInViewport } = useIsInViewport()
+  const [isReducedMotion, setIsReducedMotion] = useState(false)
+
+  // Check for reduced motion preference
+  useEffect(() => {
+    if (typeof window === "undefined") return
+
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)")
+    setIsReducedMotion(mediaQuery.matches)
+
+    const handleChange = (e: MediaQueryListEvent) => {
+      setIsReducedMotion(e.matches)
+    }
+
+    mediaQuery.addEventListener("change", handleChange)
+    return () => {
+      mediaQuery.removeEventListener("change", handleChange)
+    }
+  }, [])
 
   // Use useCallback to memoize the animateIcons function
   const animateIcons = useCallback(() => {
-    iconRefs.current.forEach((icon, index) => {
+    // Skip if animations are already active or reduced motion is preferred
+    if (animationsActive.current || isReducedMotion) return
+
+    // Mark animations as active
+    animationsActive.current = true
+
+    // Clear any existing animations
+    animationTweens.current = []
+
+    // Limit the number of animated icons based on device performance
+    const isLowPerfDevice = window.navigator.hardwareConcurrency ? window.navigator.hardwareConcurrency <= 4 : false
+
+    // Determine how many icons to animate based on device capability
+    const iconLimit = isLowPerfDevice ? 5 : techIcons.length
+
+    // Create a subset of icons to animate
+    const iconsToAnimate = iconRefs.current.slice(0, iconLimit).filter(Boolean)
+
+    iconsToAnimate.forEach((icon, index) => {
       if (!icon) return
 
       const pattern = techIcons[index].pattern
-      const duration = 2 + Math.random()
-      const delay = Math.random()
+      const duration = 2 + Math.random() * 2 // Slightly randomize duration
+      const delay = Math.random() * 0.5 // Shorter delays for better performance
 
-      switch (pattern) {
-        case "circular":
-          gsap.to(icon, {
-            duration: duration,
-            repeat: -1,
-            ease: "none",
-            motionPath: {
-              path: [
-                { x: 0, y: 0 },
-                { x: 15, y: 15 },
-                { x: 0, y: 30 },
-                { x: -15, y: 15 },
-                { x: 0, y: 0 },
-              ],
-              curviness: 1.8,
-            },
-            delay: delay,
-          })
-          break
+      let tween: gsap.core.Tween
 
-        case "wave":
-          gsap.to(icon, {
-            duration: duration,
-            repeat: -1,
-            ease: "power1.inOut",
-            yoyo: true,
-            x: Math.random() * 20 - 10,
-            y: Math.random() * 20 - 10,
-            delay: delay,
-          })
-          break
+      // Use simpler animations for low-performance devices
+      if (isLowPerfDevice) {
+        // Simple animation for all patterns on low-performance devices
+        tween = gsap.to(icon, {
+          duration: duration,
+          repeat: -1,
+          ease: "sine.inOut",
+          yoyo: true,
+          y: Math.random() * 15 - 7.5,
+          x: Math.random() * 15 - 7.5,
+          delay: delay,
+        })
+        animationTweens.current.push(tween)
+      } else {
+        // Full animations for higher-performance devices
+        switch (pattern) {
+          case "circular":
+            tween = gsap.to(icon, {
+              duration: duration,
+              repeat: -1,
+              ease: "none",
+              motionPath: {
+                path: [
+                  { x: 0, y: 0 },
+                  { x: 15, y: 15 },
+                  { x: 0, y: 30 },
+                  { x: -15, y: 15 },
+                  { x: 0, y: 0 },
+                ],
+                curviness: 1.8,
+              },
+              delay: delay,
+            })
+            animationTweens.current.push(tween)
+            break
 
-        case "bounce":
-          gsap.to(icon, {
-            duration: duration * 0.8,
-            repeat: -1,
-            ease: "power1.inOut",
-            yoyo: true,
-            y: "-=20",
-            x: Math.random() * 15 - 7.5,
-            delay: delay,
-          })
-          break
+          case "wave":
+            tween = gsap.to(icon, {
+              duration: duration,
+              repeat: -1,
+              ease: "power1.inOut",
+              yoyo: true,
+              x: Math.random() * 20 - 10,
+              y: Math.random() * 20 - 10,
+              delay: delay,
+            })
+            animationTweens.current.push(tween)
+            break
+
+          case "bounce":
+            tween = gsap.to(icon, {
+              duration: duration * 0.8,
+              repeat: -1,
+              ease: "power1.inOut",
+              yoyo: true,
+              y: "-=20",
+              x: Math.random() * 15 - 7.5,
+              delay: delay,
+            })
+            animationTweens.current.push(tween)
+            break
+        }
+
+        // Add subtle rotation to all icons (only for higher-performance devices)
+        tween = gsap.to(icon, {
+          duration: duration * 1.5,
+          repeat: -1,
+          ease: "power1.inOut",
+          yoyo: true,
+          rotation: Math.random() * 8 - 4, // Reduced rotation range
+          delay: delay,
+        })
+        animationTweens.current.push(tween)
       }
-
-      // Add subtle rotation to all icons
-      gsap.to(icon, {
-        duration: duration * 1.5,
-        repeat: -1,
-        ease: "power1.inOut",
-        yoyo: true,
-        rotation: Math.random() * 10 - 5,
-        delay: delay,
-      })
     })
-  }, []) // No dependencies as it only uses refs and constants
+  }, [isReducedMotion]) // Add isReducedMotion as a dependency
+
+  // Pause/resume animations based on visibility
+  useEffect(() => {
+    if (!animationsActive.current || animationTweens.current.length === 0) return
+
+    if (isInViewport) {
+      // Resume all animations
+      animationTweens.current.forEach((tween) => tween.resume())
+    } else {
+      // Pause all animations
+      animationTweens.current.forEach((tween) => tween.pause())
+    }
+  }, [isInViewport])
 
   useEffect(() => {
-    let isActive = true
-    // Capture the current value of iconRefs.current
-    const currentIconRefs = iconRefs.current
+    // Only run in browser
+    if (typeof window === "undefined") return
 
-    // Ensure GSAP is initialized
-    if (typeof window !== "undefined") {
-      import("@/lib/gsapUtils").then(({ initGSAP }) => {
-        if (isActive) {
-          initGSAP()
-          animateIcons()
+    // Small delay to ensure DOM is ready
+    const timer = setTimeout(() => {
+      if (isInViewport && !isReducedMotion) {
+        animateIcons()
+      }
+    }, 100)
+
+    // Return a cleanup function that properly kills all animations
+    return () => {
+      clearTimeout(timer)
+
+      // Reset animation active flag
+      animationsActive.current = false
+
+      // Kill all animations
+      animationTweens.current.forEach((tween) => {
+        if (tween) {
+          tween.kill()
         }
       })
+      animationTweens.current = []
     }
-
-    return () => {
-      isActive = false
-      // Clean up animations using the captured ref value
-      gsap.killTweensOf(currentIconRefs)
-    }
-  }, [animateIcons]) // Include animateIcons in the dependency array
+  }, [animateIcons, isInViewport, isReducedMotion])
 
   // Create a ref setter function
   const setIconRef = (index: number) => (el: HTMLDivElement | null) => {
@@ -219,11 +344,11 @@ const FloatingTechLayout: React.FC<FloatingTechLayoutProps> = ({ children }) => 
   }
 
   return (
-    <div className="relative w-full overflow-hidden">
+    <div className="relative w-full overflow-hidden" ref={containerRef}>
       {/* Floating icons layer */}
       <div className="absolute inset-0 pointer-events-none">
         {techIcons.map((icon, index) => (
-          <TechIcon key={icon.alt} icon={icon} index={index} iconRef={setIconRef(index)} />
+          <TechIcon key={icon.alt} icon={icon} index={index} iconRef={setIconRef(index)} isVisible={isInViewport} />
         ))}
       </div>
       {/* Main content layer */}

@@ -6,11 +6,9 @@ import type React from "react";
 // Create a placeholder GSAP object that will be replaced with the real one when loaded
 export const gsap = {
   to: (_target: any, _vars: any) => {
-    // This is a placeholder that will be replaced when GSAP is loaded
     return { kill: () => {} };
   },
   fromTo: (_target: any, _fromVars: any, _toVars: any) => {
-    // This is a placeholder that will be replaced when GSAP is loaded
     return { kill: () => {} };
   },
   set: (_target: any, _vars: any) => {
@@ -30,32 +28,20 @@ export const gsap = {
         return gsap.timeline();
       },
       set: (_target: any, _vars: any, _position?: any) => {
-        // Return the timeline for chaining
         return gsap.timeline();
       },
       kill: () => {},
     };
   },
-  globalTimeline: {
-    clear: () => {},
-  },
-  // Add context method
-  context: (func: () => void, scope?: any) => {
-    // Call the function immediately in the placeholder
-    if (typeof func === "function") {
-      func();
-    }
-    // Return a context object with a kill method
-    return {
-      kill: () => {},
-      revert: () => {},
-      add: () => {},
-    };
-  },
+
   // Add from method
   from: (_target: any, _vars: any) => {
     // This is a placeholder that will be replaced when GSAP is loaded
     return { kill: () => {} };
+  },
+
+  globalTimeline: {
+    clear: () => {},
   },
 };
 
@@ -152,7 +138,7 @@ export const useGSAP = (
 ) => {
   const initialized = useRef(false);
 
-
+  // Wrap the callback in useCallback to ensure it's stable
   const stableCallback = useCallback(callback, [...dependencies, callback]);
 
   useEffect(() => {
