@@ -147,7 +147,7 @@ export const MainContent = () => {
                       <span className="inline-block">
                         Fueling Progress with Smart{" "}
                       </span>
-                      <span className="inline-block text-blue-500 sm:text-black">
+                      <span className="inline-block text-blue-700 sm:text-black">
                         IT Solutions
                       </span>
                     </h1>
@@ -175,7 +175,7 @@ export const MainContent = () => {
                       <span className="inline-block">
                         Fueling Progress with Smart{" "}
                       </span>
-                      <span className="inline-block text-blue-500 sm:text-black">
+                      <span className="inline-block text-blue-700 sm:text-black">
                         IT Solutions
                       </span>
                     </h1>
@@ -213,7 +213,7 @@ export const MainContent = () => {
                     className={`text-black text-center pt-8 px-2 ${DMSans.className}`}
                   >
                     Building Success Stories for
-                    <span className="text-blue-500"> 200+ Trusted Clients</span>
+                    <span className="text-blue-700"> 200+ Trusted Clients</span>
                   </p>
                 </div>
               </FloatingTechLayout>

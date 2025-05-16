@@ -87,7 +87,7 @@ export default function ProcessSection() {
   // Refs for scroll animation
   const containerRef = useRef<HTMLElement>(null)
   const cardsRowRef = useRef<HTMLDivElement>(null)
-  const animationFrameRef:any = useRef<number | null>(null)
+  const animationFrameRef = useRef<number | null>(null)
   const lastScrollPosition = useRef(0)
   const ticking = useRef(false)
 
@@ -203,6 +203,7 @@ export default function ProcessSection() {
       window.removeEventListener("resize", handleResize)
       clearTimeout(resizeTimeout)
       if (animationFrameRef.current !== null) {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         cancelAnimationFrame(animationFrameRef.current)
       }
     }
