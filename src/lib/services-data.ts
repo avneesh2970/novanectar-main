@@ -25,12 +25,12 @@ import graphicDesign from "@/assets/services/main/graphicDesign.png";
 
 ////////////////////////////////////////////////////////////////////////////////////
 // details page cover images
-import graphicDesignCover from "@/assets/services/info/graphicDesign.jpg";
-import digitalMarketingCover from "@/assets/services/info/digitalMarketing.jpg";
+import graphicDesignCover from "@/assets/services/info/graphicDesign.webp";
+import digitalMarketingCover from "@/assets/services/info/digitalMarketing.webp";
 import eCommCover from "@/assets/services/info/eComm.jpg";
-import mobileDevCover from "@/assets/services/info/mobileDev.jpg";
-import seoCover from "@/assets/services/info/seo.jpg";
-import webDevCover from "@/assets/services/info/webDev.jpg";
+import mobileDevCover from "@/assets/services/info/mobileDev.webp";
+import seoCover from "@/assets/services/info/seo.webp";
+import webDevCover from "@/assets/services/info/webDev.webp";
 
 export interface Capability {
   heading: string;
