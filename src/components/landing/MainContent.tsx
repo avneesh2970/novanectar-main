@@ -156,7 +156,7 @@ export const MainContent = () => {
                     <p
                       className={`text-black text-center font-medium text-sm md:text-base lg:text-lg ${DMSans.className}`}
                     >
-                      <span className="inline-block">
+                      <span>
                         We empower your business with powerful IT solutions that
                         aims your success.
                       </span>
