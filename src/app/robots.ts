@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: "/private/",
+      disallow: "/admin/",
     },
     sitemap: "https://novanectar.co.in/sitemap.xml",
   }

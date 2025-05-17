@@ -30,12 +30,6 @@ export default function AboutPage() {
   return (
     <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 bg-[#f6f4f0] pt-16">
       <div className="space-y-8 text-center">
-        {/* <h2
-        id="about-section"
-          className={`text-4xl font-medium text-gray-800 underline text-center ${DMSans.className}`}
-        >
-          About Us
-        </h2> */}
          <h2
           className={`text-3xl sm:text-4xl md:text-5xl text-center font-semibold text-gray-800 mb-14 ${DMSans.className}`}
         >
