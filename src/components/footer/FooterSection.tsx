@@ -252,7 +252,7 @@ const FooterSection = () => {
           </div>
           <div className="sm:hidden col-span-1 sm:col-span-2 md:col-span-1 md:text-start">
             <h3 className="text-sm font-medium mb-4">FOLLOW US</h3>
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-4 w-60">
               {socialIcons.map((social) => (
                 <motion.a
                   key={social.name}

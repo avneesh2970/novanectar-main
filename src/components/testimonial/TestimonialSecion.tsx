@@ -23,14 +23,14 @@ const TestimonialCard = ({
 }) => {
   return (
     <div
-      className={`relative bg-white rounded-xl p-6 shadow-lg h-full flex flex-col ${DMSans.className}`}
+      className={`relative bg-white rounded-xl p-6 pt-10 shadow-lg h-full flex flex-col ${DMSans.className}`}
     >
       {/* Quote icon */}
-      <div className="absolute -top-[17] -left-0 bg-[#3DBBFA] text-white p-2 rounded-full shadow-md">
+      <div className="absolute top-3 left-3 bg-[#3DBBFA] text-white p-2 rounded-full shadow-md">
         <Quote className="w-5 h-5" />
       </div>
 
-      <div className="mb-4 flex-grow">
+      <div className="mb-4 flex-grow mt-4">
         <p className="text-gray-800 leading-relaxed text-base">{content}</p>
       </div>
 
@@ -582,19 +582,6 @@ const TestimonialSection = () => {
               )}
             </div>
           </div>
-
-          {/* "View All" Link with animation */}
-          {/* <div className="text-center mt-12" onMouseEnter={pauseAutoplay} onMouseLeave={resumeAutoplay}>
-            <Link
-              href="/testimonials"
-              className={`inline-flex items-center gap-2 text-gray-800 hover:text-[#3DBBFA] font-medium text-lg group transition-all ${DMSans.className}`}
-            >
-              View all testimonials
-              <span className="inline-block group-hover:translate-x-1 transition-transform">
-                <ArrowRight className="w-5 h-5" />
-              </span>
-            </Link>
-          </div> */}
         </div>
       </div>
     </div>
