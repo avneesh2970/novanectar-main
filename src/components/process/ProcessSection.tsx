@@ -1,12 +1,27 @@
 "use client"
-import { useRef, useEffect, useCallback } from "react"
+import { useRef, useEffect, useCallback, useState } from "react"
 import React from "react"
 import { DMSans, DMSans400, DMSans500 } from "@/fonts/font"
 import { services, SVG_ICONS } from "./services"
 import { SVGIcon } from "./svg-icon"
 import "./process-section.css" // Import the CSS file directly
 
-// Improved SVG preloading that doesn't cause layout shifts
+// Font preloading function to prevent layout shifts from font loading
+const preloadFonts = () => {
+  if (typeof window === "undefined") return
+  
+  // Use the Font Loading API if available
+  if ('fonts' in document) {
+    // Preload the fonts we're using
+    Promise.all([
+      (document as any).fonts.load(`1em ${DMSans.style.fontFamily}`),
+      (document as any).fonts.load(`1em ${DMSans400.style.fontFamily}`),
+      (document as any).fonts.load(`1em ${DMSans500.style.fontFamily}`)
+    ]).catch(err => console.error("Font preloading error:", err));
+  }
+}
+
+// Improved SVG preloading with better error handling
 const preloadSVGIcons = () => {
   if (typeof window === "undefined") return
 
@@ -20,16 +35,19 @@ const preloadSVGIcons = () => {
   preloadDiv.style.pointerEvents = "none"
   preloadDiv.setAttribute("aria-hidden", "true")
 
-  // Add all SVGs to preload - using a safer approach without Blob
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // Add all SVGs to preload with error handling
   Object.entries(SVG_ICONS).forEach(([key, svg]) => {
-    if (typeof svg === 'string') {
-      const wrapper = document.createElement('div')
-      wrapper.innerHTML = svg
-      wrapper.style.position = "absolute"
-      wrapper.style.width = "48px"
-      wrapper.style.height = "48px"
-      preloadDiv.appendChild(wrapper)
+    try {
+      if (typeof svg === 'string') {
+        const wrapper = document.createElement('div')
+        wrapper.innerHTML = svg
+        wrapper.style.position = "absolute"
+        wrapper.style.width = "48px"
+        wrapper.style.height = "48px"
+        preloadDiv.appendChild(wrapper)
+      }
+    } catch (error) {
+      console.error(`Error preloading SVG ${key}:`, error)
     }
   })
 
@@ -43,18 +61,91 @@ const preloadSVGIcons = () => {
   }, 2000)
 }
 
-// Memoized ServiceCard component with fixed dimensions to prevent layout shifts
-const ServiceCard = React.memo(({ title, description, iconKey }: any) => {
+// Skeleton card component to show while content is loading
+const SkeletonCard = React.memo(() => {
   return (
     <div 
-      className="service-card"
-      // Set explicit dimensions to prevent layout shifts
+      className="service-card skeleton-card"
       style={{
         width: "280px",
         height: "400px",
-        contain: "strict" // Use CSS containment for better performance
+        contain: "strict",
+        backgroundColor: "rgba(55, 65, 81, 0.3)",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center"
       }}
     >
+      <div 
+        className="skeleton-icon"
+        style={{
+          width: "64px",
+          height: "64px",
+          borderRadius: "50%",
+          backgroundColor: "rgba(219, 234, 254, 0.1)",
+          marginBottom: "2rem"
+        }}
+      />
+      <div 
+        className="skeleton-title"
+        style={{
+          width: "70%",
+          height: "24px",
+          backgroundColor: "rgba(219, 234, 254, 0.1)",
+          marginBottom: "1rem",
+          borderRadius: "4px"
+        }}
+      />
+      <div 
+        className="skeleton-text"
+        style={{
+          width: "80%",
+          height: "100px",
+          backgroundColor: "rgba(219, 234, 254, 0.1)",
+          borderRadius: "4px"
+        }}
+      />
+    </div>
+  )
+})
+
+SkeletonCard.displayName = "SkeletonCard"
+
+// Memoized ServiceCard component with fixed dimensions to prevent layout shifts
+const ServiceCard = React.memo(({ title, description, iconKey }: any) => {
+  // State to track if the SVG has loaded
+  const [svgLoaded, setSvgLoaded] = useState(false)
+  
+  // Effect to simulate SVG loading
+  useEffect(() => {
+    // Set a small timeout to simulate SVG loading
+    // This ensures the skeleton is shown first
+    const timer = setTimeout(() => {
+      setSvgLoaded(true)
+    }, 10)
+    
+    return () => clearTimeout(timer)
+  }, [])
+
+  return (
+    <div 
+      className="service-card"
+      style={{
+        width: "280px",
+        height: "400px",
+        contain: "strict", // Use CSS containment for better performance
+        visibility: svgLoaded ? "visible" : "hidden", // Hide until SVG is loaded
+        position: "relative"
+      }}
+    >
+      {/* Show skeleton while loading */}
+      {!svgLoaded && (
+        <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}>
+          <SkeletonCard />
+        </div>
+      )}
+      
       <div className="service-card-hover" />
 
       <div className="relative z-10">
@@ -89,8 +180,8 @@ const ServiceCard = React.memo(({ title, description, iconKey }: any) => {
                 svgString={SVG_ICONS[iconKey] as string} 
                 width={48} 
                 height={48} 
-                // Add placeholder background to reserve space
                 className="svg-icon-placeholder"
+                onLoad={() => setSvgLoaded(true)}
               />
             </div>
           </div>
@@ -134,6 +225,9 @@ const ServiceCard = React.memo(({ title, description, iconKey }: any) => {
 ServiceCard.displayName = "ServiceCard"
 
 export default function ProcessSection() {
+  // State to track if content is ready to display
+  const [contentReady, setContentReady] = useState(false)
+  
   // Refs for scroll animation
   const containerRef = useRef<HTMLElement>(null)
   const cardsRowRef = useRef<HTMLDivElement>(null)
@@ -141,6 +235,7 @@ export default function ProcessSection() {
   const lastScrollPosition = useRef(0)
   const ticking = useRef(false)
   const isInitialRender = useRef(true)
+  const observerRef = useRef<IntersectionObserver | null>(null)
 
   // Calculate container height based on content for mobile - improved version
   const updateMobileContainerHeight = useCallback(() => {
@@ -213,10 +308,47 @@ export default function ProcessSection() {
     }
   }, [])
 
+  // Fixed setupIntersectionObserver with proper dependency array
+  const setupIntersectionObserver = useCallback(() => {
+    if (typeof window === "undefined" || !containerRef.current) return
+    
+    // Skip on mobile
+    const isMobile = window.matchMedia("(max-width: 767px)").matches
+    if (isMobile) return
+    
+    // Clean up existing observer
+    if (observerRef.current) {
+      observerRef.current.disconnect()
+    }
+    
+    // Create new observer
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            // Element is visible, start animation
+            handleScroll()
+          }
+        })
+      },
+      {
+        root: null,
+        rootMargin: "0px",
+        threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+      }
+    )
+    
+    // Observe the container
+    observerRef.current.observe(containerRef.current)
+  }, [handleScroll]) // Add handleScroll to dependency array
+
   useEffect(() => {
     // Check if we're in the browser environment to avoid hydration errors
     if (typeof window === "undefined") return
 
+    // Preload fonts to prevent layout shifts
+    preloadFonts()
+    
     // Preload SVG icons to prevent layout shifts
     preloadSVGIcons()
 
@@ -238,7 +370,15 @@ export default function ProcessSection() {
       
       updateMobileContainerHeight()
       isInitialRender.current = false
+      
+      // Set content ready after a small delay to ensure dimensions are calculated
+      setTimeout(() => {
+        setContentReady(true)
+      }, 50)
     }
+
+    // Setup intersection observer for scroll animations
+    setupIntersectionObserver()
 
     // Throttled resize handler for better performance
     let resizeTimeout: NodeJS.Timeout
@@ -247,6 +387,7 @@ export default function ProcessSection() {
       resizeTimeout = setTimeout(() => {
         setVh()
         updateMobileContainerHeight()
+        setupIntersectionObserver() // Re-setup observer on resize
       }, 100)
     }
 
@@ -267,8 +408,11 @@ export default function ProcessSection() {
       if (animationFrameRef.current !== null) {
         cancelAnimationFrame(animationFrameRef.current)
       }
+      if (observerRef.current) {
+        observerRef.current.disconnect()
+      }
     }
-  }, [handleScroll, updateMobileContainerHeight])
+  }, [handleScroll, updateMobileContainerHeight, setupIntersectionObserver])
 
   return (
     <section
@@ -277,7 +421,10 @@ export default function ProcessSection() {
       // Add data attribute to prevent layout shift detection by Vercel tools
       data-allow-shifts
       // Set explicit min-height to prevent layout shifts
-      style={{ minHeight: "100vh" }}
+      style={{ 
+        minHeight: "100vh",
+        // Removed contentVisibility and containIntrinsicSize to simplify
+      }}
     >
       <div className="process-sticky-container">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-gray-900/100 to-gray-900"></div>
@@ -299,7 +446,7 @@ export default function ProcessSection() {
             className="process-cards-container"
             style={{ 
               minHeight: "400px", // Set explicit min-height to prevent layout shifts
-              contain: "layout" // Use CSS containment for better performance
+              contain: "layout size", // Use CSS containment for better performance
             }}
           >
             {/* Cards row with optimized animations */}
@@ -312,7 +459,7 @@ export default function ProcessSection() {
                 // Set explicit min-height to prevent layout shifts
                 minHeight: "400px",
                 // Use CSS containment for better performance
-                contain: "layout"
+                contain: "layout size",
               }}
             >
               {services.map((service, index) => (
@@ -328,7 +475,12 @@ export default function ProcessSection() {
                     contain: "strict"
                   }}
                 >
-                  <ServiceCard {...service} />
+                  {/* Show skeleton while content is loading */}
+                  {!contentReady ? (
+                    <SkeletonCard />
+                  ) : (
+                    <ServiceCard {...service} />
+                  )}
                 </div>
               ))}
             </div>

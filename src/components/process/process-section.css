@@ -14,6 +14,8 @@ p {
   font-optical-sizing: auto;
   /* Add font-display: swap to prevent layout shifts during font loading */
   font-display: swap;
+  /* Add font-family fallback to prevent layout shifts */
+  font-family: var(--font-fallback);
 }
 
 /* SVG icon placeholder to prevent layout shifts */
@@ -31,6 +33,32 @@ p {
   background-color: rgba(219, 234, 254, 0.1);
 }
 
+/* Add loading state for SVG icons */
+.svg-loading {
+  background-color: rgba(219, 234, 254, 0.1);
+}
+
+.svg-loaded {
+  background-color: transparent;
+}
+
+/* Skeleton animation for loading state */
+@keyframes skeletonPulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+.skeleton-card {
+  animation: skeletonPulse 1.5s ease-in-out infinite;
+}
+
 .service-card {
   position: relative;
   width: 280px;
@@ -46,10 +74,6 @@ p {
   contain: strict;
   /* Add will-change for better performance */
   will-change: transform;
-  /* Add transform-style: flat for better performance */
-  transform-style: flat;
-  /* Add backface-visibility: hidden for better performance */
-  backface-visibility: hidden;
   /* Ensure cards are fully visible */
   display: block;
 }
@@ -190,7 +214,7 @@ p {
   height: 400px;
   min-height: 400px;
   /* Use CSS containment for better performance */
-  contain: layout;
+  contain: layout size;
   width: 100%;
   /* Ensure cards are fully visible */
   display: block;
@@ -227,13 +251,9 @@ p {
   /* Make sure cards are visible immediately */
   opacity: 1 !important;
   /* Use CSS containment for better performance */
-  contain: layout;
+  contain: layout size;
   /* Add will-change for better performance */
   will-change: transform;
-  /* Add transform-style: flat for better performance */
-  transform-style: flat;
-  /* Add backface-visibility: hidden for better performance */
-  backface-visibility: hidden;
   /* Ensure all cards are visible */
   padding: 0 1rem;
 }
