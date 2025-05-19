@@ -6,7 +6,7 @@ import { services, SVG_ICONS } from "./services"
 import { SVGIcon } from "./svg-icon"
 import "./process-section.css" // Import the CSS file directly
 
-// Preload SVG icons to prevent layout shifts
+// Improved SVG preloading that doesn't cause layout shifts
 const preloadSVGIcons = () => {
   if (typeof window === "undefined") return
 
@@ -17,12 +17,20 @@ const preloadSVGIcons = () => {
   preloadDiv.style.height = "0"
   preloadDiv.style.overflow = "hidden"
   preloadDiv.style.visibility = "hidden"
+  preloadDiv.style.pointerEvents = "none"
+  preloadDiv.setAttribute("aria-hidden", "true")
 
-  // Add all SVGs to preload
-  Object.values(SVG_ICONS).forEach((svg) => {
-    const wrapper:any = document.createElement("div")
-    wrapper.innerHTML = svg
-    preloadDiv.appendChild(wrapper)
+  // Add all SVGs to preload - using a safer approach without Blob
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  Object.entries(SVG_ICONS).forEach(([key, svg]) => {
+    if (typeof svg === 'string') {
+      const wrapper = document.createElement('div')
+      wrapper.innerHTML = svg
+      wrapper.style.position = "absolute"
+      wrapper.style.width = "48px"
+      wrapper.style.height = "48px"
+      preloadDiv.appendChild(wrapper)
+    }
   })
 
   document.body.appendChild(preloadDiv)
@@ -32,34 +40,77 @@ const preloadSVGIcons = () => {
     if (document.body.contains(preloadDiv)) {
       document.body.removeChild(preloadDiv)
     }
-  }, 2000) // Reduced timeout for better performance
+  }, 2000)
 }
 
-// Memoized ServiceCard component to prevent unnecessary re-renders
+// Memoized ServiceCard component with fixed dimensions to prevent layout shifts
 const ServiceCard = React.memo(({ title, description, iconKey }: any) => {
   return (
-    <div className="service-card">
+    <div 
+      className="service-card"
+      // Set explicit dimensions to prevent layout shifts
+      style={{
+        width: "280px",
+        height: "400px",
+        contain: "strict" // Use CSS containment for better performance
+      }}
+    >
       <div className="service-card-hover" />
 
       <div className="relative z-10">
         {/* Fixed dimension container for icon to prevent layout shifts */}
-        <div className="service-card-icon-container">
-          <div className="service-card-icon">
-            {/* Render SVG from string using the SVGIcon component with explicit dimensions */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[48px] h-[48px] flex items-center justify-center">
-              <SVGIcon svgString={SVG_ICONS[iconKey]} width={48} height={48} />
+        <div 
+          className="service-card-icon-container"
+          style={{ 
+            width: "64px", 
+            height: "64px",
+            contain: "strict" // Use CSS containment for better performance
+          }}
+        >
+          <div 
+            className="service-card-icon"
+            style={{ 
+              width: "100%", 
+              height: "100%",
+              contain: "strict" // Use CSS containment for better performance
+            }}
+          >
+            {/* Render SVG with explicit dimensions */}
+            <div 
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+              style={{ 
+                width: "48px", 
+                height: "48px",
+                transform: "translate(-50%, -50%)",
+                contain: "strict" // Use CSS containment for better performance
+              }}
+            >
+              <SVGIcon 
+                svgString={SVG_ICONS[iconKey] as string} 
+                width={48} 
+                height={48} 
+                // Add placeholder background to reserve space
+                className="svg-icon-placeholder"
+              />
             </div>
           </div>
         </div>
 
-        <div className="service-card-content">
+        <div 
+          className="service-card-content"
+          style={{ 
+            minHeight: "250px", // Set explicit min-height to prevent layout shifts
+            contain: "content" // Use CSS containment for better performance
+          }}
+        >
           <h3
             className={`text-center pt-8 text-lg sm:text-xl font-medium text-white mb-2 sm:mb-3 tracking-wider ${DMSans500.className}`}
             style={{
-              // Set explicit line height to prevent layout shifts
-              lineHeight: 1.5,
-              // Reserve space for text to prevent layout shifts
-              minHeight: "2em",
+              lineHeight: "1.5",
+              minHeight: "3em", // Reserve more space for title
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center"
             }}
           >
             {title}
@@ -67,10 +118,9 @@ const ServiceCard = React.memo(({ title, description, iconKey }: any) => {
           <p
             className={`text-gray-200 text-center leading-tight text-base ${DMSans400.className}`}
             style={{
-              // Set explicit line height to prevent layout shifts
-              lineHeight: 1.5,
-              // Reserve space for text to prevent layout shifts
-              minHeight: "6em",
+              lineHeight: "1.5",
+              minHeight: "9em", // Reserve more space for description
+              display: "block"
             }}
           >
             {description}
@@ -90,8 +140,9 @@ export default function ProcessSection() {
   const animationFrameRef = useRef<number | null>(null)
   const lastScrollPosition = useRef(0)
   const ticking = useRef(false)
+  const isInitialRender = useRef(true)
 
-  // Calculate container height based on content for mobile
+  // Calculate container height based on content for mobile - improved version
   const updateMobileContainerHeight = useCallback(() => {
     if (typeof window === "undefined") return
 
@@ -100,27 +151,27 @@ export default function ProcessSection() {
 
     // Get the actual height of the cards row
     const cardsRowHeight = cardsRowRef.current.scrollHeight
-
-    // Add some padding
-    const containerHeight = cardsRowHeight + 100 // 100px for padding
-
+    
+    // Add minimal padding for mobile - reduced from previous version
+    const containerHeight = cardsRowHeight + 40 // Reduced padding to 40px
+    
     // Set the container height
     containerRef.current.style.height = `${containerHeight}px`
   }, [])
 
-  // Optimized scroll handler with throttling for better performance
+  // Optimized scroll handler with throttling and better performance
   const handleScroll = useCallback(() => {
     if (!containerRef.current || !cardsRowRef.current) return
 
     // Throttle scroll events for better performance
     if (!ticking.current) {
-      requestAnimationFrame(() => {
+      animationFrameRef.current = requestAnimationFrame(() => {
         const container = containerRef.current
         const cardsRow = cardsRowRef.current
 
         if (!container || !cardsRow) return
 
-        // Skip on mobile - use window.matchMedia for SSR compatibility
+        // Skip on mobile
         const isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches
         if (isMobile) return
 
@@ -147,6 +198,7 @@ export default function ProcessSection() {
         const scrollProgress = Math.max(0, Math.min(1, rawScrollProgress))
 
         // Apply the translation with linear interpolation for better performance
+        // Only animate transform, not opacity or other properties that cause layout shifts
         const translateX = -scrollProgress * totalScrollNeeded * 1.5 // Speed factor
         const limitedTranslateX = Math.max(-totalScrollNeeded * 1.1, Math.min(0, translateX))
 
@@ -176,7 +228,17 @@ export default function ProcessSection() {
 
     // Call it initially
     setVh()
-    updateMobileContainerHeight()
+    
+    // Set initial dimensions to prevent layout shifts
+    if (isInitialRender.current) {
+      // Force layout calculation before any animations
+      // Use a function call to avoid eslint warning
+      const forceReflow = () => document.body.offsetHeight;
+      forceReflow();
+      
+      updateMobileContainerHeight()
+      isInitialRender.current = false
+    }
 
     // Throttled resize handler for better performance
     let resizeTimeout: NodeJS.Timeout
@@ -189,7 +251,7 @@ export default function ProcessSection() {
     }
 
     // Add event listener for resize with throttling
-    window.addEventListener("resize", handleResize)
+    window.addEventListener("resize", handleResize, { passive: true })
 
     // Initial position
     handleScroll()
@@ -203,19 +265,10 @@ export default function ProcessSection() {
       window.removeEventListener("resize", handleResize)
       clearTimeout(resizeTimeout)
       if (animationFrameRef.current !== null) {
-        // eslint-disable-next-line react-hooks/exhaustive-deps
         cancelAnimationFrame(animationFrameRef.current)
       }
     }
   }, [handleScroll, updateMobileContainerHeight])
-
-  // Use client-side only rendering to avoid hydration errors
-  const [isClient, setIsClient] = React.useState(false)
-
-  useEffect(() => {
-    setIsClient(true)
-    updateMobileContainerHeight()
-  }, [updateMobileContainerHeight])
 
   return (
     <section
@@ -223,60 +276,61 @@ export default function ProcessSection() {
       className="process-container"
       // Add data attribute to prevent layout shift detection by Vercel tools
       data-allow-shifts
+      // Set explicit min-height to prevent layout shifts
+      style={{ minHeight: "100vh" }}
     >
       <div className="process-sticky-container">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-gray-900/100 to-gray-900"></div>
 
         <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8">
           <h2
-            className={`sm:pt-12 text-white text-4xl font-medium mb-8 sm:mb-12 text-center underline ${DMSans.className}`}
+            className={`process-title sm:pt-12 text-white text-4xl font-medium mb-4 sm:mb-8 text-center underline ${DMSans.className}`}
             style={{
-              // Set explicit line height to prevent layout shifts
-              lineHeight: 1.5,
-              // Reserve space for text to prevent layout shifts
-              minHeight: "1.5em",
+              lineHeight: "1.5",
+              minHeight: "2em", // Reserve more space for title
+              display: "block"
             }}
           >
             Process
           </h2>
 
           {/* Fixed height container to prevent layout shifts */}
-          <div className="process-cards-container">
+          <div 
+            className="process-cards-container"
+            style={{ 
+              minHeight: "400px", // Set explicit min-height to prevent layout shifts
+              contain: "layout" // Use CSS containment for better performance
+            }}
+          >
             {/* Cards row with optimized animations */}
             <div
               ref={cardsRowRef}
               className="process-cards-row"
-              // Add onLoad event to update container height
-              onLoad={updateMobileContainerHeight}
+              style={{
+                // Set initial opacity to 1 to prevent fade-in layout shifts
+                opacity: 1,
+                // Set explicit min-height to prevent layout shifts
+                minHeight: "400px",
+                // Use CSS containment for better performance
+                contain: "layout"
+              }}
             >
-              {services.map((service, index) =>
-                isClient ? (
-                  <div
-                    key={index}
-                    className="card-wrapper"
-                    style={{
-                      width: "280px",
-                      height: "400px",
-                      opacity: 1, // Make visible immediately
-                    }}
-                  >
-                    <ServiceCard {...service} />
-                  </div>
-                ) : (
-                  <div
-                    key={index}
-                    className="card-wrapper"
-                    // Reserve space during SSR to prevent layout shifts
-                    style={{
-                      width: "280px",
-                      height: "400px",
-                      opacity: 0,
-                    }}
-                  >
-                    <ServiceCard {...service} />
-                  </div>
-                ),
-              )}
+              {services.map((service, index) => (
+                <div
+                  key={index}
+                  className="card-wrapper"
+                  style={{
+                    width: "280px",
+                    height: "400px",
+                    // Always visible - no opacity transitions that could cause layout shifts
+                    opacity: 1,
+                    // Use CSS containment for better performance
+                    contain: "strict"
+                  }}
+                >
+                  <ServiceCard {...service} />
+                </div>
+              ))}
             </div>
           </div>
         </div>

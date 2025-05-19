@@ -12,12 +12,30 @@ h3,
 p {
   font-size-adjust: 100%;
   font-optical-sizing: auto;
+  /* Add font-display: swap to prevent layout shifts during font loading */
+  font-display: swap;
+}
+
+/* SVG icon placeholder to prevent layout shifts */
+.svg-icon-wrapper {
+  /* Add background placeholder to reserve space */
+  background-color: rgba(219, 234, 254, 0.1);
+  /* Add transition only for background-color, not for dimensions */
+  transition: background-color 0.3s ease;
+  /* Use CSS containment for better performance */
+  contain: strict;
+}
+
+.svg-icon-placeholder {
+  /* Add background placeholder to reserve space */
+  background-color: rgba(219, 234, 254, 0.1);
 }
 
 .service-card {
   position: relative;
   width: 280px;
-  aspect-ratio: 3 / 4;
+  /* Use fixed height instead of aspect-ratio to prevent layout shifts */
+  height: 400px;
   background-image: linear-gradient(to bottom right, rgba(156, 163, 175, 0.9), rgba(55, 65, 81, 0));
   border-radius: 0.75rem;
   padding: 1rem;
@@ -25,26 +43,33 @@ p {
   border: 4px solid rgb(209, 213, 219);
   flex-shrink: 0;
   /* Performance optimizations */
-  contain: content;
-  /* Set explicit height to prevent layout shifts */
-  height: 400px;
+  contain: strict;
+  /* Add will-change for better performance */
+  will-change: transform;
+  /* Add transform-style: flat for better performance */
+  transform-style: flat;
+  /* Add backface-visibility: hidden for better performance */
+  backface-visibility: hidden;
+  /* Ensure cards are fully visible */
+  display: block;
 }
 
 @media (min-width: 640px) {
   .service-card {
     width: 300px;
     padding: 1.5rem;
+    /* Keep fixed height */
+    height: 400px;
   }
 }
 
 @media (max-width: 767px) {
   .service-card {
     width: 260px;
-    aspect-ratio: 3 / 4;
-    /* Add contain property to prevent layout shifts */
-    contain: layout size;
-    /* Add height to prevent layout shifts */
+    /* Keep fixed height */
     height: 400px;
+    /* Use CSS containment for better performance */
+    contain: strict;
   }
 }
 
@@ -54,6 +79,8 @@ p {
   background-image: linear-gradient(to bottom right, rgba(37, 99, 235, 0), rgba(59, 130, 246, 0));
   pointer-events: none;
   border-radius: 0.75rem;
+  /* Use CSS containment for better performance */
+  contain: paint;
 }
 
 .service-card:hover .service-card-hover {
@@ -61,22 +88,22 @@ p {
 }
 
 .service-card-icon-container {
-  width: 4rem;
-  height: 4rem;
+  width: 64px;
+  height: 64px;
   border-radius: 9999px;
   background-color: rgba(219, 234, 254, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 1rem;
-  /* Prevent layout shifts */
-  contain: size layout;
+  /* Use CSS containment for better performance */
+  contain: strict;
 }
 
 @media (min-width: 640px) {
   .service-card-icon-container {
-    width: 5rem;
-    height: 5rem;
+    width: 64px;
+    height: 64px;
     margin-bottom: 1.5rem;
   }
 }
@@ -91,26 +118,26 @@ p {
   display: flex;
   align-items: center;
   justify-content: center;
+  /* Use CSS containment for better performance */
+  contain: strict;
 }
 
 .service-card-content {
   /* Reserve space for text to prevent layout shifts */
-  min-height: 150px;
+  min-height: 250px;
+  /* Use CSS containment for better performance */
+  contain: content;
 }
 
-/* Removed hover animation for better performance */
-.service-card:hover .service-card-content {
-  transform: none;
-}
-
-/* Update container heights to use the CSS variable */
+/* Process container with fixed dimensions */
 .process-container {
   position: relative;
   width: 100%;
   background-color: rgb(17, 24, 39);
-  /* Adjust height for different screen sizes */
+  /* Use fixed height for desktop */
   height: 250vh;
-  /* Add containment for better performance */
+  min-height: 800px;
+  /* Use CSS containment for better performance */
   contain: layout;
 }
 
@@ -119,13 +146,18 @@ p {
   .process-container {
     /* Auto height based on content */
     height: auto !important; /* Use !important to override inline styles */
-    min-height: fit-content;
-    /* Remove max-height to allow content to determine height */
-    max-height: none;
-    padding-top: 0;
-    padding-bottom: 1rem;
-    /* Add contain property to prevent layout shifts */
-    contain: paint;
+    min-height: auto !important; /* Remove min-height constraint */
+    padding-top: 0; /* Remove top padding */
+    padding-bottom: 0; /* Remove bottom padding */
+    /* Use CSS containment for better performance */
+    contain: content;
+  }
+  
+  /* Reduce title margins on mobile */
+  .process-title {
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
+    padding-top: 0 !important;
   }
 }
 
@@ -138,29 +170,38 @@ p {
   align-items: flex-start;
   justify-content: center;
   overflow: hidden;
+  /* Use CSS containment for better performance */
+  contain: layout;
 }
 
 @media (max-width: 767px) {
   .process-sticky-container {
     position: relative;
     height: auto;
-    min-height: fit-content;
-    padding: 0;
+    min-height: auto; /* Remove min-height constraint */
+    padding: 0; /* Remove padding */
+    margin: 0; /* Remove margin */
   }
 }
 
 .process-cards-container {
   overflow: hidden;
+  /* Use fixed height instead of auto to prevent layout shifts */
   height: 400px;
+  min-height: 400px;
+  /* Use CSS containment for better performance */
   contain: layout;
   width: 100%;
+  /* Ensure cards are fully visible */
+  display: block;
 }
 
 @media (max-width: 767px) {
   .process-cards-container {
     height: auto;
-    min-height: 400px;
-    padding-bottom: 1rem;
+    min-height: auto; /* Remove min-height constraint */
+    padding-bottom: 0; /* Remove bottom padding */
+    margin-bottom: 1rem; /* Add small margin at bottom */
   }
 }
 
@@ -173,6 +214,10 @@ p {
   opacity: 1 !important;
   /* No transitions on opacity to prevent delays */
   transition: none !important;
+  /* Use CSS containment for better performance */
+  contain: strict;
+  /* Ensure cards are fully visible */
+  flex-shrink: 0;
 }
 
 .process-cards-row {
@@ -181,6 +226,16 @@ p {
   height: 100%;
   /* Make sure cards are visible immediately */
   opacity: 1 !important;
+  /* Use CSS containment for better performance */
+  contain: layout;
+  /* Add will-change for better performance */
+  will-change: transform;
+  /* Add transform-style: flat for better performance */
+  transform-style: flat;
+  /* Add backface-visibility: hidden for better performance */
+  backface-visibility: hidden;
+  /* Ensure all cards are visible */
+  padding: 0 1rem;
 }
 
 @media (min-width: 640px) {
@@ -208,7 +263,9 @@ p {
     padding-right: 1rem;
     /* Set height to auto to allow content to determine height */
     height: auto;
-    min-height: 400px;
+    min-height: auto; /* Remove min-height constraint */
+    margin-top: 0; /* Remove top margin */
+    margin-bottom: 0; /* Remove bottom margin */
   }
 
   .process-cards-row::-webkit-scrollbar {
@@ -342,4 +399,52 @@ p {
 
 .to-gray-900 {
   --tw-gradient-to: rgb(17, 24, 39);
+}
+
+/* Add top-1/2 and left-1/2 classes */
+.top-1\/2 {
+  top: 50%;
+}
+
+.left-1\/2 {
+  left: 50%;
+}
+
+/* Add transform translate classes */
+.-translate-x-1\/2 {
+  transform: translateX(-50%);
+}
+
+.-translate-y-1\/2 {
+  transform: translateY(-50%);
+}
+
+/* Add sm:text-xl class */
+@media (min-width: 640px) {
+  .sm\:text-xl {
+    font-size: 1.25rem;
+  }
+  
+  .sm\:mb-3 {
+    margin-bottom: 0.75rem;
+  }
+}
+
+/* Mobile-specific margin and padding adjustments */
+@media (max-width: 767px) {
+  .mb-4 {
+    margin-bottom: 1rem;
+  }
+  
+  .mb-8 {
+    margin-bottom: 2rem;
+  }
+  
+  .sm\:mb-8 {
+    margin-bottom: 2rem;
+  }
+  
+  .sm\:pt-12 {
+    padding-top: 0;
+  }
 }
