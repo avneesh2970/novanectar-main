@@ -15,19 +15,19 @@ import seoLogo from "@/assets/services/seoLogo.png";
 // import graphicDesign from "@/assets/services/graphicDesign.png";
 
 // main card center image imports/ corected images/
-import seo from "@/assets/services/main/seo.png";
-import mobileDev from "@/assets/services/main/mobileDev.png";
-import webDev from "@/assets/services/main/webDev.png";
-import eComm from "@/assets/services/main/eComm.png";
-import digitalMarketing from "@/assets/services/main/digitalMarketing.png";
-import graphicDesign from "@/assets/services/main/graphicDesign.png";
+import seo from "@/assets/services/main/seo.webp";
+import mobileDev from "@/assets/services/main/mobileDev.webp";
+import webDev from "@/assets/services/main/webDev.webp";
+import eComm from "@/assets/services/main/eComm.webp";
+import digitalMarketing from "@/assets/services/main/digitalMarketing.webp";
+import graphicDesign from "@/assets/services/main/graphicDesign.webp";
 
 
 ////////////////////////////////////////////////////////////////////////////////////
 // details page cover images
 import graphicDesignCover from "@/assets/services/info/graphicDesign.webp";
 import digitalMarketingCover from "@/assets/services/info/digitalMarketing.webp";
-import eCommCover from "@/assets/services/info/eComm.jpg";
+import eCommCover from "@/assets/services/info/eComm.webp";
 import mobileDevCover from "@/assets/services/info/mobileDev.webp";
 import seoCover from "@/assets/services/info/seo.webp";
 import webDevCover from "@/assets/services/info/webDev.webp";
