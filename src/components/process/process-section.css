@@ -171,12 +171,10 @@ p {
     /* Auto height based on content */
     height: auto !important; /* Use !important to override inline styles */
     min-height: auto !important; /* Remove min-height constraint */
-    padding-top: 0; /* Remove top padding */
-    padding-bottom: 0; /* Remove bottom padding */
-    /* Use CSS containment for better performance */
-    contain: content;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
   }
-  
+
   /* Reduce title margins on mobile */
   .process-title {
     margin-top: 1rem !important;
@@ -203,8 +201,6 @@ p {
     position: relative;
     height: auto;
     min-height: auto; /* Remove min-height constraint */
-    padding: 0; /* Remove padding */
-    margin: 0; /* Remove margin */
   }
 }
 
@@ -213,8 +209,6 @@ p {
   /* Use fixed height instead of auto to prevent layout shifts */
   height: 400px;
   min-height: 400px;
-  /* Use CSS containment for better performance */
-  contain: layout size;
   width: 100%;
   /* Ensure cards are fully visible */
   display: block;
@@ -224,8 +218,7 @@ p {
   .process-cards-container {
     height: auto;
     min-height: auto; /* Remove min-height constraint */
-    padding-bottom: 0; /* Remove bottom padding */
-    margin-bottom: 1rem; /* Add small margin at bottom */
+    padding-bottom: 2rem;
   }
 }
 
@@ -444,7 +437,7 @@ p {
   .sm\:text-xl {
     font-size: 1.25rem;
   }
-  
+
   .sm\:mb-3 {
     margin-bottom: 0.75rem;
   }
@@ -455,16 +448,30 @@ p {
   .mb-4 {
     margin-bottom: 1rem;
   }
-  
+
   .mb-8 {
     margin-bottom: 2rem;
   }
-  
+
   .sm\:mb-8 {
     margin-bottom: 2rem;
   }
-  
+
   .sm\:pt-12 {
     padding-top: 0;
   }
+}
+
+.process-box {
+  min-height: 180px; /* Adjust to your need */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.process-box h3 {
+  min-height: 60px; /* or line-height x number of lines */
+}
+
+.process-box p {
+  min-height: 80px;
 }
