@@ -86,7 +86,7 @@ export default function ServiceScroll({
               key={index}
               className="flex items-center space-x-3 sm:space-x-4 mx-6"
             >
-              <service.icon className="w-4 sm:w-8 h-4 sm:h-8 text-yellow-400" />
+              <service.icon className="w-4 sm:w-8 h-4 sm:h-8 text-blue-500" />
               <span className="text-white text-sm sm:text-lg font-medium">
                 {service.text}
               </span>
@@ -99,7 +99,7 @@ export default function ServiceScroll({
               key={index}
               className="flex items-center space-x-3 sm:space-x-4 mx-6"
             >
-              <service.icon className="w-4 sm:w-8 h-4 sm:h-8 text-yellow-400" />
+              <service.icon className="w-4 sm:w-8 h-4 sm:h-8 text-blue-500" />
               <span className="text-white text-sm sm:text-lg font-medium">
                 {service.text}
               </span>
