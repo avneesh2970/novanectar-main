@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 // import type { Metadata } from "next";
 import { use, useEffect, useState } from "react";
@@ -18,7 +18,6 @@ import { AnimatedInput } from "@/components/contact/AnimatedInput";
 // type Props = {
 //   params: Promise<{ id: string }>;
 // };
-
 
 // export async function generateMetadata({ params }: Props): Promise<Metadata> {
 //   const resolvedParams = await params;
@@ -82,7 +81,7 @@ export default function ServicePage({
 }) {
   const resolvedParams = use(params);
   const service = getServiceById(resolvedParams.id);
-
+  console.log("params:", resolvedParams.id);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"success" | "error" | null>(
     null
@@ -102,11 +101,10 @@ export default function ServicePage({
       transition: { duration: 2, ease: "easeInOut" },
     });
   }, [controls]);
-  
+
   if (!service) {
     return <div>Service not found</div>;
   }
-
 
   const onSubmit: SubmitHandler<any> = async (data) => {
     setIsSubmitting(true);
