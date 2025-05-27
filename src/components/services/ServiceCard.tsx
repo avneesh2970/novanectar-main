@@ -4,7 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import type { Service } from "@/lib/services-data";
 import { DMSans500 } from "@/fonts/font";
-import { MoveUpRight } from 'lucide-react';
+import { MoveUpRight } from "lucide-react";
 
 type ServiceCardProps = Service;
 
@@ -41,7 +41,8 @@ export default function ServiceCard({
         <div className="flex items-center justify-center w-20 sm:w-24 h-20 sm:h-24 mx-auto -mt-10 sm:-mt-12 relative z-10">
           <Image
             src={icon || "/placeholder.svg"}
-            alt={`${title} icon`}
+            // alt={`${title} icon`}
+            alt={`smart it solution`}
             width={96}
             height={96}
             className="transition-transform duration-300 group-hover:scale-110 border-4 sm:border-6 border-blue-300 rounded-full bg-white"

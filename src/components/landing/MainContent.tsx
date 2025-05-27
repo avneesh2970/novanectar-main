@@ -143,6 +143,7 @@ export const MainContent = () => {
                   <div className="w-5xl px-2 pl-5 text-center">
                     <h1
                       className={`text-black text-2xl md:text-5xl sm:text-4xl max-w-4xl mx-auto font-bold ${WorkSans.className}`}
+                      style={{ textRendering: "optimizeSpeed" }}
                     >
                       <span className="inline-block">
                         Fueling Progress with Smart{" "}
@@ -152,16 +153,41 @@ export const MainContent = () => {
                       </span>
                     </h1>
                   </div>
-                  <div className="pt-8 sm:pt-14 text-center px-2 max-w-xl mx-auto">
+                  <div className="pt-4 sm:pt-14 text-center px-2 max-w-xl mx-auto">
+                    {/* Critical LCP text - preload font and optimize rendering */}
                     <p
                       className={`text-black text-center font-medium text-sm md:text-base lg:text-lg ${DMSans.className}`}
+                      style={{ textRendering: "optimizeSpeed" }}
                     >
-                      <span>
+                      <span className="inline-block">
                         We empower your business with powerful IT solutions that
                         aims your success.
                       </span>
                     </p>
                   </div>
+                  <div className="flex pt-10 px-2 justify-center gap-4">
+                    <button
+                      className={`bg-blue-700 px-3 py-2 sm:px-5 sm:py-2 text-white text-xs sm:text-base rounded-md font-medium shadow-md transition-transform transform hover:scale-105 hover:bg-blue-800 focus:ring-2 focus:ring-blue-400 focus:outline-none active:scale-95 ${DMSans.className}`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        scrollToSection("services-section");
+                      }}
+                    >
+                      Get Started Today
+                    </button>
+                    <button
+                      className={`border border-blue-700 text-blue-700 px-3 py-3 sm:px-5 sm:py-3 text-xs sm:text-base rounded-md font-medium shadow-md transition-transform transform hover:scale-105 hover:text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-400 focus:outline-none active:scale-95 bg-white ${DMSans.className}`}
+                      onClick={() => setIsOpen(true)}
+                    >
+                      Schedule a Free Consultation
+                    </button>
+                  </div>
+                  <p
+                    className={`text-black text-center pt-8 px-2 ${DMSans.className}`}
+                  >
+                    Building Success Stories for
+                    <span className="text-blue-700"> 200+ Trusted Clients</span>
+                  </p>
                 </div>
               }
             >
@@ -180,7 +206,7 @@ export const MainContent = () => {
                       </span>
                     </h1>
                   </div>
-                  <div className="pt-8 sm:pt-14 text-center px-2 max-w-xl mx-auto">
+                  <div className="pt-4 sm:pt-14 text-center px-2 max-w-xl mx-auto">
                     {/* Critical LCP text - preload font and optimize rendering */}
                     <p
                       className={`text-black text-center font-medium text-sm md:text-base lg:text-lg ${DMSans.className}`}
@@ -224,18 +250,21 @@ export const MainContent = () => {
               <div className="w-5xl px-2 pl-5 text-center">
                 <h1
                   className={`text-black text-2xl md:text-5xl sm:text-4xl max-w-4xl mx-auto font-bold ${WorkSans.className}`}
+                  style={{ textRendering: "optimizeSpeed" }}
                 >
                   <span className="inline-block">
                     Fueling Progress with Smart{" "}
                   </span>
-                  <span className="inline-block text-blue-500 sm:text-black">
+                  <span className="inline-block text-blue-700 sm:text-black">
                     IT Solutions
                   </span>
                 </h1>
               </div>
-              <div className="pt-8 sm:pt-14 text-center px-2 max-w-xl mx-auto">
+              <div className="pt-4 sm:pt-14 text-center px-2 max-w-xl mx-auto">
+                {/* Critical LCP text - preload font and optimize rendering */}
                 <p
                   className={`text-black text-center font-medium text-sm md:text-base lg:text-lg ${DMSans.className}`}
+                  style={{ textRendering: "optimizeSpeed" }}
                 >
                   <span className="inline-block">
                     We empower your business with powerful IT solutions that
@@ -245,16 +274,27 @@ export const MainContent = () => {
               </div>
               <div className="flex pt-10 px-2 justify-center gap-4">
                 <button
-                  className={`bg-blue-700 px-3 py-2 sm:px-5 sm:py-2 text-white text-xs sm:text-base rounded-md font-medium shadow-md ${DMSans.className}`}
+                  className={`bg-blue-700 px-3 py-2 sm:px-5 sm:py-2 text-white text-xs sm:text-base rounded-md font-medium shadow-md transition-transform transform hover:scale-105 hover:bg-blue-800 focus:ring-2 focus:ring-blue-400 focus:outline-none active:scale-95 ${DMSans.className}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToSection("services-section");
+                  }}
                 >
                   Get Started Today
                 </button>
                 <button
-                  className={`border border-blue-700 text-blue-700 px-3 py-3 sm:px-5 sm:py-3 text-xs sm:text-base rounded-md font-medium shadow-md bg-white ${DMSans.className}`}
+                  className={`border border-blue-700 text-blue-700 px-3 py-3 sm:px-5 sm:py-3 text-xs sm:text-base rounded-md font-medium shadow-md transition-transform transform hover:scale-105 hover:text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-400 focus:outline-none active:scale-95 bg-white ${DMSans.className}`}
+                  onClick={() => setIsOpen(true)}
                 >
                   Schedule a Free Consultation
                 </button>
               </div>
+              <p
+                className={`text-black text-center pt-8 px-2 ${DMSans.className}`}
+              >
+                Building Success Stories for
+                <span className="text-blue-700"> 200+ Trusted Clients</span>
+              </p>
             </div>
           )}
         </div>
@@ -270,7 +310,7 @@ export const MainContent = () => {
               <AboutSection />
             </Suspense>
 
-            <div className="bg-[#fbebf6] pt-16 text-black text-3xl text-center">
+            <div className="bg-[#F5F5F5] text-black text-3xl text-center">
               <h2
                 className={`text-3xl sm:text-4xl md:text-5xl text-center font-semibold text-gray-800 mb- ${DMSans.className}`}
               >
