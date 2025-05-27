@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://novanectar.co.in"),
   title: {
     template: "%s | Novanectar Services Pvt. Ltd.",
-    default: "Novanectar Services - Fueling Progress with Smart IT Solutions",
+    default: "Novanectar - Fueling Progress with Smart IT Solutions",
   },
   description:
     "Novanectar Services provides smart IT solutions including graphic design, website development, and application development to help your business grow.",
@@ -40,6 +40,18 @@ export const metadata: Metadata = {
     "E-commerce Solutions",
     "Technical Solutions",
     "IT Services India",
+    "smart IT solutions",
+    "it company dehradun",
+    "best it company",
+    "best it company in dehradun",
+    "top it company",
+    "top it company in world",
+    "top 10 it company in world",
+    "top 10 it company",
+    "top 10 it company in india",
+    "top it firms",
+    "top businesses",
+    "best it company in world",
   ],
   authors: [{ name: "Novanectar Services" }],
   creator: "Novanectar Services Pvt. Ltd.",
@@ -72,7 +84,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: "your-google-verification-code",
+    google: "",
   },
   alternates: {
     canonical: "https://novanectar.co.in",

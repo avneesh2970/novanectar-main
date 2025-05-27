@@ -127,7 +127,7 @@ export const MainContent = () => {
         <Navbar />
         <div className="relative w-full bg-white pt-16">
           {/* Base grid */}
-          <div className="absolute inset-0 dark:bg-grid-white/[0.2] sm:bg-grid-black/[0.2]" />
+          <div className="-mt-4 absolute inset-0 dark:bg-grid-white/[0.2] sm:bg-grid-black/[0.2]" />
 
           {/* Hover effect layer */}
           <div
