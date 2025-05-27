@@ -8,8 +8,8 @@ import { DMSans } from "@/fonts/font";
 import { AnimatedInput } from "./AnimatedInput";
 import { HiMail } from "react-icons/hi";
 import { Phone } from "lucide-react";
-import contact from "@/assets/contact/contact.jpg";
-import Image from "next/image";
+// import contact from "@/assets/contact/contact.jpg";
+// import Image from "next/image";
 
 interface IFormInput {
   name: string;
@@ -145,18 +145,18 @@ const ContactForm = () => {
               >
                 {/* Image with overlay */}
                 <div className="relative h-64 overflow-hidden">
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3444.5105195261544!2d78.00362147458128!3d30.307993406037497!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39092be94375e729%3A0xc160311fe8cb82d6!2sNovaNectar%20Services%20Pvt.%20Ltd.!5e0!3m2!1sen!2sin!4v1748350315124!5m2!1sen!2sin"
-          width="100%"
-          height="100%"
-          style={{ border: 0 }}
-          allowFullScreen
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-          className="w-full h-full"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-blue-900/20 to-transparent pointer-events-none"></div>
-      </div>
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3444.5105195261544!2d78.00362147458128!3d30.307993406037497!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39092be94375e729%3A0xc160311fe8cb82d6!2sNovaNectar%20Services%20Pvt.%20Ltd.!5e0!3m2!1sen!2sin!4v1748350315124!5m2!1sen!2sin"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    className="w-full h-full"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-blue-900/20 to-transparent pointer-events-none"></div>
+                </div>
                 <div className="p-6">
                   {/* Email Section */}
                   <motion.div
