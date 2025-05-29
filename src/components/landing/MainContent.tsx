@@ -131,7 +131,7 @@ export const MainContent = () => {
 
           {/* Hover effect layer */}
           <div
-            className="absolute inset-0 dark:bg-grid-hover-white/[0.4] sm:bg-grid-hover-black/[0.4] opacity-0 transition-opacity duration-300"
+            className="-mt-4 absolute inset-0 dark:bg-grid-hover-white/[0.4] sm:bg-grid-hover-black/[0.4] opacity-0 transition-opacity duration-300"
             id="grid-hover-layer"
           />
 

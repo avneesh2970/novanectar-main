@@ -160,13 +160,13 @@ const ContactForm = () => {
                 <div className="p-6">
                   {/* Email Section */}
                   <motion.div
-                    className="mb-8"
+                    className="mb-4"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.8, duration: 0.8 }}
                   >
                     <motion.h3
-                      className="text-xl font-semibold text-gray-700 mb-4 flex items-center"
+                      className="text-xl font-semibold text-gray-700 flex items-center"
                       initial={{ y: 20, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
                       transition={{ delay: 0.9, duration: 0.5 }}
@@ -188,7 +188,7 @@ const ContactForm = () => {
                       >
                         <a
                           href="mailto:career@assuredjob.com"
-                          className="text-gray-600 group-hover:text-blue-600 transition-colors duration-150"
+                          className="text-gray-600 group-hover:text-blue-600 transition-colors duration-150 text-base"
                         >
                           info@novanectar.co.in
                         </a>
@@ -202,7 +202,7 @@ const ContactForm = () => {
                     transition={{ delay: 1.2, duration: 0.8 }}
                   >
                     <motion.h3
-                      className="text-xl font-semibold text-gray-700 mb-4 flex items-center"
+                      className="text-xl font-semibold text-gray-700 flex items-center"
                       initial={{ y: 20, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
                       transition={{ delay: 1.3, duration: 0.5 }}
@@ -213,7 +213,7 @@ const ContactForm = () => {
                       Phone Number
                     </motion.h3>
 
-                    <div className="flex flex-col space-y-3 pl-12">
+                    <div className="flex flex-col space-y-3 pl-12 text-base">
                       <motion.div
                         className="flex items-center space-x-3 group"
                         initial={{ x: -30, opacity: 0 }}
