@@ -2,11 +2,11 @@ import { type NextRequest, NextResponse } from "next/server"
 import { connectDB } from "@/lib/dbConnect"
 import Contact from "@/models/Contact"
 
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, context:any) {
   try {
     await connectDB()
 
-    const { id } = params
+    const { id } = context.params;
 
     // Validate the ID
     if (!id || id === "undefined") {
