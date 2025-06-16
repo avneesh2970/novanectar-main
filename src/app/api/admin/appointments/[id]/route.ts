@@ -2,11 +2,11 @@ import { type NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/dbConnect";
 import Appointment from "@/models/Appointment";
 
-export async function DELETE(request: NextRequest, { params }: any) {
+export async function DELETE(request: NextRequest, context: { params: Record<string, string> }) {
   try {
     await connectDB();
 
-    const { id } = params;
+    const { id } = context.params;
 
     // Validate the ID
     if (!id || id === "undefined") {
