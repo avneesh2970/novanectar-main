@@ -27,40 +27,50 @@ const navItems: NavItem[] = [
       { label: "App Development", href: "/services/mobile-development" },
       { label: "Graphic Design", href: "/services/graphic-design" },
       { label: "Digital Marketing", href: "/services/digital-marketing" },
-      { label: "Ecommerce", href: "/services/ecommerce" },
+      { label: "Social Media Management", href: "/services/social-media-management" },
       { label: "SEO", href: "/services/seo" },
     ],
   },
   { href: "/", label: "Our Work" },
   {
     href: "https://edu.novanectar.co.in/internships",
-    label: "Internship",
+    label: "Career",
     items: [
       {
-        label: "Web Development",
-        href: "https://edu.novanectar.co.in/internships",
+        label: "Open Positions",
+        href: "/career",
       },
       {
-        label: "Mobile Development",
-        href: "https://edu.novanectar.co.in/internships",
+        label: "Internship",
+        href: "https://internship.novanectar.co.in/",
       },
       {
-        label: "UI/UX Design",
-        href: "https://edu.novanectar.co.in/internships",
+        label: "Training",
+        href: "https://edu.novanectar.co.in",
       },
     ],
   },
+  // {
+  //   href: "https://edu.novanectar.co.in",
+  //   label: "Training",
+  //   items: [
+  //     { label: "Frontend Development", href: "https://edu.novanectar.co.in" },
+  //     { label: "Backend Development", href: "https://edu.novanectar.co.in" },
+  //     { label: "Full Stack Development", href: "https://edu.novanectar.co.in" },
+  //   ],
+  // },
+  // { href: "/career", label: "Career" },
+  // { href: "/blog", label: "Blog" },
   {
-    href: "https://edu.novanectar.co.in",
-    label: "Training",
+    href: "/blog",
+    label: "Innovation",
     items: [
-      { label: "Frontend Development", href: "https://edu.novanectar.co.in" },
-      { label: "Backend Development", href: "https://edu.novanectar.co.in" },
-      { label: "Full Stack Development", href: "https://edu.novanectar.co.in" },
+      // { label: "Career", href: "/career" },
+      { label: "Blog", href: "/blog" },
+      { label: "Event", href: "/event" },
+      { label: "News", href: "/news" },
     ],
   },
-  { href: "/career", label: "Career" },
-  { href: "/blog", label: "Blog" }, 
 ];
 
 export default function Navbar() {
@@ -87,6 +97,12 @@ export default function Navbar() {
           height: "100vh",
           duration: 0.8, // Increased duration
           ease: "power2.inOut",
+          onComplete: () => {
+            if (mobileMenuRef.current) {
+              mobileMenuRef.current.style.overflow = "visible";
+              mobileMenuRef.current.style.height = "100vh";
+            }
+          },
         }
       );
     } else {
@@ -94,6 +110,7 @@ export default function Navbar() {
       setExpandedItem(null);
 
       if (mobileMenuRef.current) {
+        mobileMenuRef.current.style.overflow = "hidden"
         gsap.to(mobileMenuRef.current, {
           opacity: 0,
           height: 0,
@@ -165,10 +182,10 @@ export default function Navbar() {
         <div
           ref={mobileMenuRef}
           className="lg:hidden overflow-hidden"
-          style={{ height: 0 }}
+          style={{ height: "100vh" }}
         >
-          <div className="bg-[#F8F9FA] h-screen overflow-y-auto">
-            <div className="px-4 pt-4 pb-20">
+          <div className="bg-[#F8F9FA] max-h-[100vh] overflow-y-auto">
+            <div className="px-4 pt-4 pb-40">
               {" "}
               {/* Added padding bottom for scroll space */}
               <div className="space-y-4">
@@ -287,13 +304,6 @@ export default function Navbar() {
                   }}
                   className="pt-4" // Added padding top for better spacing
                 >
-                  {/* <Link
-                  href="/"
-                  onClick={toggleMenu}
-                  className="block w-full py-4 text-center rounded-md bg-[#4169E1] text-white font-medium hover:bg-blue-600 transition-colors"
-                >
-                  Contact
-                </Link> */}
                   <button
                     // href="#"
                     onClick={(e) => {

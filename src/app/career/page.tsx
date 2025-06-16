@@ -33,7 +33,7 @@ export default function Jobs() {
     <div className={`bg-[#f6f6f6] min-h-screen ${DMSans.className}`}>
       <Navbar />
 
-      <div className="w-full overflow-hidden mt-2">
+      <div className="w-full overflow-hidden mt-14 md:mt-2">
         <div className="w-full min-h-[400px] flex flex-col md:flex-row items-center justify-between px-6 py-12 md:py-20">
           <div className="w-full md:w-1/2 space-y-6 mb-12 md:mb-0">
             <motion.h1

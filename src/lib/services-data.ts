@@ -22,7 +22,6 @@ import eComm from "@/assets/services/main/eComm.webp";
 import digitalMarketing from "@/assets/services/main/digitalMarketing.webp";
 import graphicDesign from "@/assets/services/main/graphicDesign.webp";
 
-
 ////////////////////////////////////////////////////////////////////////////////////
 // details page cover images
 import graphicDesignCover from "@/assets/services/info/graphicDesign.webp";
@@ -177,24 +176,67 @@ export const services: Service[] = [
       },
     ],
   },
+  // {
+  //   id: "ecommerce",
+  //   title: "Ecommerce",
+  //   description:
+  //     "Develop robust e-commerce platforms to boost your online presence and streamline your business operations.",
+  //   detailedDescription:
+  //     "Novanectar Services Private Limited creates dynamic e-commerce solutions designed to boost your sales and enhance customer experiences. Our team blends innovative technology with intuitive design to build secure, scalable online stores. Whether you're starting a new venture or scaling up, we provide tailored solutions that ensure smooth transactions, easy navigation, and seamless integration across platforms. Our vision is to help you turn your e-commerce vision into a thriving business.",
+  //   icon: eCommLogo,
+  //   image: eComm,
+  //   coverImage: eCommCover,
+  //   capability: [
+  //     {
+  //       heading: "Store Management Features",
+  //       content:
+  //         "Easy-to-use tools for managing product catalogues, inventory, and orders to optimize your store’s performance.",
+  //     },
+  //     {
+  //       heading: "Secure Payment Integration",
+  //       content:
+  //         "Safe and reliable payment gateways for seamless and secure transactions.",
+  //     },
+  //     {
+  //       heading: "Shopping Cart and Checkout",
+  //       content:
+  //         "User-friendly cart and checkout processes to boost conversions and improve user experience.",
+  //     },
+  //     {
+  //       heading: "Multi-Channel Integration",
+  //       content:
+  //         "Connect with various platforms like Amazon and social media for wider reach and better sales.",
+  //     },
+  //     {
+  //       heading: "Customer Support Tools",
+  //       content:
+  //         "Integrated tools for efficient customer service, handling inquiries, and managing support tickets.",
+  //     },
+  //     {
+  //       heading: "Maintenance and Support",
+  //       content:
+  //         "Continuous maintenance, updates, and round-the-clock support to ensure smooth, uninterrupted operations.",
+  //     },
+  //   ],
+  // },
   {
-    id: "ecommerce",
-    title: "Ecommerce",
+    id: "social-media-management",
+    title: "Social Media Management",
     description:
-      "Develop robust e-commerce platforms to boost your online presence and streamline your business operations.",
+      "Elevate your brand's digital presence and engagement with powerful, data-driven social media strategies.",
     detailedDescription:
-      "Novanectar Services Private Limited creates dynamic e-commerce solutions designed to boost your sales and enhance customer experiences. Our team blends innovative technology with intuitive design to build secure, scalable online stores. Whether you're starting a new venture or scaling up, we provide tailored solutions that ensure smooth transactions, easy navigation, and seamless integration across platforms. Our vision is to help you turn your e-commerce vision into a thriving business.",
+      "Novanectar Services Private Limited offers comprehensive social media management services tailored to amplify your brand voice and connect with your audience effectively. From creative content creation to strategic posting and community management, our team ensures your social profiles stay active, engaging, and aligned with your business goals. We specialize in building brand awareness, driving engagement, and generating leads through smart, platform-specific strategies.",
     icon: eCommLogo,
     image: eComm,
     coverImage: eCommCover,
     capability: [
       {
-        heading: "Store Management Features",
+        heading: "Content Strategy & Planning",
         content:
-          "Easy-to-use tools for managing product catalogues, inventory, and orders to optimize your store’s performance.",
+          "Curated, goal-driven content calendars and strategies tailored to your brand's voice and target audience.",
       },
       {
-        heading: "Secure Payment Integration",
+        heading: "Post Design & Publishing",
         content:
           "Safe and reliable payment gateways for seamless and secure transactions.",
       },

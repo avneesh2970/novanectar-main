@@ -42,15 +42,6 @@ export default function NotFound() {
               <span>Go Home</span>
             </Link>
           </motion.div>
-          {/* <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.8 }}>
-            <Link
-              href="/contact"
-              className="flex items-center justify-center space-x-2 bg-white text-indigo-600 px-6 py-3 rounded-full hover:bg-gray-100 transition duration-300 border border-indigo-600"
-            >
-              <Coffee size={20} />
-              <span>Contact Us</span>
-            </Link>
-          </motion.div> */}
         </div>
         <motion.div
           initial={{ opacity: 0, y: 20 }}

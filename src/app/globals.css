@@ -315,7 +315,7 @@ body {
   max-width: 100% !important;
   height: auto !important;
   border-radius: 0.375rem !important; /* rounded-md */
-  margin: 1rem 0 !important;
+  margin: 1rem 0;
 }
 
 /* Style links in blog content */

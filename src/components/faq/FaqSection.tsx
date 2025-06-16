@@ -4,45 +4,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Plus } from "lucide-react";
 import { DMSans } from "@/fonts/font";
 
-const faqs = [
-  {
-    id: 1,
-    question: "Do you provide website maintenance and updates post-launch?",
-    answer:
-      "Yes, we offer comprehensive website maintenance and updates, including content changes, performance optimization, bug fixes, and feature enhancements to ensure your website stays secure, functional, and up-to-date.",
-  },
-  {
-    id: 2,
-    question: "How do you ensure app security and data privacy?",
-    answer:
-      "We follow industry best practices, including encryption, secure authentication, regular vulnerability testing, and adherence to data protection laws, ensuring that all apps we develop prioritize user security and data privacy.",
-  },
-  {
-    id: 3,
-    question: "How long does it take to see SEO results? ",
-    answer:
-      "SEO results typically take 3 to 6 months, depending on competition, keyword difficulty, and the scope of optimization efforts, but steady improvements can often be observed within a few weeks.",
-  },
-  {
-    id: 4,
-    question: "How many design revisions do you offer?",
-    answer:
-      "We offer multiple design revisions based on your feedback to ensure the final output aligns perfectly with your vision, with specific limits depending on the project package chosen.",
-  },
-  {
-    id: 5,
-    question: "Do you conduct user testing for design projects?",
-    answer:
-      "Yes, we conduct user testing to gather real user feedback, identify usability issues, and optimize the design for an enhanced user experience and functionality.",
-  },
-  {
-    id: 6,
-    question: "What digital marketing strategies do you specialize in?",
-    answer:
-      "We specialize in SEO, social media marketing, pay-per-click advertising, content marketing, email marketing, and comprehensive digital strategy development to boost brand visibility and achieve your business goals.",
-  },
-];
-
 const FAQItem = ({
   faq,
   isOpen,
@@ -118,7 +79,7 @@ const FAQItem = ({
   );
 };
 
-const FAQSection = () => {
+const FAQSection = ({faqs}:any) => {
   const [openId, setOpenId] = useState<any>(null);
   const [hoveredId, setHoveredId] = useState<any>(null);
 
@@ -196,7 +157,7 @@ const FAQSection = () => {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.6 }}
           >
-            {faqs.map((faq) => (
+            {faqs.map((faq:any) => (
               <FAQItem
                 key={faq.id}
                 faq={faq}

@@ -10,6 +10,7 @@ import TextAlign from "@tiptap/extension-text-align"
 import { Color } from "@tiptap/extension-color"
 import TextStyle from "@tiptap/extension-text-style"
 import { Node } from "@tiptap/core"
+import { NodeSelection } from "@tiptap/pm/state"
 import {
   Bold,
   Italic,
@@ -72,9 +73,45 @@ const CustomParagraph = Node.create({
   },
 })
 
+// Custom Image extension with alignment support
+const CustomImage = Image.extend({
+  addAttributes() {
+    return {
+      ...this.parent?.(),
+      alignment: {
+        default: "none",
+        parseHTML: (element: HTMLElement) => element.getAttribute("data-alignment") || "none",
+        renderHTML: (attributes: { alignment?: string }) => {
+          if (!attributes.alignment || attributes.alignment === "none") {
+            return {}
+          }
+          return {
+            "data-alignment": attributes.alignment,
+            style: `display: block; ${
+              attributes.alignment === "center"
+                ? "margin-left: auto; margin-right: auto;"
+                : attributes.alignment === "left"
+                  ? "margin-right: auto; margin-left: 0;"
+                  : "margin-left: auto; margin-right: 0;"
+            }`,
+          }
+        },
+      },
+    }
+  },
+})
+
 interface BlogEditorProps {
   content: string
   onChange: (content: string) => void
+}
+
+// Add interface extension for TipTap Image attributes
+interface ImageAttributes {
+  src: string
+  alt?: string
+  title?: string
+  alignment?: string
 }
 
 export default function BlogEditor({ content, onChange }: BlogEditorProps) {
@@ -85,6 +122,8 @@ export default function BlogEditor({ content, onChange }: BlogEditorProps) {
   const [imageAltText, setImageAltText] = useState("") // Add state for image alt text
   const [showImageModal, setShowImageModal] = useState(false) // Add state for image modal
   const [imageFile, setImageFile] = useState<File | null>(null) // Add state for image file
+  const [selectedNodeType, setSelectedNodeType] = useState<string | null>(null)
+  const [selectedNodeAlignment, setSelectedNodeAlignment] = useState<string | null>(null)
 
   // Initialize the editor with proper HTML content
   const editor = useEditor({
@@ -117,10 +156,12 @@ export default function BlogEditor({ content, onChange }: BlogEditorProps) {
           class: "text-blue-600 no-underline",
         },
       }),
-      Image.configure({
+      CustomImage.configure({
         HTMLAttributes: {
           class: "max-w-full rounded-lg my-4",
         },
+        inline: false,
+        allowBase64: true,
       }),
       TextAlign.configure({
         types: ["heading", "paragraph"],
@@ -130,13 +171,66 @@ export default function BlogEditor({ content, onChange }: BlogEditorProps) {
     ],
     content: content || "<p></p>", // Ensure there's at least an empty paragraph
     onUpdate: ({ editor }) => {
-      const html = editor.getHTML()
+      let html = editor.getHTML()
+
+      // Process HTML to ensure image alignment is preserved
+      const parser = new DOMParser()
+      const doc = parser.parseFromString(html, "text/html")
+
+      const images = doc.querySelectorAll("img[data-alignment]")
+      images.forEach((element) => {
+        const img = element as HTMLImageElement
+        const alignment = img.getAttribute("data-alignment")
+        if (alignment && alignment !== "none") {
+          img.style.display = "block"
+
+          if (alignment === "center") {
+            img.style.marginLeft = "auto"
+            img.style.marginRight = "auto"
+          } else if (alignment === "left") {
+            img.style.marginLeft = "0"
+            img.style.marginRight = "auto"
+          } else if (alignment === "right") {
+            img.style.marginLeft = "auto"
+            img.style.marginRight = "0"
+          }
+        }
+      })
+
+      html = doc.body.innerHTML
       setHtmlContent(html)
       onChange(html)
+    },
+    onSelectionUpdate: ({ editor }) => {
+      // Check if an image is selected
+      const { selection } = editor.state
+      const node = selection.$anchor.nodeAfter
+
+      if (node && node.type.name === "image") {
+        setSelectedNodeType("image")
+        setSelectedNodeAlignment(node.attrs.alignment || "none")
+      } else {
+        setSelectedNodeType(null)
+        setSelectedNodeAlignment(null)
+      }
     },
     editorProps: {
       attributes: {
         class: "prose prose-sm sm:prose lg:prose-lg xl:prose-xl focus:outline-none p-4 text-gray-700 overflow-y-auto",
+      },
+      handleClick(view, pos) {
+        const { state } = view
+        const { doc } = state
+        const node = doc.nodeAt(pos)
+
+        if (node && node.type.name === "image") {
+          // Create a proper NodeSelection for the image
+          const nodeSelection = NodeSelection.create(state.doc, pos)
+          const tr = state.tr.setSelection(nodeSelection)
+          view.dispatch(tr)
+          return true
+        }
+        return false
       },
     },
   })
@@ -174,7 +268,7 @@ export default function BlogEditor({ content, onChange }: BlogEditorProps) {
     }
   }, [editor])
 
-  // Handle image upload with alt text
+  // Update the uploadImage function
   const uploadImage = useCallback(async () => {
     if (!editor || !imageFile) return
 
@@ -200,15 +294,14 @@ export default function BlogEditor({ content, onChange }: BlogEditorProps) {
 
       const data = await response.json()
 
-      // Insert image into editor with alt text
-      editor
-        .chain()
-        .focus()
-        .setImage({
-          src: data.secure_url,
-          alt: imageAltText || imageFile.name, // Use alt text or fallback to filename
-        })
-        .run()
+      // Insert image into editor with alt text and alignment
+      const imageAttrs: ImageAttributes = {
+        src: data.secure_url,
+        alt: imageAltText || imageFile.name,
+        alignment: "none",
+      }
+
+      editor.chain().focus().setImage(imageAttrs).run()
 
       // Reset state
       setShowImageModal(false)
@@ -302,6 +395,43 @@ export default function BlogEditor({ content, onChange }: BlogEditorProps) {
     focusEditor()
     editor.chain().focus().toggleBlockquote().run()
   }, [editor, focusEditor])
+
+  // Apply image alignment
+  const setImageAlignment = useCallback(
+    (alignment: string) => {
+      if (!editor) return
+
+      // Get the current selection
+      const { selection } = editor.state
+
+      // Check if we have a node selection (which would be the case for an image)
+      if (selection instanceof NodeSelection && selection.node.type.name === "image") {
+        editor.chain().focus().updateAttributes("image", { alignment }).run()
+        setSelectedNodeAlignment(alignment)
+      } else {
+        // Try to find an image at the current cursor position
+        const pos = selection.$anchor.pos
+        const node = editor.state.doc.nodeAt(pos - 1)
+
+        if (node && node.type.name === "image") {
+          // Create a node selection for the image
+          const from = pos - node.nodeSize
+
+          editor.chain().setNodeSelection(from).updateAttributes("image", { alignment }).run()
+
+          setSelectedNodeAlignment(alignment)
+        } else {
+          // If no image is selected, apply text alignment
+          editor
+            .chain()
+            .focus()
+            .setTextAlign(alignment === "none" ? "left" : alignment)
+            .run()
+        }
+      }
+    },
+    [editor],
+  )
 
   if (!editor) {
     return <div className="h-[500px] w-full bg-gray-100 animate-pulse rounded-md" />
@@ -504,33 +634,39 @@ export default function BlogEditor({ content, onChange }: BlogEditorProps) {
             <div className="w-px h-6 bg-gray-300 mx-1"></div>
             <button
               type="button"
-              onClick={() => {
-                focusEditor()
-                editor.chain().focus().setTextAlign("left").run()
-              }}
-              className={`p-2 rounded hover:bg-gray-200 ${editor.isActive({ textAlign: "left" }) ? "bg-gray-200" : ""}`}
+              onClick={() => setImageAlignment("left")}
+              className={`p-2 rounded hover:bg-gray-200 ${
+                (selectedNodeType === "image" && selectedNodeAlignment === "left") ||
+                (!selectedNodeType && editor.isActive({ textAlign: "left" }))
+                  ? "bg-gray-200"
+                  : ""
+              }`}
               title="Align Left"
             >
               <AlignLeft className="h-4 w-4" />
             </button>
             <button
               type="button"
-              onClick={() => {
-                focusEditor()
-                editor.chain().focus().setTextAlign("center").run()
-              }}
-              className={`p-2 rounded hover:bg-gray-200 ${editor.isActive({ textAlign: "center" }) ? "bg-gray-200" : ""}`}
+              onClick={() => setImageAlignment("center")}
+              className={`p-2 rounded hover:bg-gray-200 ${
+                (selectedNodeType === "image" && selectedNodeAlignment === "center") ||
+                (!selectedNodeType && editor.isActive({ textAlign: "center" }))
+                  ? "bg-gray-200"
+                  : ""
+              }`}
               title="Align Center"
             >
               <AlignCenter className="h-4 w-4" />
             </button>
             <button
               type="button"
-              onClick={() => {
-                focusEditor()
-                editor.chain().focus().setTextAlign("right").run()
-              }}
-              className={`p-2 rounded hover:bg-gray-200 ${editor.isActive({ textAlign: "right" }) ? "bg-gray-200" : ""}`}
+              onClick={() => setImageAlignment("right")}
+              className={`p-2 rounded hover:bg-gray-200 ${
+                (selectedNodeType === "image" && selectedNodeAlignment === "right") ||
+                (!selectedNodeType && editor.isActive({ textAlign: "right" }))
+                  ? "bg-gray-200"
+                  : ""
+              }`}
               title="Align Right"
             >
               <AlignRight className="h-4 w-4" />

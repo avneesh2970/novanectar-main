@@ -1,20 +1,29 @@
-import { Suspense, lazy } from "react"
-import { MainContent } from "@/components/landing/MainContent"
+
+import { Suspense, lazy } from "react";
+import { MainContent } from "@/components/landing/MainContent";
 
 // Eagerly load critical above-the-fold components
-import LoadingSpinner from "@/components/ui/loading-spinner"
+import LoadingSpinner from "@/components/ui/loading-spinner";
+import { HomeFaqs } from "@/data/faqsData";
+import StatsCounter from "@/components/stats/stats";
 
 // Lazy load below-the-fold components
-const ProcessSection = lazy(() => import("@/components/process/ProcessSection"))
-const ProjectSession = lazy(() => import("@/components/projects/ProjectSession"))
-const Clients = lazy(() => import("@/components/ourClients/Clients"))
-const WhyChooseUs = lazy(() => import("@/components/why-us/WhyUsSession"))
-const ContactForm = lazy(() => import("@/components/contact/contact"))
-const TestimonialSection = lazy(() => import("@/components/testimonial/TestimonialSecion"))
-const FAQSection = lazy(() => import("@/components/faq/FaqSection"))
-const FooterSection = lazy(() => import("@/components/footer/FooterSection"))
-const WhatsappIcon = lazy(() => import("@/components/whatsapp/Whatsapp"))
-const CallingIcon = lazy(() => import("@/components/calling/Call"))
+const ProcessSection = lazy(
+  () => import("@/components/process/ProcessSection")
+);
+const ProjectSession = lazy(
+  () => import("@/components/projects/ProjectSession")
+);
+const Clients = lazy(() => import("@/components/ourClients/Clients"));
+const WhyChooseUs = lazy(() => import("@/components/why-us/WhyUsSession"));
+const ContactForm = lazy(() => import("@/components/contact/contact"));
+const TestimonialSection = lazy(
+  () => import("@/components/testimonial/TestimonialSecion")
+);
+const FAQSection = lazy(() => import("@/components/faq/FaqSection"));
+const FooterSection = lazy(() => import("@/components/footer/FooterSection"));
+const WhatsappIcon = lazy(() => import("@/components/whatsapp/Whatsapp"));
+const CallingIcon = lazy(() => import("@/components/calling/Call"));
 
 export default function Home() {
   return (
@@ -41,6 +50,15 @@ export default function Home() {
         </div>
       </Suspense>
 
+      {/* ///////////////////////////////////////////////////// */}
+      <Suspense fallback={<LoadingSpinner />}>
+        <div className="content-visibility-auto">
+          <StatsCounter />
+        </div>
+      </Suspense>
+
+      {/* ///////////////////////////////////////////////////// */}
+
       <Suspense fallback={<LoadingSpinner />}>
         <div className="content-visibility-auto">
           <WhyChooseUs />
@@ -61,7 +79,7 @@ export default function Home() {
 
       <Suspense fallback={<LoadingSpinner />}>
         <div className="content-visibility-auto">
-          <FAQSection />
+          <FAQSection faqs={HomeFaqs} />
         </div>
       </Suspense>
 
@@ -78,5 +96,5 @@ export default function Home() {
         <CallingIcon />
       </Suspense>
     </>
-  )
+  );
 }

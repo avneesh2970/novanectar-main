@@ -154,7 +154,7 @@ export default function JobDetails() {
       <Navbar />
       <div className="w-full mx-auto border-4 mt-20">
         <div className="rounded-lg">
-          <div className="fixed top-[5.01rem] w-full z-50 border-b-2 mx-auto bg-[#F9FAFB]">
+          <div className="fixed top-[5.01rem] w-full z-40 border-b-2 mx-auto bg-[#F9FAFB]">
             <div className="flex justify-between items-center px-4 md:px-8 py-3 max-w-screen-xl mx-auto">
               {/* Left Section */}
               <div className="flex items-center gap-3">

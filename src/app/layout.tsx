@@ -1,10 +1,18 @@
-import type React from "react"
-import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
-import { inter, roboto_mono, playfair, DMSans, DMSans400, DMSans500 } from "@/fonts/font"
-import "./globals.css"
-import { Toaster } from "react-hot-toast"
-import Script from "next/script"
+import type React from "react";
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import {
+  inter,
+  roboto_mono,
+  playfair,
+  DMSans,
+  DMSans400,
+  DMSans500,
+} from "@/fonts/font";
+import "./globals.css";
+import { Toaster } from "react-hot-toast";
+import Script from "next/script";
+import AnalyticsListener from "@/components/AnalyticsListener";
 
 // Optimize font loading
 const geistSans = Geist({
@@ -12,14 +20,14 @@ const geistSans = Geist({
   subsets: ["latin"],
   display: "swap",
   preload: true,
-})
+});
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
   display: "swap",
   preload: false, // Not critical for initial render
-})
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://novanectar.co.in"),
@@ -58,7 +66,8 @@ export const metadata: Metadata = {
   publisher: "Novanectar Services Pvt. Ltd.",
   openGraph: {
     title: "Novanectar Services - Fueling Progress with Smart IT Solutions",
-    description: "Empowering businesses with powerful IT solutions that aims your success.",
+    description:
+      "Empowering businesses with powerful IT solutions that aims your success.",
     url: "https://novanectar.co.in",
     siteName: "Novanectar Services Pvt. Ltd.",
     images: [
@@ -89,15 +98,21 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://novanectar.co.in",
   },
-}
+};
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className="light">
       <head>
         {/* Preconnect to external domains */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
 
         {/* Preload critical CSS */}
         {/* <link rel="preload" href="/globals.css" as="style" /> */}
@@ -183,10 +198,13 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${roboto_mono.variable} ${playfair.variable} ${DMSans.variable} ${DMSans400.variable} ${DMSans500.variable} antialiased`}
       >
-        <main>{children}</main>
+        <main>
+          <AnalyticsListener />
+          {children}
+        </main>
         <div id="portal-root" />
         <Toaster />
       </body>
     </html>
-  )
+  );
 }

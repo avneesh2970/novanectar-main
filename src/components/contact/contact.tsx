@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { DMSans } from "@/fonts/font";
@@ -8,6 +8,7 @@ import { DMSans } from "@/fonts/font";
 import { AnimatedInput } from "./AnimatedInput";
 import { HiMail } from "react-icons/hi";
 import { Phone } from "lucide-react";
+import { FaLocationDot } from "react-icons/fa6";
 // import contact from "@/assets/contact/contact.jpg";
 // import Image from "next/image";
 
@@ -31,7 +32,11 @@ const ContactForm = () => {
     handleSubmit,
     formState: { errors },
     reset,
+    watch,
   } = useForm<IFormInput>();
+
+  // Watch all form values
+  const watchedValues = watch();
 
   useEffect(() => {
     controls.start({
@@ -158,15 +163,56 @@ const ContactForm = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-blue-900/20 to-transparent pointer-events-none"></div>
                 </div>
                 <div className="p-6">
-                  {/* Email Section */}
+                  {/* Address Section */}
                   <motion.div
-                    className="mb-4"
+                    className="mb-1"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.8, duration: 0.8 }}
                   >
                     <motion.h3
-                      className="text-xl font-semibold text-gray-700 flex items-center"
+                      className="text-lg font-semibold text-gray-700 flex items-center"
+                      initial={{ y: 20, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{ delay: 0.9, duration: 0.5 }}
+                    >
+                      <div className="bg-blue-100 p-2 rounded-full mr-3">
+                        <FaLocationDot className="w-5 h-5 text-blue-600" />
+                      </div>
+                      Address
+                    </motion.h3>
+
+                    <div className="flex flex-col space-y-3 pl-12">
+                      <motion.div
+                        className="flex items-center space-x-3 group"
+                        initial={{ x: -30, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ delay: 1.0, duration: 0.5 }}
+                        whileHover={{ x: 5 }}
+                        whileTap={{ x: 2 }}
+                      >
+                        <a
+                          href="https://www.google.com/maps/place/NovaNectar+Services+Pvt.+Ltd./@30.307989,78.006196,15z/data=!4m6!3m5!1s0x39092be94375e729:0xc160311fe8cb82d6!8m2!3d30.3079888!4d78.0061964!16s%2Fg%2F11vyydyk88?hl=en&entry=ttu&g_ep=EgoyMDI1MDUyNy4wIKXMDSoASAFQAw%3D%3D"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-gray-600 group-hover:text-blue-600 transition-colors duration-150 text-sm cursor-pointer"
+                        >
+                          GMS Rd, Haripuram, Kanwali, Dehradun, Uttarakhand
+                          248001
+                        </a>
+                      </motion.div>
+                    </div>
+                  </motion.div>
+
+                  {/* Email Section */}
+                  <motion.div
+                    className="mb-1"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.8, duration: 0.8 }}
+                  >
+                    <motion.h3
+                      className="text-lg font-semibold text-gray-700 flex items-center"
                       initial={{ y: 20, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
                       transition={{ delay: 0.9, duration: 0.5 }}
@@ -187,14 +233,15 @@ const ContactForm = () => {
                         whileTap={{ x: 2 }}
                       >
                         <a
-                          href="mailto:career@assuredjob.com"
-                          className="text-gray-600 group-hover:text-blue-600 transition-colors duration-150 text-base"
+                          href="mailto:info@novanectar.co.in"
+                          className="text-gray-600 group-hover:text-blue-600 transition-colors duration-150 text-sm cursor-pointer"
                         >
                           info@novanectar.co.in
                         </a>
                       </motion.div>
                     </div>
                   </motion.div>
+
                   {/* Phone Section */}
                   <motion.div
                     initial={{ opacity: 0 }}
@@ -202,7 +249,7 @@ const ContactForm = () => {
                     transition={{ delay: 1.2, duration: 0.8 }}
                   >
                     <motion.h3
-                      className="text-xl font-semibold text-gray-700 flex items-center"
+                      className="text-lg font-semibold text-gray-700 flex items-center"
                       initial={{ y: 20, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
                       transition={{ delay: 1.3, duration: 0.5 }}
@@ -213,7 +260,7 @@ const ContactForm = () => {
                       Phone Number
                     </motion.h3>
 
-                    <div className="flex flex-col space-y-3 pl-12 text-base">
+                    <div className="flex flex-col pl-12 text-sm">
                       <motion.div
                         className="flex items-center space-x-3 group"
                         initial={{ x: -30, opacity: 0 }}
@@ -223,10 +270,10 @@ const ContactForm = () => {
                         whileTap={{ x: 2 }}
                       >
                         <a
-                          href="tel:+918979891703"
-                          className="text-gray-600 group-hover:text-blue-600 transition-colors duration-150"
+                          href="tel:+918979891705"
+                          className="text-gray-600 group-hover:text-blue-600 transition-colors duration-150 cursor-pointer"
                         >
-                          +91 8979891703
+                          +91 8979891705
                         </a>
                       </motion.div>
 
@@ -240,7 +287,7 @@ const ContactForm = () => {
                       >
                         <a
                           href="tel:+918860159136"
-                          className="text-gray-600 group-hover:text-blue-600 transition-colors duration-150"
+                          className="text-gray-600 group-hover:text-blue-600 transition-colors duration-150 cursor-pointer"
                         >
                           +91 8860159136
                         </a>
@@ -263,6 +310,7 @@ const ContactForm = () => {
                 type="text"
                 placeholder="Enter Your Name"
                 error={errors.name}
+                value={watchedValues.name || ""}
               />
               <AnimatedInput
                 register={register("email", {
@@ -275,6 +323,7 @@ const ContactForm = () => {
                 type="email"
                 placeholder="Your Email"
                 error={errors.email}
+                value={watchedValues.email || ""}
               />
               <AnimatedInput
                 register={register("contact", {
@@ -287,6 +336,7 @@ const ContactForm = () => {
                 type="tel"
                 placeholder="Your Contact"
                 error={errors.contact}
+                value={watchedValues.contact || ""}
               />
               <AnimatedInput
                 register={register("subject", {
@@ -295,6 +345,7 @@ const ContactForm = () => {
                 type="text"
                 placeholder="Subject"
                 error={errors.subject}
+                value={watchedValues.subject || ""}
               />
               <AnimatedInput
                 register={register("message", {
@@ -303,6 +354,7 @@ const ContactForm = () => {
                 type="textarea"
                 placeholder="Message"
                 error={errors.message}
+                value={watchedValues.message || ""}
               />
 
               <motion.button

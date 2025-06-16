@@ -1,8 +1,8 @@
-import type { MetadataRoute } from "next"
+import type { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = "https://novanectar.co.in"
-  
+  const baseUrl = "https://novanectar.co.in";
+
   // Main pages
   const mainPages = [
     {
@@ -17,16 +17,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly" as const,
       priority: 0.5,
     },
-  ]
+  ];
 
   // Services pages
-  const services = ["seo", "ecommerce", "digital-marketing", "graphic-design", "mobile-development", "web-development"]
+  const services = [
+    "seo",
+    "social-media-management",
+    "digital-marketing",
+    "graphic-design",
+    "mobile-development",
+    "web-development",
+  ];
   const serviceUrls = services.map((service) => ({
     url: `${baseUrl}/services/${service}`,
     lastModified: new Date(),
     changeFrequency: "monthly" as const,
     priority: 0.8,
-  }))
+  }));
 
   // Career pages
   const careerMainPage = {
@@ -34,22 +41,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: new Date(),
     changeFrequency: "weekly" as const,
     priority: 0.8,
-  }
-  
+  };
+
   const careerPositions = [
-    "b-d-e", 
-    "it-sales", 
-    "graphic-designer", 
-    "social-media-executive", 
-    "video-editor"
-  ]
-  
+    "b-d-e",
+    "it-sales",
+    "ui-ux",
+    "graphic-designer",
+    "social-media-executive",
+    "video-editor",
+  ];
+
   const careerPositionUrls = careerPositions.map((position) => ({
     url: `${baseUrl}/career/${position}`,
     lastModified: new Date(),
     changeFrequency: "weekly" as const,
     priority: 0.7,
-  }))
+  }));
 
   // Blog main page
   const blogMainPage = {
@@ -57,8 +65,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: new Date(),
     changeFrequency: "daily" as const,
     priority: 0.9,
-  }
-  
+  };
+
+  // News and Events pages
+  const newsEventsPages = [
+    {
+      url: `${baseUrl}/news`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/event`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.8,
+    },
+  ];
+
   // Combine all URLs
   return [
     ...mainPages,
@@ -66,5 +90,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     careerMainPage,
     ...careerPositionUrls,
     blogMainPage,
-  ]
+    ...newsEventsPages
+  ];
 }

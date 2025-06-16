@@ -144,7 +144,7 @@ const FooterSection = () => {
                 {name: "App Development", id: "mobile-development"},
                 {name: "Graphic Design", id: "graphic-design"},
                 {name: "Digital Marketing", id: "digital-marketing"},
-                {name: "E-Commerce", id: "ecommerce"},
+                {name: "Social Media Management", id: "social-media-management"},
                 {name: "SEO", id: "seo"},
               ].map((item) => (
                 <motion.li

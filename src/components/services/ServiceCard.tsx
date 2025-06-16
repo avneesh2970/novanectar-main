@@ -16,14 +16,14 @@ export default function ServiceCard({
   image,
 }: ServiceCardProps) {
   return (
-    <Link href={`/services/${id}`} className="block">
+    <Link href={`/services/${id}`} className="block h-full">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="relative bg-[#FAEEEE] rounded-lg shadow-lg overflow-hidden group hover:shadow-2xl transition-all duration-300 cursor-pointer pb-4 flex flex-col transform hover:-translate-y-1 max-w-sm mx-auto h-full"
+        className="relative bg-[#FAEEEE] rounded-lg shadow-lg overflow-hidden group hover:shadow-2xl transition-all duration-300 cursor-pointer flex flex-col transform hover:-translate-y-1 h-full"
       >
-        <div className="relative w-full pt-[75%] overflow-hidden rounded-t-lg">
+        <div className="relative w-full pt-[75%] overflow-hidden rounded-t-lg flex-shrink-0">
           <Image
             src={image || "/placeholder.svg"}
             alt={title}
@@ -38,7 +38,7 @@ export default function ServiceCard({
           />
           <div className="absolute inset-0 bg-black bg-opacity-20 transition-opacity duration-300 group-hover:bg-opacity-30" />
         </div>
-        <div className="flex items-center justify-center w-20 sm:w-24 h-20 sm:h-24 mx-auto -mt-10 sm:-mt-12 relative z-10">
+        <div className="flex items-center justify-center w-20 sm:w-24 h-20 sm:h-24 mx-auto -mt-10 sm:-mt-12 relative z-10 flex-shrink-0">
           <Image
             src={icon || "/placeholder.svg"}
             // alt={`${title} icon`}
@@ -50,8 +50,8 @@ export default function ServiceCard({
             loading="lazy"
           />
         </div>
-        <div className="px-4 pt-2">
-          <div>
+        <div className="px-4 pt-2 pb-4 flex-grow flex flex-col justify-between">
+          <div className="flex-grow">
             <h3
               className={`text-xl sm:text-2xl text-gray-800 group-hover:text-blue-500 transition-colors duration-300 ${DMSans500.className}`}
             >
