@@ -270,10 +270,10 @@ const ContactForm = () => {
                         whileTap={{ x: 2 }}
                       >
                         <a
-                          href="tel:+918979891705"
+                          href="tel:+918979891703"
                           className="text-gray-600 group-hover:text-blue-600 transition-colors duration-150 cursor-pointer"
                         >
-                          +91 8979891705
+                          +91 8979891703
                         </a>
                       </motion.div>
 
@@ -286,10 +286,10 @@ const ContactForm = () => {
                         whileTap={{ x: 2 }}
                       >
                         <a
-                          href="tel:+918979891708"
+                          href="tel:+918979891705"
                           className="text-gray-600 group-hover:text-blue-600 transition-colors duration-150 cursor-pointer"
                         >
-                          +91 8979891708
+                          +91 8979891705
                         </a>
                       </motion.div>
                     </div>
