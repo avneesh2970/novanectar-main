@@ -12,6 +12,7 @@ import { DMSans } from "@/fonts/font";
 import { motion, AnimatePresence } from "framer-motion";
 import Script from "next/script";
 import toast from "react-hot-toast";
+import HighlightableText from "./HighLightableText";
 
 export default function JobDetails() {
   const params = useParams();
@@ -199,7 +200,23 @@ export default function JobDetails() {
             <section>
               <h2 className="font-medium text-gray-900 mb-2">About the job</h2>
               <div className="space-y-4 text-gray-600 text-sm">
-                <p>{job.details.about}</p>
+                <p>
+                  {/* {job.details.about} */}
+
+                  <HighlightableText
+                    text={job.details.about}
+                    highlights={[
+                      {
+                        text: "NovaNectar",
+                        link: "https://novanectar.co.in",
+                      },
+                      {
+                        text: "UI/UX",
+                        link: "https://novanectar.co.in/services/graphic-design",
+                      },
+                    ]}
+                  />
+                </p>
                 {/* <p>{job.details.impact}</p> */}
               </div>
             </section>
@@ -230,7 +247,21 @@ export default function JobDetails() {
               <ul className="list-disc pl-5 space-y-2 text-sm text-gray-600">
                 {job.details.responsibilities.map(
                   (responsibility: any, index: any) => (
-                    <li key={index}>{responsibility}</li>
+                    <li key={index}>
+                      <HighlightableText
+                        text={responsibility}
+                        highlights={[
+                          {
+                            text: "website development",
+                            link: "https://novanectar.co.in/services/web-development",
+                          },
+                          {
+                            text: "UI/UX",
+                            link: "https://novanectar.co.in/services/graphic-design",
+                          },
+                        ]}
+                      />
+                    </li>
                   )
                 )}
               </ul>
@@ -242,7 +273,25 @@ export default function JobDetails() {
               </h2>
               <ul className="list-disc pl-5 space-y-2 text-sm text-gray-600">
                 {job.details.skillsRequired.map((skill: any, index: any) => (
-                  <li key={index}>{skill}</li>
+                  <li key={index}>
+                    <HighlightableText
+                      text={skill}
+                      highlights={[
+                        {
+                          text: "Graphic Design",
+                          link: "https://novanectar.co.in/services/graphic-design",
+                        },
+                        {
+                          text: "adobe XD",
+                          link: "https://en.wikipedia.org/wiki/Adobe_XD",
+                        },
+                        {
+                          text: "Figma",
+                          link: "https://en.wikipedia.org/wiki/Figma",
+                        },
+                      ]}
+                    />
+                  </li>
                 ))}
               </ul>
             </section>
@@ -278,16 +327,17 @@ export default function JobDetails() {
               <h2 className="font-medium text-gray-900 mb-2">How To Apply</h2>
               <div className="space-y-4 text-gray-600 text-sm">
                 <p>
-                  If this opportunity excites you. Please send your resume and
-                  cover letter to hr@novanectar.co.in. Ensure your resume is
-                  clear and professionally formatted. If you have any questions,
-                  feel free to contact us at 8979891705.
+                  If this opportunity evokes you. Send your resume and cover
+                  letter to hr@novanectar.co.in. Make sure your resume is
+                  clearly and professionally formatted. If you have any
+                  questions, please feel free to contact 8979891705.
                 </p>
               </div>
             </section>
             <section>
-            <h2 className="font-medium text-gray-900 mb-2">Join Us at NovaNectar and Grow Your Career!</h2>
-
+              <h2 className="font-medium text-gray-900 mb-2">
+                Join Us at NovaNectar and Grow Your Career!
+              </h2>
             </section>
           </div>
 

@@ -42,7 +42,8 @@ export const jobListings: any = [
       salary:
         " ₹10,000 - ₹20,000 per month (₹10,000 fixed + performance incentives).",
     },
-    job_bio: "Looking for a dynamic BDE to identify new business opportunities and build strong client relationships."
+    job_bio:
+      "Looking for a dynamic BDE to identify new business opportunities and build strong client relationships.",
   },
   {
     id: "it-sales",
@@ -87,7 +88,8 @@ export const jobListings: any = [
       salary:
         " ₹10,000 - ₹20,000 per month (₹10,000 fixed + performance incentives).",
     },
-    job_bio:"We’re looking for a target-driven IT Sales Executive to generate leads and close deals in the tech space."
+    job_bio:
+      "We’re looking for a target-driven IT Sales Executive to generate leads and close deals in the tech space.",
   },
   {
     id: "ui-ux",
@@ -99,39 +101,40 @@ export const jobListings: any = [
     location: "Dehradun",
     experience: "Fresher Or 1 Year Experience",
     details: {
-      about:
-        "At NovaNectar, we’re expanding our digital presence and looking for a creative UI/UX Designer to join our team. Whether you’re an experienced designer or just starting out, we value fresh ideas and are committed to supporting your growth. You’ll play a key role in designing intuitive, visually appealing digital products that enhance user experience and business outcomes.",
-      jobType: "Full-time, 3-month probation.",
+      about: 
+        "At NovaNectar, we are growing our online presence and want a talented UI/UX Designer to become part of our team. An experienced designer or someone just entering the field, we appreciate new ideas and are dedicated to helping you grow. You will be an integral part of creating intuitive and visually appealing digital products that drive user experience and business results.",
+      jobType: "Full time, 3 Month Probation",
       workLocation: "In-person",
       responsibilities: [
-        "Collaboration: Work closely with cross-functional teams (Product, Development, and Marketing) to create user-centric designs.",
-        "Research & Feedback: Conduct user research and gather feedback to continuously improve design solutions.",
-        "Design & Prototyping: Create wireframes, prototypes, and user interfaces for websites, mobile apps, and other digital products.",
-        "Design Systems: Develop and maintain design systems and UI/UX standards to ensure consistency across projects.",
-        "Usability Testing: Conduct usability testing, analyze results, and implement improvements based on findings.",
-        "Brand Alignment: Ensure that designs align with the company’s brand identity and business goals.",
+        "Collaboration:  Work closely with the cross-functional team (product, development, marketing) to create user-oriented designs.",
+        "Research & Feedback:  Perform user surveys and gatherfeedback to improve ongoing design solutions.",
+        "Design & Prototyping: Design wireframes, prototypes and user interfaces for website development, mobile applications, and other digital products",
+        "Design Systems: Create and uphold design systems and UI/UX standards to provide consistency throughout projects",
+        "Usability Testing: Perform usability testing, review findings, and make changes based on results.",
+        "Brand Alignment: Make sure that designs conform to the company's brand identity and business objectives",
       ],
       skillsRequired: [
-        "Bachelor’s degree in Graphic Design, Interaction Design, or a related field.",
-        "For Experienced Candidates: Minimum 1 year of UI/UX design experience, with a strong portfolio demonstrating your skills and problem-solving abilities.",
+        "Bachelor degree in Graphic Design, interaction Design or a related field.",
+        "For experience candidates: Minimum 1 year of UI/UX design experience, with a strong portfolio demonstrating your skills and problem solving abilities. ",
         "For Freshers: A strong interest in design, with a willingness to learn and grow.",
-        "Proficiency in design tools like Adobe XD, Figma, Sketch, or similar.",
-        "Excellent communication skills, with the ability to effectively present design ideas and collaborate with team members.",
-        "Attention to detail and a passion for creating user-friendly, engaging designs."
+        "Proficiency in design tools like adobe XD, Figma, Sketch or Similar",
+        "Excellent Communication skills with the ability to effectively present design ideas and collaborate with team members.",
+        "Attention to detail and a passion for creating user friendly engaging design.",
       ],
       preferredSkills: [
-        "Basic knowledge of HTML/CSS and front-end development.",
+        "Basic knowledge of HTML/CSS and Frontend Development",
         "Experience designing responsive layouts for different devices and screen sizes.",
-        "Familiarity with user research, A/B testing, and usability testing.",
-        "Creative problem-solving skills and the ability to think critically about design challenges.",
-        "Understanding of design principles and best practices in UI/UX.",
+        "Familiarity with user research, A/B testing and usability testing.",
+        "Creative Problem solving skills and the ability to think critically about design challenges",
+        "Understanding of design principle and best practice in UI/UX",
       ],
       workEnvironment:
-        "At NovaNectar, we offer a collaborative, fast-paced environment where creativity is encouraged, and your contributions are valued. Whether you’re working independently or as part of a team, we provide the resources and support to help you grow professionally. If you're passionate about design and thrive in an innovative setting, this is the perfect place for you.",
+        "Novanectar offers a functional and rapid culture that promotes creativity and value input. Whether you want to work alone or in a team, we provide the tools and support to support you in professional development. If you love and thrive in a creative environment, this is just the right place for you. ",
       salary:
-        " ₹10,000 - ₹20,000 per month (₹10,000 fixed + performance incentives).",
+        "10,000 - 20,000 per month (10,000 fixed + Performance incentives) ",
     },
-    job_bio:"We’re hiring a passionate UI/UX Designer to craft seamless user experiences and engaging product designs."
+    job_bio:
+      "We’re hiring a passionate UI/UX Designer to craft seamless user experiences and engaging product designs.",
   },
   {
     id: "graphic-designer",
@@ -160,7 +163,7 @@ export const jobListings: any = [
         "For Freshers: A passion for design, creativity, and willingness to learn.",
         "Technical Skills: Proficiency in Adobe Creative Suite (Illustrator, Photoshop, InDesign) or similar design software.",
         "Communication Skills: Strong ability to present and communicate design ideas clearly to colleagues and clients.",
-        "Attention to Detail: Ability to deliver high-quality, visually appealing designs with precision and care."
+        "Attention to Detail: Ability to deliver high-quality, visually appealing designs with precision and care.",
       ],
       preferredSkills: [
         "UI/UX Knowledge: Basic understanding of UI/UX principles and how they apply to design.",
@@ -173,7 +176,8 @@ export const jobListings: any = [
       salary:
         "₹10,000 – ₹20,000 per month (₹10,000 fixed + performance incentives).",
     },
-    job_bio:"Exciting opportunity for a Graphic Designer to work on digital ads, print designs, and promotional content."
+    job_bio:
+      "Exciting opportunity for a Graphic Designer to work on digital ads, print designs, and promotional content.",
   },
   {
     id: "social-media-executive",
@@ -204,7 +208,7 @@ export const jobListings: any = [
         "For Freshers: Passion for social media and a strong desire to learn and grow in the field.",
         "Technical Skills: Proficiency in social media platforms, content scheduling tools (e.g., Hootsuite, Buffer), and basic knowledge of graphic design tools (e.g., Canva, Photoshop).",
         "Communication Skills: Strong written and verbal communication skills with the ability to create compelling content.",
-        "Attention to Detail: Ability to craft posts that are visually appealing and aligned with the brand’s voice."
+        "Attention to Detail: Ability to craft posts that are visually appealing and aligned with the brand’s voice.",
       ],
       preferredSkills: [
         "•	Photography & Videography: Basic skills in photography or video creation for social media.",
@@ -217,7 +221,8 @@ export const jobListings: any = [
       salary:
         " ₹10,000 - ₹20,000 per month (₹10,000 fixed + performance incentives).",
     },
-    job_bio:"Passionate about social media? Join us to shape brand voice, manage content calendars, and engage audiences."
+    job_bio:
+      "Passionate about social media? Join us to shape brand voice, manage content calendars, and engage audiences.",
   },
   {
     id: "video-editor",
@@ -247,7 +252,7 @@ export const jobListings: any = [
         "For Freshers: Passion for video editing and eagerness to learn.",
         "Technical Skills: Proficiency in video editing software (Adobe Premiere Pro, After Effects, Final Cut Pro, etc.).",
         "Communication Skills: Ability to present and communicate ideas clearly to colleagues and clients.",
-        "Attention to Detail: Ability to deliver visually appealing videos with precision."
+        "Attention to Detail: Ability to deliver visually appealing videos with precision.",
       ],
       preferredSkills: [
         "Animation: Basic knowledge of animation or motion graphics (e.g., After Effects).",
@@ -261,6 +266,7 @@ export const jobListings: any = [
       salary:
         "₹12,000 – ₹25,000 per month (₹12,000 fixed + performance incentives).",
     },
-    job_bio:"We’re looking for a skilled Video Editor to turn raw footage into polished, high-quality videos with storytelling impact."
+    job_bio:
+      "We’re looking for a skilled Video Editor to turn raw footage into polished, high-quality videos with storytelling impact.",
   },
 ];

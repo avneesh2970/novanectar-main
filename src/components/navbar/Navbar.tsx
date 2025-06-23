@@ -25,7 +25,7 @@ const navItems: NavItem[] = [
     items: [
       { label: "Website Development", href: "/services/web-development" },
       { label: "App Development", href: "/services/mobile-development" },
-      { label: "Graphic Design", href: "/services/graphic-design" },
+      { label: "Graphic Design", href: "/services/graphic-designing" },
       { label: "Digital Marketing", href: "/services/digital-marketing" },
       { label: "Social Media Management", href: "/services/social-media-management" },
       { label: "SEO", href: "/services/seo" },

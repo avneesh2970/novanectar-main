@@ -49,7 +49,7 @@ export interface Service {
 
 export const services: Service[] = [
   {
-    id: "graphic-design",
+    id: "graphic-designing",
     title: "Graphic Design",
     description:
       "Create visually stunning designs tailored to your brand, ensuring a professional and creative edge in every project.",
@@ -176,49 +176,6 @@ export const services: Service[] = [
       },
     ],
   },
-  // {
-  //   id: "ecommerce",
-  //   title: "Ecommerce",
-  //   description:
-  //     "Develop robust e-commerce platforms to boost your online presence and streamline your business operations.",
-  //   detailedDescription:
-  //     "Novanectar Services Private Limited creates dynamic e-commerce solutions designed to boost your sales and enhance customer experiences. Our team blends innovative technology with intuitive design to build secure, scalable online stores. Whether you're starting a new venture or scaling up, we provide tailored solutions that ensure smooth transactions, easy navigation, and seamless integration across platforms. Our vision is to help you turn your e-commerce vision into a thriving business.",
-  //   icon: eCommLogo,
-  //   image: eComm,
-  //   coverImage: eCommCover,
-  //   capability: [
-  //     {
-  //       heading: "Store Management Features",
-  //       content:
-  //         "Easy-to-use tools for managing product catalogues, inventory, and orders to optimize your store’s performance.",
-  //     },
-  //     {
-  //       heading: "Secure Payment Integration",
-  //       content:
-  //         "Safe and reliable payment gateways for seamless and secure transactions.",
-  //     },
-  //     {
-  //       heading: "Shopping Cart and Checkout",
-  //       content:
-  //         "User-friendly cart and checkout processes to boost conversions and improve user experience.",
-  //     },
-  //     {
-  //       heading: "Multi-Channel Integration",
-  //       content:
-  //         "Connect with various platforms like Amazon and social media for wider reach and better sales.",
-  //     },
-  //     {
-  //       heading: "Customer Support Tools",
-  //       content:
-  //         "Integrated tools for efficient customer service, handling inquiries, and managing support tickets.",
-  //     },
-  //     {
-  //       heading: "Maintenance and Support",
-  //       content:
-  //         "Continuous maintenance, updates, and round-the-clock support to ensure smooth, uninterrupted operations.",
-  //     },
-  //   ],
-  // },
   {
     id: "social-media-management",
     title: "Social Media Management",

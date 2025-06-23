@@ -24,7 +24,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "seo",
     "social-media-management",
     "digital-marketing",
-    "graphic-design",
+    "graphic-designing",
     "mobile-development",
     "web-development",
   ];
@@ -90,6 +90,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     careerMainPage,
     ...careerPositionUrls,
     blogMainPage,
-    ...newsEventsPages
+    ...newsEventsPages,
   ];
 }

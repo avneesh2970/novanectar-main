@@ -137,12 +137,29 @@ export default function DigitalMarketingClientPage() {
       title: "Social Media Marketing (SMM)",
       description: (
         <>
-          We advertise your business on sites such as Instagram, Facebook, and
-          LinkedIn. This creates brand awareness, engages your audience, and
-          drives new customers through creative posts and sponsored
+          We advertise your business on sites such as{" "}
+          <a
+            href="https://www.instagram.com/novanectar_services_pvt.ltd"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
+          >
+            Instagram
+          </a>
+          ,{" "}
+          <a
+            href="https://www.facebook.com/people/Novanectar-Services-Pvt-Ltd/61565824312345/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
+          >
+            Facebook
+          </a>
+          , and LinkedIn. This creates brand awareness, engages your audience,
+          and drives new customers through creative posts and sponsored
           advertisements. So this is actually known as{" "}
           <a
-            href="https://en.wikipedia.org/wiki/Social_media_marketing"
+            href="https://novanectar.co.in/services/social-media-management"
             target="_blank"
             rel="noopener noreferrer"
             className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
@@ -157,17 +174,24 @@ export default function DigitalMarketingClientPage() {
       title: "Google & Facebook Ads (PPC)",
       description: (
         <>
-          <a
+          {/* <a
             href="https://en.wikipedia.org/wiki/Advertising"
             target="_blank"
             rel="noopener noreferrer"
             className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
-          >
-            Paid ads
-          </a>{" "}
+          > */}
+          Paid ads
+          {/* </a>{" "} */}
           bring instant visibility to your business. We run targeted ad
           campaigns on Google and social media to generate high-quality leads
-          within your budget, and track every rupee spent for better ROI
+          within your budget, and track every rupee spent for better {" "}<a
+            href="https://en.wikipedia.org/wiki/Return_on_investment"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
+          >
+            ROI
+          </a>
         </>
       ),
       icon: <MousePointer className="w-6 h-6" />,
@@ -176,17 +200,9 @@ export default function DigitalMarketingClientPage() {
       title: "Content Marketing",
       description: (
         <>
-          <a
-            href="https://en.wikipedia.org/wiki/Content_marketing"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
-          >
-            Good content builds trust
-          </a>{" "}
-          . We write blogs, product descriptions, and web pages that educate,
-          attract, and convert your audience. Our content is also optimized for
-          SEO to improve Google ranking.
+          Good content builds trust. We write blogs, product descriptions, and
+          web pages that educate, attract, and convert your audience. Our
+          content is also optimized for SEO to improve Google ranking.
         </>
       ),
       icon: <FileText className="w-6 h-6" />,
@@ -208,17 +224,16 @@ export default function DigitalMarketingClientPage() {
       description: (
         <>
           Your{" "}
-          <a
+          {/* <a
             href="https://novanectar.co.in/services/web-development"
             target="_blank"
             rel="noopener noreferrer"
             className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
-          >
-            website
-          </a>{" "}
-          is your digital storefront, we make sure it leaves a lasting
-          impression. From fast-loading pages to mobile responsiveness and
-          SEO-readiness, we build modern, conversion-focused websites that
+          > */}
+          website
+          {/* </a>{" "} */} is your digital storefront, we make sure it leaves a
+          lasting impression. From fast-loading pages to mobile responsiveness
+          and SEO-readiness, we build modern, conversion-focused websites that
           reflect your brand and drive results.
         </>
       ),
@@ -248,17 +263,18 @@ export default function DigitalMarketingClientPage() {
       title: "Graphic Design",
       description: (
         <>
+          Our creative team{" "}
           <a
-            href="https://novanectar.co.in/services/graphic-design"
+            href="https://novanectar.co.in/services/graphic-designing"
             target="_blank"
             rel="noopener noreferrer"
             className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
           >
-            Our creative team designs everything
-          </a>
-          from logos, social media creatives, brochures, banners, to full brand
-          identity kits. Clean, consistent, and compelling graphics to elevate
-          your brand presence across all platforms.
+            designs
+          </a>{" "}
+          everything from logos, social media creatives, brochures, banners, to
+          full brand identity kits. Clean, consistent, and compelling graphics
+          to elevate your brand presence across all platforms.
         </>
       ),
       icon: <Palette className="w-6 h-6" />,
@@ -268,17 +284,16 @@ export default function DigitalMarketingClientPage() {
       description: (
         <>
           Ready to sell online? We build{" "}
-          <a
-            href="https://novanectar.co.in/services/ecommerce"
+          {/* <a
+            href="https://novanectar.co.in/services/social-media-management"
             target="_blank"
             rel="noopener noreferrer"
             className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
-          >
-            powerful eCommerce platforms
-          </a>{" "}
-          with secure payment integration, product management, and user-friendly
-          interfaces. From Shopify and WooCommerce to custom builds, we help you
-          grow your online store and drive sales 24/7.
+          > */}
+          powerful eCommerce platforms
+          {/* </a> */} with secure payment integration, product management, and
+          user-friendly interfaces. From Shopify and WooCommerce to custom
+          builds, we help you grow your online store and drive sales 24/7.
         </>
       ),
       icon: <ShoppingCart className="w-6 h-6" />,
@@ -390,9 +405,7 @@ export default function DigitalMarketingClientPage() {
         }
       `}</style>
       <Navbar />
-      <div
-        className={`mt-20 min-h-screen bg-white ${DMSans.className}`}
-      >
+      <div className={`mt-20 min-h-screen bg-white ${DMSans.className}`}>
         {/* Hero Section */}
         <motion.div
           ref={heroRef}
@@ -524,8 +537,16 @@ export default function DigitalMarketingClientPage() {
                   Grow Your Business with Smart IT Solution
                 </h2>
                 <p className="text-[#424242] text-base sm:text-lg leading-relaxed">
-                  At Smart IT Solution, we assist companies in growing online
-                  through proven{" "}
+                  At{" "}
+                  <a
+                    href="https://novanectar.co.in"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
+                  >
+                    Smart IT Solution
+                  </a>
+                  , we assist companies in growing online through proven{" "}
                   <a
                     href="https://novanectar.co.in/services/digital-marketing"
                     target="_blank"
@@ -637,9 +658,7 @@ export default function DigitalMarketingClientPage() {
                       whileHover={scaleOnHover}
                     >
                       <div className="flex items-start">
-                        <motion.div
-                          className="flex items-center justify-center w-12 h-12 rounded-full bg-[#4878AF] text-white mr-4 flex-shrink-0"
-                        >
+                        <motion.div className="flex items-center justify-center w-12 h-12 rounded-full bg-[#4878AF] text-white mr-4 flex-shrink-0">
                           {service.icon}
                         </motion.div>
                         <div>
@@ -745,9 +764,7 @@ export default function DigitalMarketingClientPage() {
                   whileHover={{ y: -5, scale: 1.02 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <motion.div
-                    className="text-[#4878AF] mb-3 flex justify-center"
-                  >
+                  <motion.div className="text-[#4878AF] mb-3 flex justify-center">
                     {client.icon}
                   </motion.div>
                   <h3 className="text-sm sm:text-base md:text-lg font-semibold text-[#0a0a0a]">

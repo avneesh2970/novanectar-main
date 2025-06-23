@@ -31,10 +31,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://novanectar.co.in"),
-  title: {
-    template: "%s | Novanectar Services Pvt. Ltd.",
-    default: "Novanectar - Fueling Progress with Smart IT Solutions",
-  },
+  title: "Novanectar Services Pvt. Ltd.",
   description:
     "Novanectar Services provides smart IT solutions including graphic design, website development, and application development to help your business grow.",
   keywords: [

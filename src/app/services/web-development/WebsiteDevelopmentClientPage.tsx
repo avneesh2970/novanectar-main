@@ -145,9 +145,7 @@ export default function WebsiteDevelopmentClientPage() {
         }
       `}</style>
       <Navbar />
-      <div
-        className={`mt-20 min-h-screen bg-white ${DMSans.className}`}
-      >
+      <div className={`mt-20 min-h-screen bg-white ${DMSans.className}`}>
         {/* Hero Section */}
         <motion.div
           ref={heroRef}
@@ -353,12 +351,20 @@ export default function WebsiteDevelopmentClientPage() {
                   Solution for your Website
                 </h2>
                 <p className="text-[#424242] text-base sm:text-lg leading-relaxed">
-                  Novanectar Smart IT Solution , one of the leading website
-                  development firms in Dehradun , is cognizant of the unique
-                  requirements of regional companies. Our team of seasoned
-                  professionals creates websites that are not only visually
-                  appealing but also practical and easy to use by fusing
-                  technology, creativity, and domain knowledge.
+                  {" "}
+                  <a
+                    href="https://novanectar.co.in"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
+                  >
+                    Novanectar Smart IT Solution
+                  </a>{" "}
+                  , one of the leading website development firms in Dehradun ,
+                  is cognizant of the unique requirements of regional companies.
+                  Our team of seasoned professionals creates websites that are
+                  not only visually appealing but also practical and easy to use
+                  by fusing technology, creativity, and domain knowledge.
                 </p>
               </motion.div>
             </div>
@@ -397,13 +403,13 @@ export default function WebsiteDevelopmentClientPage() {
                     {
                       title: "Custom Website Design",
                       content: `As one of the top web development company in Dehradun, Smart IT Solution is well aware of the special needs of business houses here. Our expert and highly skilled professionals blend imagination, technology to create Custom Website Design.`,
-                      link: "https://novanectar.co.in",
-                      linkText: "Website Design",
+                      link: "https://novanectar.co.in/services/web-development",
+                      linkText: "Custom Website Design",
                     },
                     {
                       title: "Ecommerce Website Development",
                       content: `Put your business online with a secure, scalable, and feature-rich e-commerce site. We integrate payment gateways, inventory management, and easy-to-use product catalogs to drive your sales.`,
-                      link: "https://novanectar.co.in/services/seo",
+                      link: "https://novanectar.co.in/services/web-development",
                       linkText: "e-commerce site",
                     },
                     {
@@ -415,16 +421,8 @@ export default function WebsiteDevelopmentClientPage() {
                     {
                       title: "Content Management System (CMS)",
                       content: `Update your website easily using our CMS options. We have experience working with custom coded websites, WordPress, Joomla, and more to provide you with complete control of your content.`,
-                      links: [
-                        {
-                          url: "https://en.wikipedia.org/wiki/Web_design",
-                          text: "custom coded websites",
-                        },
-                        {
-                          url: "https://en.wikipedia.org/wiki/WordPress",
-                          text: "WordPress",
-                        },
-                      ],
+                      link: "https://en.wikipedia.org/wiki/WordPress",
+                      linkText: "WordPress",
                     },
                     {
                       title: "Website Maintenance and Support",
@@ -433,7 +431,7 @@ export default function WebsiteDevelopmentClientPage() {
                     {
                       title: "UI & UX Design",
                       content: `We are user experience designers that make sure your users have a seamless navigation, clean calls-to-action, and an aesthetically pleasing interface.`,
-                      link: "https://en.wikipedia.org/wiki/User_experience_design",
+                      link: "https://novanectar.co.in/services/graphic-design",
                       linkText: "user experience designers",
                     },
                   ].map((service, index) => (

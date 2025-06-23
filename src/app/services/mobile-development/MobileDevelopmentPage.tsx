@@ -109,17 +109,9 @@ export default function MobileDevelopmentPage() {
       content: (
         <>
           As a Dehradun-based company, we understand the local market while
-          staying updated with global tech trends. Our focus on{" "}
-          <a
-            href="https://novanectar.co.in/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
-          >
-            Smart IT Solutions
-          </a>{" "}
-          ensures your app is both beautifully designed and technologically
-          strong.
+          staying updated with global tech trends. Our focus on Smart IT
+          Solutions ensures your app is both beautifully designed and
+          technologically strong.
         </>
       ),
     },
@@ -136,7 +128,7 @@ export default function MobileDevelopmentPage() {
           >
             UI/UX
           </a>{" "}
-          designers, project managers, and QA specialists who collaborate to
+          designers project managers, and QA specialists who collaborate to
           deliver high-quality applications that create digital experiences your
           users will love.
         </>
@@ -144,26 +136,70 @@ export default function MobileDevelopmentPage() {
     },
     {
       title: "Full-Service Development",
-      content:
-        "We provide complete app development solutions from planning and designing to development, testing, and maintenance, ensuring your project success from start to finish.",
+      content: (
+        <>
+          We provide complete{" "}
+          <a
+            href="https://novanectar.co.in/services/mobile-development"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
+          >
+            app development
+          </a>{" "}
+          solutions from planning and designing to development, testing, and
+          maintenance, ensuring your project success from start to finish.
+        </>
+      ),
     },
     {
       title: "Cross-Platform Excellence",
-      content:
-        "We use cutting-edge technologies like Flutter and React Native to develop apps that work smoothly on both platforms, saving you time and cost while maximizing reach.",
+      content: (
+        <>
+          We use cutting-edge technologies like Flutter and React Native to
+          develop apps that work smoothly on both platforms, saving you time and
+          cost while maximizing reach.,
+        </>
+      ),
     },
   ];
 
   const services = [
     {
       title: "iOS and App Development",
-      description:
-        "At Novanectar we provide high quality apps that deliver seamless experience across iPhones and Android devices.",
+      description: (
+        <>
+          At {" "}
+          <a
+            href="https://novanectar.co.in"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
+          >
+            Novanectar{" "}
+          </a>
+           we provide high quality apps that deliver seamless
+          experience across iPhones and Android devices.
+        </>
+      ),
     },
     {
       title: "App Development",
-      description:
-        "We use technologies like Flutter and React Native to develop apps that work smoothly on both platforms, saving time and cost.",
+      description: (
+        <>
+          We use technologies like Flutter and{" "}
+          <a
+            href="https://en.wikipedia.org/wiki/React_Native"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
+          >
+            React Native{" "}
+          </a>{" "}
+          to develop apps that work smoothly on both platforms, saving time and
+          cost.,
+        </>
+      ),
     },
     {
       title: "Web App Development",
@@ -176,8 +212,8 @@ export default function MobileDevelopmentPage() {
             rel="noopener noreferrer"
             className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
           >
-            web applications
-          </a>{" "}
+            web applications{" "}
+          </a>
           that easily adapt to your business needs and grow with your company.
         </>
       ),
@@ -186,17 +222,8 @@ export default function MobileDevelopmentPage() {
       title: "Custom App Solutions",
       description: (
         <>
-          From{" "}
-          <a
-            href="https://novanectar.co.in/services/ecommerce"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
-          >
-            e-commerce
-          </a>{" "}
-          to booking apps, we develop each and every solution that aligns with
-          your business goal.
+          Frome-commerce to booking apps, we develop each and every solution
+          that aligns with your business goal.
         </>
       ),
     },
@@ -217,7 +244,17 @@ export default function MobileDevelopmentPage() {
   ];
 
   const technologies = [
-    "Flutter, React Native, Kotlin, Swift",
+    <>
+      <a
+        href="https://flutter.dev"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
+      >
+        Flutter
+      </a>
+      , React Native, Kotlin, Swift
+    </>,
     "Node.js, PHP, Python",
     "Firebase, AWS, MongoDB, MySQL",
     "Figma, Adobe XD for UI/UX design",
@@ -279,9 +316,7 @@ export default function MobileDevelopmentPage() {
         }
       `}</style>
       <Navbar />
-      <div
-        className={`mt-20 min-h-screen bg-white ${DMSans.className}`}
-      >
+      <div className={`mt-20 min-h-screen bg-white ${DMSans.className}`}>
         {/* Hero Section */}
         <motion.div
           ref={heroRef}
@@ -431,27 +466,11 @@ export default function MobileDevelopmentPage() {
                   design and technology to realize digital ideas.
                 </p>
                 <p className="text-[#424242] text-base sm:text-lg leading-relaxed">
-                  In today&apos;s world, businesses need functional,{" "}
-                  <a
-                    href="https://en.wikipedia.org/wiki/Mobile_app"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
-                  >
-                    user-friendly apps
-                  </a>
-                  . Whether you are a{" "}
-                  <a
-                    href="https://en.wikipedia.org/wiki/Startup_company"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
-                  >
-                    startup company
-                  </a>
-                  , established company, or entrepreneur with a unique concept,
-                  our app development services are designed to meet your
-                  specific requirements.
+                  In today&apos;s world, businesses need
+                  functional,user-friendly apps. Whether you are a startup
+                  company, established company, or entrepreneur with a unique
+                  concept, our app development services are designed to meet
+                  your specific requirements.
                 </p>
               </motion.div>
               <motion.div
@@ -581,26 +600,9 @@ export default function MobileDevelopmentPage() {
                     What We Offer
                   </h2>
                   <p className="text-[#424242] text-base sm:text-lg leading-relaxed">
-                    At Novanectar{" "}
-                    <a
-                      href="https://novanectar.co.in/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
-                    >
-                      Smart IT Solution
-                    </a>
-                    , we provide full{" "}
-                    <a
-                      href="https://novanectar.co.in/services/mobile-development"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
-                    >
-                      app development
-                    </a>{" "}
-                    solutions from planning and designing to development,
-                    testing and maintenance.
+                    At Novanectar Smart IT Solution, we provide full app
+                    development solutions from planning and designing to
+                    development, testing and maintenance.
                   </p>
                 </div>
               </motion.div>

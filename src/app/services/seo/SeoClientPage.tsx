@@ -75,7 +75,6 @@ const cardVariant = {
   },
 };
 
-
 const iconPulse = {
   scale: [1, 1.1, 1],
   transition: {
@@ -84,7 +83,6 @@ const iconPulse = {
     ease: "easeInOut",
   },
 };
-
 
 export default function SeoServicePage() {
   const [openAccordion, setOpenAccordion] = useState<number | null>(null);
@@ -119,14 +117,14 @@ export default function SeoServicePage() {
       content: (
         <>
           Our senior consultants have been optimizing{" "}
-          <a
+          {/* <a
             href="https://novanectar.co.in/services/seo"
             target="_blank"
             rel="noopener noreferrer"
             className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
-          >
-            websites
-          </a>{" "}
+          > */}
+          websites
+          {/* </a>{" "} */}
           since the early days of search engines.
         </>
       ),
@@ -137,15 +135,14 @@ export default function SeoServicePage() {
       content: (
         <>
           As an established{" "}
-          <a
+          {/* <a
             href="https://novanectar.co.in/services/seo"
             target="_blank"
             rel="noopener noreferrer"
             className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
-          >
-            SEO consultant in Dehradun
-          </a>
-          , we understand regional markets and user intent deeply.
+          > */}
+          SEO consultant in Dehradun
+          {/* </a> */}, we understand regional markets and user intent deeply.
         </>
       ),
       icon: <MapPin className="w-5 h-5" />,
@@ -167,9 +164,21 @@ export default function SeoServicePage() {
   const seoProcess = [
     {
       title: "Website Audit & Competitive Analysis",
-      description:
-        "At Novanectar Smart IT Solution we assess your current site, analyze and competitors and Build a Winning Roadmap",
-      icon: <Search className="w-6 h-6" />,
+      description: (
+        <>
+          At{" "}
+          <a
+            href="https://novanectar.co.in"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
+          >
+            Novanectar Smart IT Solution
+          </a>{" "}
+          we assess your current site, analyze and competitors and Build a
+          Winning Roadmap, icon: <Search className="w-6 h-6" />,
+        </>
+      ),
     },
     {
       title: "Keyword Research & Content Planning",
@@ -177,14 +186,14 @@ export default function SeoServicePage() {
         <>
           We Find the{" "}
           <a
-            href="https://en.wikipedia.org/wiki/Keyword_research"
+            href="https://business.google.com/in/ad-tools/keyword-planner/"
             target="_blank"
             rel="noopener noreferrer"
             className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
           >
             best keywords
           </a>{" "}
-          to target,
+          to target.
         </>
       ),
       icon: <FileText className="w-6 h-6" />,
@@ -195,22 +204,35 @@ export default function SeoServicePage() {
         <>
           We create quality backlinks via guest blogs, business citations,
           outreach, and {""}
-          <a
+          {/* <a
             href="https://en.wikipedia.org/wiki/Online_presence_management"
             target="_blank"
             rel="noopener noreferrer"
             className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
-          >
-            online PR.
-          </a>
+          > */}
+          online PR.
+          {/* </a> */}
         </>
       ),
       icon: <BarChart2 className="w-6 h-6" />,
     },
     {
       title: "Local SEO",
-      description:
-        "We enhance your local search visibility by optimizing your Google Business Profile, local directories, and map listings.",
+      description: (
+        <>
+          We enhance your local search visibility by optimizing your{" "}
+          <a
+            href="https://g.co/kgs/3XBPS4S"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
+          >
+            Google Business Profile
+          </a>
+          , local directories, and map listings.
+        </>
+      ),
+
       icon: <MapPin className="w-6 h-6" />,
     },
     {
@@ -347,9 +369,7 @@ export default function SeoServicePage() {
         }
       `}</style>
       <Navbar />
-      <div
-        className={`mt-20 min-h-screen bg-white ${DMSans.className}`}
-      >
+      <div className={`mt-20 min-h-screen bg-white ${DMSans.className}`}>
         {/* Hero Section */}
         <motion.div
           ref={heroRef}
@@ -499,8 +519,17 @@ export default function SeoServicePage() {
                 </p>
                 <p className="text-[#424242] text-base sm:text-lg leading-relaxed">
                   Whether you are a small local business or a large enterprise.
-                  Our seo strategies are data driven, time tested and designed
-                  for long term success.
+                  Our{" "}
+                  <a
+                    href="https://novanectar.co.in/services/seo"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
+                  >
+                    seo strategies
+                  </a>{" "}
+                  are data driven, time tested and designed for long term
+                  success.
                 </p>
               </motion.div>
               <motion.div
@@ -562,7 +591,7 @@ export default function SeoServicePage() {
                 <p className="text-[#424242] text-base sm:text-lg leading-relaxed mb-6">
                   With decades of experience, we have seen SEO evolve and have
                   been involved with it. Here&apos;s why over 200+ businesses
-                  trust
+                  trust{" "}
                   <a
                     href="https://novanectar.co.in/"
                     target="_blank"
@@ -647,7 +676,16 @@ export default function SeoServicePage() {
                     SEO Process
                   </h2>
                   <p className="text-[#424242] text-base sm:text-lg mt-4">
-                    We follow 360 SEO Framework that gets result
+                    We follow 360{" "}
+                    <a
+                      href="https://en.wikipedia.org/wiki/Search_engine_optimization"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
+                    >
+                      SEO Framework
+                    </a>{" "}
+                    that gets result
                   </p>
                 </div>
               </motion.div>

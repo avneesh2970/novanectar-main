@@ -165,14 +165,43 @@ export default function SocialMediaManagementPage() {
     },
     {
       title: "Content Creation & Designing",
-      description:
-        "Visuals matter most. Our team creates beautiful creatives, brand-centric graphics, captivating reels, and video content that resonates with your identity.",
+      description: (
+        <>
+          Visuals matter most. Our team creates beautiful creatives,
+          brand-centric{" "}
+          <a
+            href="https://novanectar.co.in/services/graphic-designing"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
+          >
+            graphics
+          </a>
+          , captivating reels, and video content that resonates with your
+          identity.
+        </>
+      ),
+
       icon: <Camera className="w-6 h-6" />,
     },
     {
       title: "Captions, Hashtags & Scheduling",
-      description:
-        "We create human-centric, SEO-friendly captions and engage relevant hashtags to help you get noticed—at the right moment, by the right people.",
+      description: (
+        <>
+          We create human-centric,{" "}
+          <a
+            href="https://en.wikipedia.org/wiki/Search_engine_optimization"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
+          >
+            SEO-friendly
+          </a>{" "}
+          captions and engage relevant hashtags to help you get noticed—at the
+          right moment, by the right people.,
+        </>
+      ),
+
       icon: <Calendar className="w-6 h-6" />,
     },
     {
@@ -281,9 +310,7 @@ export default function SocialMediaManagementPage() {
         }
       `}</style>
       <Navbar />
-      <div
-        className={`mt-20 min-h-screen bg-white ${DMSans.className}`}
-      >
+      <div className={`mt-20 min-h-screen bg-white ${DMSans.className}`}>
         {/* Hero Section */}
         <motion.div
           ref={heroRef}
@@ -438,22 +465,57 @@ export default function SocialMediaManagementPage() {
                   </a>{" "}
                   that integrates the strengths of creative content, strategic
                   planning, and data-driven insights to provide your brand with
-                  a significant presence on social platforms such as Instagram,
-                  Facebook, LinkedIn, YouTube, Twitter, and others.
+                  a significant presence on social platforms such as Instagram,{" "}
+                  <a
+                    href="https://www.facebook.com/people/Novanectar-Services-Pvt-Ltd/61565824312345/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
+                  >
+                    Facebook
+                  </a>
+                  ,{" "}
+                  <a
+                    href="https://www.linkedin.com/company/novanectar/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
+                  >
+                    LinkedIn
+                  </a>
+                  ,{" "}
+                  <a
+                    href="https://www.youtube.com/@novanectarservicespvt.ltd."
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
+                  >
+                    YouTube
+                  </a>
+                  ,{" "}
+                  <a
+                    href="https://x.com/nova_necta80067"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
+                  >
+                    Twitter
+                  </a>
+                  , and others.
                 </p>
                 <p className="text-[#424242] text-base sm:text-lg leading-relaxed">
                   Whether you&apos;re a startup trying to grow awareness or an
                   enterprise brand looking to scale your digital voice, our{" "}
                   <a
-                    href="https://en.wikipedia.org/wiki/Social_media_marketing"
+                    href="https://novanectar.co.in/services/social-media-management"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
                   >
-                    Social Media Management
+                    Social Media Management services
                   </a>{" "}
-                  services are designed to drive engagement, attract loyal
-                  customers, and boost your online credibility.
+                  are designed to drive engagement, attract loyal customers, and
+                  boost your online credibility.
                 </p>
               </motion.div>
               <motion.div
@@ -513,24 +575,16 @@ export default function SocialMediaManagementPage() {
                 </h2>
 
                 <p className="text-[#424242] text-base sm:text-lg leading-relaxed mb-6">
-                  When you hire NovaNectar{" "}
+                  When you hire{" "}
                   <a
                     href="https://novanectar.co.in"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
                   >
-                    Smart IT Solution
-                  </a>
-                  , you&apos;re not only hiring a
-                  <a
-                    href="https://novanectar.co.in"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
-                  >
-                    social media manager
-                  </a>
+                    NovaNectar Smart IT Solution
+                  </a>{" "}
+                  , you&apos;re not only hiring a social media manager
                   —you&apos;re hiring a digital growth partner.
                 </p>
 

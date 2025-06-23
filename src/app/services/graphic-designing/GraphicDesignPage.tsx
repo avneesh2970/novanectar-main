@@ -131,32 +131,28 @@ export default function GraphicDesigningPage() {
       content: (
         <>
           A great logo builds trust and brand recognition. Our experienced
-          designers create unique and timeless logos for Dehradun companies,{" "}
-          <a
-            href="https://en.wikipedia.org/wiki/Startup_company#:~:text=A%20startup%20or%20start%2Dup,validate%20a%20scalable%20business%20model."
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
-          >
-            startups
-          </a>{" "}
-          and{" "}
-          <a
-            href="https://en.wikipedia.org/wiki/Personal_branding"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
-          >
-            personal brands
-          </a>
-          .
+          designers create unique and timeless logos for Dehradun companies,
+          startups and personal brands.
         </>
       ),
     },
     {
       title: "Social Media Post Design",
-      content:
-        "Create engaging and consistent social media graphics for Instagram, Facebook, LinkedIn, and more. Increase your online visibility with our monthly creative plan.",
+      content: (
+        <>
+          Create engaging and consistent social media graphics for Instagram,
+          Facebook, LinkedIn, and more. Increase your online visibility with our{" "}
+          <a
+            href="https://internship.novanectar.co.in/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
+          >
+            monthly creative plan
+          </a>
+          .
+        </>
+      ),
     },
     {
       title: "Flyer Design",
@@ -165,13 +161,39 @@ export default function GraphicDesigningPage() {
     },
     {
       title: "Website Banners and UI Graphics",
-      content:
-        "We design breathtaking website banners, symbols and UI elements to improve the user experience and make your website look professional.",
+      content: (
+        <>
+          We design breathtaking{" "}
+          <a
+            href="https://novanectar.co.in/services/web-development"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
+          >
+            website
+          </a>{" "}
+          banners, symbols and UI elements to improve the user experience and
+          make your website look professional.,
+        </>
+      ),
     },
     {
       title: "Hoardings, poster and Banner",
-      content:
-        "Perfect for offline marketing at Dehradun or all over india. We offer high resolution printing designs that will attract attention at a glance.",
+      content: (
+        <>
+          Perfect for offline marketing at{" "}
+          <a
+            href="https://novanectar.co.in"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
+          >
+            Dehradun or all over india
+          </a>
+          . We offer high resolution printing designs that will attract
+          attention at a glance.
+        </>
+      ),
     },
     {
       title: "T-shirt & Merchandise Design",
@@ -240,9 +262,7 @@ export default function GraphicDesigningPage() {
         }
       `}</style>
       <Navbar />
-      <div
-        className={`mt-20 min-h-screen bg-white ${DMSans.className}`}
-      >
+      <div className={`mt-20 min-h-screen bg-white ${DMSans.className}`}>
         {/* Hero Section */}
         <motion.div
           ref={heroRef}
@@ -376,19 +396,27 @@ export default function GraphicDesigningPage() {
                 <p className="text-[#424242] text-base sm:text-lg leading-relaxed">
                   Are you looking for a professional{" "}
                   <a
-                    href="https://novanectar.co.in/services/graphic-design"
+                    href="https://novanectar.co.in/services/graphic-designing"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
                   >
-                    graphic designer in Dehradun
+                    graphic designing service in Dehradun
                   </a>{" "}
-                  to give your brand the momentum you need? Your Wait is over!
-                  Novanectar Smart It Solution offers first-class, creative and
-                  inexpensive graphic designer in dehradun services that meet
-                  your business requirements. Logo, social media updates,
-                  banners or brochures. Our qualified designers will shape your
-                  company into compelling graphics.
+                  to give your brand the momentum you need? Your Wait is over!{" "}
+                  <a
+                    href="https://novanectar.co.in"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
+                  >
+                    Novanectar Smart IT Solution
+                  </a>{" "}
+                  offers first-class, creative, and inexpensive graphic
+                  designing service in Dehradun that meet your business
+                  requirements. Logo, social media updates, banners or
+                  brochures. Our qualified designers will shape your company
+                  into compelling graphics.
                 </p>
               </motion.div>
               <motion.div
@@ -439,13 +467,13 @@ export default function GraphicDesigningPage() {
                 variants={fadeInRight}
               >
                 <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#0a0a0a] mb-4 md:mb-6">
-                  Why Choose Smart IT Solution as your Graphic Designer?
+                  Why Choose Smart IT Solution for Your Graphic Designing Needs?
                 </h2>
 
                 <p className="text-[#424242] text-base sm:text-lg leading-relaxed mb-6">
                   Novanectar{" "}
                   <a
-                    href="https://novanectar.co.in/services/seo"
+                    href="https://novanectar.co.in/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
@@ -590,10 +618,26 @@ export default function GraphicDesigningPage() {
                   Why Smart IT Solution is Trusted
                 </h2>
                 <p className="text-[#424242] text-base sm:text-lg leading-relaxed mb-6">
-                  We are more than just graphic designers at Novanectar- we are
-                  your creative partner. So we have years of experience, Smart
-                  It Solutions Designs offers the designs that reflect from this
-                  result.
+                  We are more than just graphic designers at{" "}
+                  <a
+                    href="https://novanectar.co.in"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
+                  >
+                    Novanectar
+                  </a>
+                  - we are your creative partner. So we have years of
+                  experience,{" "}
+                  <a
+                    href="https://novanectar.co.in"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-bold font-sans hover:text-blue-500 transition-colors duration-150"
+                  >
+                    Smart It Solutions
+                  </a>{" "}
+                  Designs offers the designs that reflect from this result.
                 </p>
                 <motion.ul
                   className="text-[#424242]"
