@@ -69,7 +69,7 @@ const FooterSection = () => {
   return (
     <footer
       ref={footerRef}
-      className={`relative bg-[#020817] text-white py-16 overflow-hidden ${DMSans.className}`}
+      className={`relative bg-[#020817] text-white pt-16 pb-8 overflow-hidden ${DMSans.className}`}
     >
       {/* Floating Ellipses */}
       <div className="absolute left-0 top-0 ellipse">
@@ -124,7 +124,7 @@ const FooterSection = () => {
                   className="text-sm"
                 >
                   <Link
-                  href={`#${item.id}`}
+                    href={`#${item.id}`}
                     className="text-gray-400 hover:text-white transition-colors"
                     // onClick={() => scrollToSection(item.id)}
                   >
@@ -140,12 +140,15 @@ const FooterSection = () => {
             <h3 className="text-sm font-medium mb-4">SOLUTIONS</h3>
             <ul className="space-y-2">
               {[
-                {name: "Web Development", id: "web-development"},
-                {name: "App Development", id: "mobile-development"},
-                {name: "Graphic Design", id: "graphic-design"},
-                {name: "Digital Marketing", id: "digital-marketing"},
-                {name: "Social Media Management", id: "social-media-management"},
-                {name: "SEO", id: "seo"},
+                { name: "Web Development", id: "web-development" },
+                { name: "App Development", id: "mobile-development" },
+                { name: "Graphic Designing", id: "graphic-designing" },
+                { name: "Digital Marketing", id: "digital-marketing" },
+                {
+                  name: "Social Media Management",
+                  id: "social-media-management",
+                },
+                { name: "SEO", id: "seo" },
               ].map((item) => (
                 <motion.li
                   key={item.id}
@@ -169,18 +172,28 @@ const FooterSection = () => {
             <div className="mb-4">
               <h3 className="text-sm font-medium mb-4">CAREER</h3>
               <ul className="space-y-2">
-                {["Jobs", "Internship", "Training"].map((item) => (
+                {[
+                  { name: "Jobs", link: "/career" },
+                  {
+                    name: "Internship",
+                    link: "https://edu.novanectar.co.in/internships",
+                  },
+                  {
+                    name: "Training",
+                    link: "https://edu.novanectar.co.in/courses",
+                  },
+                ].map((item) => (
                   <motion.li
-                    key={item}
+                    key={item.name}
                     variants={linkVariants}
                     whileHover="hover"
                     className="text-sm"
                   >
                     <Link
-                      href="https://edu.novanectar.co.in/internships"
+                      href={item.link}
                       className="text-gray-400 hover:text-white transition-colors"
                     >
-                      {item}
+                      {item.name}
                     </Link>
                   </motion.li>
                 ))}

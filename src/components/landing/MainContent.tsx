@@ -305,10 +305,11 @@ export const MainContent = () => {
             <Suspense fallback={<LoadingFallback />}>
               <ServiceScroll />
             </Suspense>
-
-            <Suspense fallback={<LoadingFallback />}>
-              <AboutSection />
-            </Suspense>
+            <div id="about-section">
+              <Suspense fallback={<LoadingFallback />}>
+                <AboutSection />
+              </Suspense>
+            </div>
 
             <div className="bg-[#F5F5F5] text-black text-3xl text-center">
               <h2
