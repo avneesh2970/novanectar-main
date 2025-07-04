@@ -4,22 +4,23 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { format } from "date-fns";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Edit, Trash2, Plus, Search, ArrowLeft } from "lucide-react";
 import { toast } from "react-hot-toast";
 
-interface BlogPost {
+interface EventPost {
   _id: string;
   title: string;
   slug: string;
-  excerpt: string;
-  author: string;
+  eventDate: string;
+  eventTime: string;
+  venue: string;
   createdAt: string;
-  categories: string[];
 }
 
-export default function BlogDashboard() {
+export default function EventDashboard() {
   const router = useRouter();
-  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [posts, setPosts] = useState<EventPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -46,23 +47,21 @@ export default function BlogDashboard() {
   const fetchPosts = async () => {
     try {
       setLoading(true);
-      const response = await fetch("/api/blog/posts");
-      if (!response.ok) throw new Error("Failed to fetch posts");
+      const response = await fetch("/api/event/posts");
+      if (!response.ok) throw new Error("Failed to fetch events");
       const data = await response.json();
       setPosts(data);
     } catch (error) {
-      console.error("Error fetching posts:", error);
-      toast.error("Failed to load blog posts");
+      console.error("Error fetching events:", error);
+      toast.error("Failed to load events");
     } finally {
       setLoading(false);
     }
   };
 
   const handleLogout = async () => {
-    // Clear sessionStorage
     sessionStorage.removeItem("blogLoggedIn");
 
-    // Clear the cookie by making a logout request
     await fetch("/api/blog/logout", {
       method: "POST",
       credentials: "include",
@@ -80,33 +79,27 @@ export default function BlogDashboard() {
     if (!postToDelete) return;
 
     try {
-      const response = await fetch(`/api/blog/posts/${postToDelete}`, {
+      const response = await fetch(`/api/event/posts/${postToDelete}`, {
         method: "DELETE",
       });
 
-      if (!response.ok) throw new Error("Failed to delete post");
+      if (!response.ok) throw new Error("Failed to delete event");
 
       setPosts(posts.filter((post) => post._id !== postToDelete));
-      toast.success("Post deleted successfully");
+      toast.success("Event deleted successfully");
     } catch (error) {
-      console.error("Error deleting post:", error);
-      toast.error("Failed to delete post");
+      console.error("Error deleting event:", error);
+      toast.error("Failed to delete event");
     } finally {
       setShowDeleteModal(false);
       setPostToDelete(null);
     }
   };
 
-  const filteredPosts = posts.filter(
-    (post) =>
-      post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      post.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      post.categories.some((category) =>
-        category.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+  const filteredPosts = posts.filter((post) =>
+    post.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Show loading state until authentication check is complete
   if (!isAuthenticated) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -122,17 +115,22 @@ export default function BlogDashboard() {
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-4">
               <Link
-                href="/blog"
+                href="/blog-admin/dashboard"
                 className="text-purple-600 hover:text-purple-800"
               >
                 <ArrowLeft className="h-5 w-5" />
               </Link>
               <h1 className="text-2xl font-bold text-gray-800">
-                Blog Dashboard
+                Event Dashboard
               </h1>
             </div>
-            <Link href="/blog-admin/add-event" className="text-gray-800 font-semibold border p-2 rounded-xl border-black hover:bg-blue-500 hover:text-white">Add Events</Link>
-            <Link href="/blog-admin/add-news" className="text-gray-800 font-semibold border p-2 rounded-xl border-black hover:bg-blue-500 hover:text-white">Add News</Link>
+            <Link
+              href="/blog-admin/add-event/new"
+              className="flex items-center gap-2 bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition-colors"
+            >
+              <Plus className="h-5 w-5" />
+              <span>New Event</span>
+            </Link>
             <button
               onClick={handleLogout}
               className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition-colors"
@@ -145,21 +143,13 @@ export default function BlogDashboard() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-          <Link
-            href="/blog-admin/dashboard/new"
-            className="flex items-center gap-2 bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition-colors"
-          >
-            <Plus className="h-5 w-5" />
-            <span>New Post</span>
-          </Link>
-
           <div className="relative w-full md:w-64">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <Search className="h-5 w-5 text-gray-400" />
             </div>
             <input
               type="text"
-              placeholder="Search posts..."
+              placeholder="Search events..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md bg-white text-gray-900 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
@@ -174,7 +164,7 @@ export default function BlogDashboard() {
         ) : filteredPosts.length === 0 ? (
           <div className="bg-white rounded-lg shadow p-6 text-center">
             <p className="text-gray-500 mb-4">
-              {searchTerm ? "No posts match your search" : "No blog posts yet"}
+              {searchTerm ? "No events match your search" : "No events yet"}
             </p>
             {searchTerm && (
               <button
@@ -190,34 +180,19 @@ export default function BlogDashboard() {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Title
                   </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell"
-                  >
-                    Author
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell"
-                  >
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Date
                   </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden lg:table-cell"
-                  >
-                    Categories
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Time
                   </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Venue
+                  </th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
@@ -225,48 +200,26 @@ export default function BlogDashboard() {
               <tbody className="bg-white divide-y divide-gray-200">
                 {filteredPosts.map((post) => (
                   <tr key={post._id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900 truncate max-w-xs">
-                        {post.title}
-                      </div>
-                      <div className="text-sm text-gray-500 truncate max-w-xs md:hidden">
-                        {post.author} •{" "}
-                        {format(new Date(post.createdAt), "dd MMM yyyy")}
-                      </div>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      {post.title}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap hidden md:table-cell">
-                      <div className="text-sm text-gray-900">{post.author}</div>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {format(new Date(post.eventDate), "dd MMM yyyy")}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap hidden md:table-cell">
-                      <div className="text-sm text-gray-500">
-                        {format(new Date(post.createdAt), "dd MMM yyyy")}
-                      </div>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {post.eventTime}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap hidden lg:table-cell">
-                      <div className="flex flex-wrap gap-1">
-                        {post.categories.slice(0, 2).map((category, index) => (
-                          <span
-                            key={index}
-                            className="px-2 py-1 text-xs rounded-full bg-purple-100 text-purple-800"
-                          >
-                            {category}
-                          </span>
-                        ))}
-                        {post.categories.length > 2 && (
-                          <span className="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-800">
-                            +{post.categories.length - 2}
-                          </span>
-                        )}
-                      </div>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {post.venue}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <div className="flex justify-end gap-2">
-                        <Link
-                          href={`/blog-admin/dashboard/edit/${post._id}`}
+                        {/* <Link
+                          href={`/blog-admin/add-event/edit/${post._id}`}
                           className="text-blue-600 hover:text-blue-900"
                         >
                           <Edit className="h-5 w-5" />
-                        </Link>
+                        </Link> */}
                         <button
                           onClick={() => confirmDelete(post._id)}
                           className="text-red-600 hover:text-red-900"
@@ -283,15 +236,14 @@ export default function BlogDashboard() {
         )}
       </main>
 
-      {/* Delete Confirmation Modal */}
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg max-w-md w-full p-6">
             <h3 className="text-lg font-medium text-gray-900 mb-4">
-              Delete Post
+              Delete Event
             </h3>
             <p className="text-gray-500 mb-6">
-              Are you sure you want to delete this post? This action cannot be
+              Are you sure you want to delete this event? This action cannot be
               undone.
             </p>
             <div className="flex justify-end gap-3">

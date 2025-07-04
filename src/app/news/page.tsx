@@ -1,117 +1,567 @@
-"use client"
+/* eslint-disable @typescript-eslint/no-unused-vars */
+"use client";
 
-import FooterSection from "@/components/footer/FooterSection"
-import Navbar from "@/components/navbar/Navbar"
-import { motion } from "framer-motion"
-import { BookOpen, Newspaper, TrendingUp } from "lucide-react"
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Calendar,
+  User,
+  Clock,
+  Loader2,
+  X,
+  Tag,
+  Share2,
+  BookOpen,
+} from "lucide-react";
+import Image from "next/image";
+import Navbar from "@/components/navbar/Navbar";
+import FooterSection from "@/components/footer/FooterSection";
 
-export default function NewsPage() {
-  const floatingVariants = {
-    animate: {
-      y: [-10, 10, -10],
-      transition: {
-        duration: 3,
-        repeat: Number.POSITIVE_INFINITY,
-        ease: "easeInOut",
-      },
-    },
-  }
+interface NewsItem {
+  _id: string;
+  title: string;
+  content: string;
+  excerpt: string;
+  featuredImage?: string;
+  featuredImageAlt?: string;
+  author: string;
+  category: string;
+  tags: string[];
+  publishDate: string;
+  views: number;
+  createdAt: string;
+}
+
+// News Detail Modal Component
+function NewsDetailModal({
+  news,
+  isOpen,
+  onClose,
+}: {
+  news: NewsItem | null;
+  isOpen: boolean;
+  onClose: () => void;
+}) {
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+
+    if (isOpen) {
+      document.addEventListener("keydown", handleEscape);
+      document.body.style.overflow = "hidden";
+    }
+
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen, onClose]);
+
+  if (!news) return null;
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+
+  const getReadingTime = (content: string) => {
+    const wordsPerMinute = 200;
+    const words = content.split(" ").length;
+    const minutes = Math.ceil(words / wordsPerMinute);
+    return `${minutes} min read`;
+  };
+
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: news.title,
+          text: news.excerpt || news.content.substring(0, 200),
+          url: window.location.href,
+        });
+      } catch (err) {
+        console.log("Error sharing:", err);
+      }
+    } else {
+      // Fallback: copy to clipboard
+      navigator.clipboard.writeText(window.location.href);
+      alert("Link copied to clipboard!");
+    }
+  };
 
   return (
-    <>
-      <Navbar />
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 flex items-center justify-center">
-        {/* Background Elements */}
-        <div className="absolute inset-0 overflow-hidden">
+    <AnimatePresence>
+      {isOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          {/* Backdrop */}
           <motion.div
-            variants={floatingVariants}
-            animate="animate"
-            className="absolute top-20 left-10 w-20 h-20 bg-blue-500/30 rounded-full blur-xl"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
           />
-          <motion.div
-            variants={floatingVariants}
-            animate="animate"
-            style={{ animationDelay: "1s" }}
-            className="absolute top-40 right-20 w-32 h-32 bg-purple-500/30 rounded-full blur-xl"
-          />
-          <motion.div
-            variants={floatingVariants}
-            animate="animate"
-            style={{ animationDelay: "2s" }}
-            className="absolute bottom-20 left-1/4 w-24 h-24 bg-pink-500/30 rounded-full blur-xl"
-          />
-        </div>
 
-        {/* Main Content */}
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          {/* Modal */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            transition={{ type: "spring", duration: 0.5 }}
+            className="relative bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
+          >
+            {/* Close Button */}
+            <button
+              onClick={onClose}
+              className="absolute top-4 right-4 z-10 w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-all duration-200 hover:scale-110"
+            >
+              <X className="w-5 h-5 text-gray-600" />
+            </button>
+
+            <div className="overflow-y-auto max-h-[90vh]">
+              {/* Hero Image */}
+              <div className="relative w-full h-64 sm:h-80">
+                {news.featuredImage ? (
+                  <Image
+                    src={news.featuredImage || "/placeholder.svg"}
+                    alt={news.featuredImageAlt || news.title}
+                    fill
+                    className="object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-purple-100 to-blue-100 flex items-center justify-center">
+                    <BookOpen className="w-20 h-20 text-purple-400" />
+                  </div>
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+
+                {/* Category Badge */}
+                <div className="absolute top-4 left-4">
+                  <span className="px-4 py-2 bg-white/90 backdrop-blur-sm text-purple-800 text-sm font-semibold rounded-full shadow-lg">
+                    {news.category}
+                  </span>
+                </div>
+
+                {/* Share Button */}
+                <div className="absolute top-4 right-16">
+                  <button
+                    onClick={handleShare}
+                    className="w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-all duration-200 hover:scale-110"
+                  >
+                    <Share2 className="w-5 h-5 text-gray-600" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Content */}
+              <div className="p-6 sm:p-8">
+                {/* Title */}
+                <motion.h1
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-6 leading-tight"
+                >
+                  {news.title}
+                </motion.h1>
+
+                {/* Meta Information */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="flex flex-wrap items-center gap-6 mb-8 pb-6 border-b border-gray-200"
+                >
+                  <div className="flex items-center text-gray-600">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center mr-3">
+                      <User className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold">{news.author}</p>
+                      <p className="text-xs text-gray-500">Author</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center text-gray-600">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-r from-green-500 to-teal-500 flex items-center justify-center mr-3">
+                      <Calendar className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold">
+                        {formatDate(news.publishDate)}
+                      </p>
+                      <p className="text-xs text-gray-500">Published</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center text-gray-600">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-r from-orange-500 to-red-500 flex items-center justify-center mr-3">
+                      <Clock className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold">
+                        {getReadingTime(news.content)}
+                      </p>
+                      <p className="text-xs text-gray-500">Reading time</p>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Excerpt */}
+                {news.excerpt && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                    className="mb-8"
+                  >
+                    <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center">
+                      <div className="w-1 h-6 bg-gradient-to-b from-purple-500 to-blue-500 rounded-full mr-3"></div>
+                      Summary
+                    </h3>
+                    <p className="text-gray-700 text-lg leading-relaxed bg-gray-50 p-4 rounded-xl border-l-4 border-purple-500">
+                      {news.excerpt}
+                    </p>
+                  </motion.div>
+                )}
+
+                {/* Content */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 }}
+                  className="mb-8"
+                >
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                    <div className="w-1 h-6 bg-gradient-to-b from-purple-500 to-blue-500 rounded-full mr-3"></div>
+                    Full Article
+                  </h3>
+                  <div className="prose max-w-none">
+                    <div className="text-gray-700 text-base leading-relaxed whitespace-pre-wrap">
+                      {news.content}
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Tags */}
+                {news.tags.length > 0 && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.6 }}
+                    className="mb-8"
+                  >
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                      <Tag className="w-5 h-5 mr-2 text-purple-600" />
+                      Tags
+                    </h3>
+                    <div className="flex flex-wrap gap-3">
+                      {news.tags.map((tag, index) => (
+                        <motion.span
+                          key={index}
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ delay: 0.7 + index * 0.1 }}
+                          className="px-4 py-2 bg-gradient-to-r from-purple-100 to-blue-100 text-purple-800 text-sm font-medium rounded-full hover:from-purple-200 hover:to-blue-200 transition-all duration-200 cursor-pointer"
+                        >
+                          #{tag}
+                        </motion.span>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* Footer */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.8 }}
+                  className="pt-6 border-t border-gray-200"
+                >
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div className="text-sm text-gray-500">
+                      <p>Published on {formatDate(news.publishDate)}</p>
+                      {/* {news.createdAt !== news.publishDate && (
+                        <p className="mt-1">Last updated: {new Date(news.createdAt).toLocaleDateString()}</p>
+                      )} */}
+                    </div>
+                    {/* <button
+                      onClick={handleShare}
+                      className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-200 transform hover:scale-105 shadow-lg"
+                    >
+                      <Share2 className="w-4 h-4" />
+                      <span>Share Article</span>
+                    </button> */}
+                  </div>
+                </motion.div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
+  );
+}
+
+export default function NewsPage() {
+  const [news, setNews] = useState<NewsItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        const response = await fetch("/api/news/posts");
+        const result = await response.json();
+
+        if (result.success) {
+          setNews(result.data);
+        } else {
+          setError("Failed to fetch news");
+        }
+      } catch (err) {
+        setError("An error occurred while fetching news");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNews();
+  }, []);
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+
+  const getReadingTime = (content: string) => {
+    const wordsPerMinute = 200;
+    const words = content.split(" ").length;
+    const minutes = Math.ceil(words / wordsPerMinute);
+    return `${minutes} min read`;
+  };
+
+  const handleNewsClick = (newsItem: NewsItem) => {
+    setSelectedNews(newsItem);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setTimeout(() => setSelectedNews(null), 300);
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-purple-50 flex items-center justify-center">
+        <div className="text-center">
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="w-24 mt-20 h-24 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-8"
+            transition={{ duration: 0.5 }}
+            className="relative"
           >
-            <Newspaper className="w-12 h-12 text-white" />
+            <Loader2 className="w-12 h-12 animate-spin text-purple-600 mx-auto mb-4" />
+            <div className="absolute inset-0 w-12 h-12 border-4 border-purple-200 rounded-full animate-pulse mx-auto" />
           </motion.div>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            className="text-4xl md:text-6xl font-bold text-gray-900 mb-6"
-          >
-            No News Yet
-          </motion.h1>
-
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.7 }}
-            className="text-2xl md:text-4xl font-semibold mb-8"
-          >
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Stay Updated
-            </span>
-          </motion.h2>
-
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.9 }}
-            className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto"
+            transition={{ delay: 0.2 }}
+            className="text-lg text-gray-600"
           >
-            We&apos;re preparing to bring you the latest news and updates. Check back soon for fresh content!
+            Loading latest news...
           </motion.p>
+        </div>
+      </div>
+    );
+  }
 
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-purple-50">
+      {/* Header */}
+      <Navbar />
+      <div className="bg-white/80 backdrop-blur-md">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 1.1 }}
-            className="flex justify-center items-center space-x-8"
+            className="text-center"
           >
-            <motion.div whileHover={{ y: -5 }} className="flex flex-col items-center">
-              <div className="w-16 h-16 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full flex items-center justify-center mb-3">
-                <Newspaper className="w-8 h-8 text-white" />
-              </div>
-              <p className="text-gray-600 font-medium">Articles</p>
-            </motion.div>
-
-            <motion.div whileHover={{ y: -5 }} className="flex flex-col items-center">
-              <div className="w-16 h-16 bg-gradient-to-r from-purple-400 to-purple-600 rounded-full flex items-center justify-center mb-3">
-                <BookOpen className="w-8 h-8 text-white" />
-              </div>
-              <p className="text-gray-600 font-medium">Updates</p>
-            </motion.div>
-
-            <motion.div whileHover={{ y: -5 }} className="flex flex-col items-center">
-              <div className="w-16 h-16 bg-gradient-to-r from-pink-400 to-pink-600 rounded-full flex items-center justify-center mb-3">
-                <TrendingUp className="w-8 h-8 text-white" />
-              </div>
-              <p className="text-gray-600 font-medium">Insights</p>
-            </motion.div>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mt-14">
+              Our News
+            </h1>
+            {/* <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">
+              Stay updated with the latest news and insights from around the world
+            </p> */}
           </motion.div>
         </div>
       </div>
+
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {error ? (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center py-16"
+          >
+            <div className="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <BookOpen className="w-12 h-12 text-red-400" />
+            </div>
+            <h3 className="text-2xl font-bold text-gray-900 mb-2">
+              Error Loading News
+            </h3>
+            <p className="text-gray-600">{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="mt-4 px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+            >
+              Try Again
+            </button>
+          </motion.div>
+        ) : news.length === 0 ? (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center py-16"
+          >
+            <div className="w-24 h-24 bg-gradient-to-r from-purple-100 to-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <BookOpen className="w-12 h-12 text-purple-400" />
+            </div>
+            <h3 className="text-2xl font-bold text-gray-900 mb-2">
+              No News Available
+            </h3>
+            <p className="text-gray-600">
+              Check back later for the latest updates
+            </p>
+          </motion.div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {news.map((item, index) => (
+              <motion.article
+                key={item._id}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                onClick={() => handleNewsClick(item)}
+                className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 group cursor-pointer transform hover:-translate-y-2"
+              >
+                {/* Image */}
+                <div className="relative h-48 sm:h-56 overflow-hidden">
+                  {item.featuredImage ? (
+                    <Image
+                      src={item.featuredImage || "/placeholder.svg"}
+                      alt={item.featuredImageAlt || item.title}
+                      fill
+                      className="object-cover transition-transform duration-300 group-hover:scale-110"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-purple-100 to-blue-100 flex items-center justify-center">
+                      <BookOpen className="w-16 h-16 text-purple-400" />
+                    </div>
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute top-4 left-4">
+                    <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-purple-800 text-xs font-semibold rounded-full shadow-lg">
+                      {item.category}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="p-6">
+                  <h2 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-purple-700 transition-colors leading-tight">
+                    {item.title}
+                  </h2>
+
+                  <p className="text-gray-600 text-sm mb-4 line-clamp-3 leading-relaxed">
+                    {item.excerpt || item.content.substring(0, 150) + "..."}
+                  </p>
+
+                  {/* Meta Info */}
+                  <div className="flex items-center justify-between text-xs text-gray-500 mb-4">
+                    <div className="flex items-center space-x-4">
+                      <div className="flex items-center">
+                        <User className="w-3 h-3 mr-1" />
+                        <span className="font-medium">{item.author}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <Calendar className="w-3 h-3 mr-1" />
+                        <span>{formatDate(item.publishDate)}</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center">
+                      <Clock className="w-3 h-3 mr-1" />
+                      <span>{getReadingTime(item.content)}</span>
+                    </div>
+                  </div>
+
+                  {/* Tags */}
+                  {item.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {item.tags.slice(0, 3).map((tag, tagIndex) => (
+                        <span
+                          key={tagIndex}
+                          className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full hover:bg-purple-100 hover:text-purple-700 transition-colors"
+                        >
+                          #{tag}
+                        </span>
+                      ))}
+                      {item.tags.length > 3 && (
+                        <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
+                          +{item.tags.length - 3}
+                        </span>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Read More Indicator */}
+                  <div className="mt-4 pt-4 border-t border-gray-100">
+                    <div className="flex items-center justify-between">
+                      <span className="text-purple-600 text-sm font-medium group-hover:text-purple-700 transition-colors">
+                        Read full article
+                      </span>
+                      <div className="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center group-hover:bg-purple-200 transition-colors">
+                        <svg
+                          className="w-3 h-3 text-purple-600 transform group-hover:translate-x-0.5 transition-transform"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 5l7 7-7 7"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </motion.article>
+            ))}
+          </div>
+        )}
+      </main>
+
       <FooterSection />
-    </>
-  )
+      {/* News Detail Modal */}
+      <NewsDetailModal
+        news={selectedNews}
+        isOpen={isModalOpen}
+        onClose={closeModal}
+      />
+    </div>
+  );
 }
