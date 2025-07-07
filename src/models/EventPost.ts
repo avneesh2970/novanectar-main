@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose"
 
 const EventPostSchema = new Schema<any>(
   {
@@ -9,7 +9,6 @@ const EventPostSchema = new Schema<any>(
     },
     slug: {
       type: String,
-      // required: true,
       unique: true,
       trim: true,
     },
@@ -20,14 +19,14 @@ const EventPostSchema = new Schema<any>(
     },
     content: {
       type: String,
-      // required: true,
+      required: true,
     },
     eventDate: {
       type: Date,
       required: true,
     },
     eventTime: {
-      type: String, // or Date if you prefer ISO format for combined datetime
+      type: String,
       required: true,
     },
     venue: {
@@ -59,9 +58,7 @@ const EventPostSchema = new Schema<any>(
       trim: true,
     },
   },
-  { timestamps: true }
-);
+  { timestamps: true },
+)
 
-export const EventPost =
-  mongoose.models.EventPost ||
-  mongoose.model<any>("EventPost", EventPostSchema);
+export const EventPost = mongoose.models.EventPost || mongoose.model<any>("EventPost", EventPostSchema)

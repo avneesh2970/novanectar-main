@@ -1,7 +1,10 @@
 import { NextResponse } from "next/server"
 import { cookies } from "next/headers"
+import ActiveBlogUser from "@/models/ActiveBlogUser";
+import { connectDB } from "@/lib/dbConnect";
 
 export async function POST(request: Request) {
+   await connectDB();
   const { username, password } = await request.json()
 
   if (username === process.env.BLOG_USERNAME && password === process.env.BLOG_PASSWORD) {
@@ -25,6 +28,20 @@ export async function POST(request: Request) {
       sameSite: "strict",
       maxAge: 60 * 60 * 24 * 7, // 1 week
     })
+
+     cookieStore.set("blogUserName", username, {
+      path: "/",
+      httpOnly: false,
+      sameSite: "strict",
+      maxAge: 60 * 60 * 24 * 7,
+    });
+
+     // Add owner to ActiveBlogUser collection
+    await ActiveBlogUser.create({
+      username,
+      loginTime: new Date(),
+      sessionType: "owner",
+    });
 
     return NextResponse.json({
       success: true,

@@ -15,14 +15,16 @@ const NewsSchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
     },
+    description: {
+      type: String,
+      required: [true, "Description is required"],
+      trim: true,
+      maxlength: [300, "Description cannot exceed 300 characters"],
+    },
     content: {
       type: String,
       required: [true, "Content is required"],
       minlength: [50, "Content must be at least 50 characters"],
-    },
-    excerpt: {
-      type: String,
-      maxlength: [300, "Excerpt cannot exceed 300 characters"],
     },
     featuredImage: {
       type: String,
@@ -36,6 +38,7 @@ const NewsSchema = new mongoose.Schema(
       type: String,
       required: [true, "Author is required"],
       trim: true,
+      default: "Novanectar",
     },
     category: {
       type: String,
@@ -61,28 +64,18 @@ const NewsSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    metaTitle: {
+      type: String,
+      trim: true,
+    },
+    metaDescription: {
+      type: String,
+      trim: true,
+    },
   },
   {
     timestamps: true,
   },
 )
-
-// Create slug from title before saving
-NewsSchema.pre("save", function (next) {
-  if (this.isModified("title") && !this.slug) {
-    this.slug = this.title
-      .toLowerCase()
-      .replace(/[^a-zA-Z0-9 ]/g, "") // Remove special characters
-      .replace(/\s+/g, "-") // Replace spaces with hyphens
-      .trim()
-      .substring(0, 100) // Limit length
-
-    // If slug is empty after processing, use a default
-    if (!this.slug) {
-      this.slug = `news-${Date.now()}`
-    }
-  }
-  next()
-})
 
 export default mongoose.models.News || mongoose.model("News", NewsSchema)

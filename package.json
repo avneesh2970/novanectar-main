@@ -19,6 +19,7 @@
     "@tiptap/starter-kit": "^2.11.7",
     "bcryptjs": "^3.0.2",
     "clsx": "^2.1.1",
+    "crypto": "^1.0.1",
     "date-fns": "^4.1.0",
     "framer-motion": "^11.16.4",
     "gsap": "^3.12.5",

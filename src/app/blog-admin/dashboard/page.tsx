@@ -26,22 +26,79 @@ export default function BlogDashboard() {
   const [postToDelete, setPostToDelete] = useState<string | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  // useEffect(() => {
+  //   // Check both sessionStorage and cookies
+  //   const isLoggedInSession = sessionStorage.getItem("blogLoggedIn") === "true";
+  //   const isLoggedInCookie = document.cookie.includes(
+  //     "blogLoggedInClient=true"
+  //   );
+
+  //   if (!isLoggedInSession && !isLoggedInCookie) {
+  //     console.log("Not authenticated, redirecting to login");
+  //     router.push("/blog-admin");
+  //     return;
+  //   }
+
+  //   setIsAuthenticated(true);
+  //   fetchPosts();
+  // }, [router]);
+
+
   useEffect(() => {
-    // Check both sessionStorage and cookies
+  const checkSession = async () => {
+    // Check local cookies/sessionStorage
     const isLoggedInSession = sessionStorage.getItem("blogLoggedIn") === "true";
-    const isLoggedInCookie = document.cookie.includes(
-      "blogLoggedInClient=true"
-    );
+    const isLoggedInCookie = document.cookie.includes("blogLoggedInClient=true");
 
     if (!isLoggedInSession && !isLoggedInCookie) {
-      console.log("Not authenticated, redirecting to login");
+      console.log("Not authenticated locally, redirecting to login");
       router.push("/blog-admin");
       return;
     }
 
-    setIsAuthenticated(true);
-    fetchPosts();
-  }, [router]);
+    // Now check with server if user still exists
+    const username = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("blogUserName="))
+      ?.split("=")[1];
+
+    if (!username) {
+      console.log("No username cookie, redirecting");
+      router.push("/blog-admin");
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/blog/check-session?username=${username}`);
+      const data = await res.json();
+
+      if (!data.valid) {
+        console.log("Session invalid on server, logging out");
+
+        // Clear cookies
+        document.cookie = "blogLoggedIn=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        document.cookie = "blogLoggedInClient=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        document.cookie = "blogUserName=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+        // Clear sessionStorage too
+        sessionStorage.removeItem("blogLoggedIn");
+
+        router.push("/blog-admin");
+        return;
+      }
+
+      // If everything is fine
+      setIsAuthenticated(true);
+      fetchPosts();
+    } catch (err) {
+      console.error("Session check failed", err);
+      router.push("/blog-admin");
+    }
+  };
+
+  checkSession();
+}, [router]);
+
 
   const fetchPosts = async () => {
     try {
@@ -133,6 +190,7 @@ export default function BlogDashboard() {
             </div>
             <Link href="/blog-admin/add-event" className="text-gray-800 font-semibold border p-2 rounded-xl border-black hover:bg-blue-500 hover:text-white">Add Events</Link>
             <Link href="/blog-admin/add-news" className="text-gray-800 font-semibold border p-2 rounded-xl border-black hover:bg-blue-500 hover:text-white">Add News</Link>
+            
             <button
               onClick={handleLogout}
               className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition-colors"

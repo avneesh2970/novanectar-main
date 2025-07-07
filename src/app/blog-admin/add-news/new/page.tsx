@@ -1,382 +1,532 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
 import type React from "react"
-import { useState } from "react"
-import { motion } from "framer-motion"
-import { Upload, Save, X, Loader2 } from "lucide-react"
-import Image from "next/image"
 
-interface NewsFormData {
-  title: string
-  content: string
-  excerpt: string
-  featuredImage: string
-  featuredImageAlt: string
-  author: string
-  category: string
-  tags: string
-  publishDate: string
-}
+import { useRouter } from "next/navigation"
+import { useState, useRef } from "react"
+import Link from "next/link"
+import { ArrowLeft, Save, ImageIcon, X, Loader2, Hash, Search } from "lucide-react"
+import { toast } from "react-hot-toast"
+import Image from "next/image"
+import BlogEditor from "@/components/blogs/blog-editor"
 
 const categories = ["Technology", "Business", "Sports", "Entertainment", "Health", "Politics", "Other"]
 
-export default function NewsUploadPage() {
-  const [formData, setFormData] = useState<NewsFormData>({
-    title: "",
-    content: "",
-    excerpt: "",
-    featuredImage: "",
-    featuredImageAlt: "",
-    author: "",
-    category: "Other",
-    tags: "",
-    publishDate: new Date().toISOString().split("T")[0],
-  })
+export default function AddNews() {
+  const router = useRouter()
+  const [title, setTitle] = useState("")
+  const [slug, setSlug] = useState("")
+  const [description, setDescription] = useState("")
+  const [content, setContent] = useState("")
+  const [author, setAuthor] = useState("Novanectar")
+  const [category, setCategory] = useState("Other")
+  const [tags, setTags] = useState<string[]>([])
+  const [newTag, setNewTag] = useState("")
+  const [publishDate, setPublishDate] = useState(new Date().toISOString().split("T")[0])
+  const [metaTitle, setMetaTitle] = useState("")
+  const [metaDescription, setMetaDescription] = useState("")
+  const [image, setImage] = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState("")
+  const [imageAlt, setImageAlt] = useState("")
+  const [saving, setSaving] = useState(false)
+  const [showSeoSection, setShowSeoSection] = useState(false)
+  const [autoSlug, setAutoSlug] = useState(true)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const [loading, setLoading] = useState(false)
-  const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null)
-  const [imagePreview, setImagePreview] = useState<string>("")
-  const [imageError, setImageError] = useState(false)
-
-  // Function to validate if URL is a valid image URL
-  const isValidImageUrl = (url: string): boolean => {
-    if (!url) return false
-
-    // Check if it's a valid URL format
-    try {
-      new URL(url)
-    } catch {
-      return false
-    }
-
-    // Check if URL starts with http/https
-    if (!url.startsWith("http://") && !url.startsWith("https://")) {
-      return false
-    }
-
-    // Check if URL has a reasonable length (not just "h" or "ht")
-    if (url.length < 10) {
-      return false
-    }
-
-    return true
+  // Auto-generate slug from title (only for auto-generation)
+  const generateSlugFromTitle = (text: string) => {
+    return text
+      .toLowerCase()
+      .replace(/[^\w\s-]/gi, "") // Allow hyphens in the regex
+      .replace(/\s+/g, "-")
+      .substring(0, 50)
   }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }))
+  // Validate and clean manual slug input (preserve hyphens)
+  const cleanSlugInput = (text: string) => {
+    return text
+      .toLowerCase()
+      .replace(/[^\w-]/gi, "") // Only allow word characters and hyphens
+      .replace(/--+/g, "-") // Replace multiple consecutive hyphens with single hyphen
+      .replace(/^-+|-+$/g, "") // Remove hyphens from start and end
+      .substring(0, 50)
+  }
 
-    // Update image preview when featuredImage URL changes
-    if (name === "featuredImage") {
-      setImageError(false)
+  // Handle title change and auto-generate slug
+  const handleTitleChange = (value: string) => {
+    setTitle(value)
+    if (autoSlug) {
+      setSlug(generateSlugFromTitle(value))
+    }
+    // Auto-generate meta title if empty
+    if (!metaTitle) {
+      setMetaTitle(value)
+    }
+  }
 
-      // Only set preview if it's a valid URL
-      if (isValidImageUrl(value)) {
-        setImagePreview(value)
-      } else {
-        setImagePreview("")
+  // Handle manual slug change
+  const handleSlugChange = (value: string) => {
+    setSlug(cleanSlugInput(value))
+    setAutoSlug(false)
+  }
+
+  // Add tag
+  const addTag = () => {
+    if (newTag.trim() && !tags.includes(newTag.trim())) {
+      setTags([...tags, newTag.trim()])
+      setNewTag("")
+    }
+  }
+
+  // Remove tag
+  const removeTag = (tagToRemove: string) => {
+    setTags(tags.filter((tag) => tag !== tagToRemove))
+  }
+
+  const uploadImageToCloudinary = async (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const formData = new FormData()
+      formData.append("file", file)
+      formData.append("upload_preset", process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "")
+      formData.append("cloud_name", process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || "")
+
+      const xhr = new XMLHttpRequest()
+      xhr.onload = () => {
+        if (xhr.status === 200) {
+          const response = JSON.parse(xhr.responseText)
+          resolve(response.secure_url)
+        } else {
+          reject(new Error("Upload failed"))
+        }
+      }
+      xhr.onerror = () => reject(new Error("Upload failed"))
+      xhr.open("POST", `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/upload`)
+      xhr.send(formData)
+    })
+  }
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0]
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("Image size exceeds 5MB limit")
+        return
+      }
+      setImage(file)
+      setImagePreview(URL.createObjectURL(file))
+      // Auto-generate alt text from title if empty
+      if (!imageAlt && title) {
+        setImageAlt(title)
       }
     }
   }
 
-  const handleImageError = () => {
-    setImageError(true)
+  const removeImage = () => {
+    setImage(null)
     setImagePreview("")
+    setImageAlt("")
+    if (fileInputRef.current) fileInputRef.current.value = ""
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setLoading(true)
-    setMessage(null)
+
+    // Validation
+    if (!title.trim()) {
+      toast.error("News title is required")
+      return
+    }
+    if (!slug.trim()) {
+      toast.error("News slug is required")
+      return
+    }
+    if (!description.trim()) {
+      toast.error("News description is required")
+      return
+    }
+    if (!content.trim()) {
+      toast.error("News content is required")
+      return
+    }
+    if (!author.trim()) {
+      toast.error("Author is required")
+      return
+    }
+    if (image && !imageAlt.trim()) {
+      toast.error("Image alt text is required for accessibility")
+      return
+    }
+
+    setSaving(true)
 
     try {
-      // Convert tags string to array
-      const tagsArray = formData.tags
-        .split(",")
-        .map((tag) => tag.trim())
-        .filter((tag) => tag.length > 0)
+      let imageUrl = ""
+      if (image) {
+        imageUrl = await uploadImageToCloudinary(image)
+      }
 
-      const submitData = {
-        ...formData,
-        tags: tagsArray,
-        publishDate: new Date(formData.publishDate),
+      const newsData = {
+        title: title.trim(),
+        slug: slug.trim(),
+        description: description.trim(),
+        content: content.trim(),
+        author: author.trim(),
+        category,
+        tags,
+        publishDate: new Date(publishDate),
+        featuredImage: imageUrl,
+        featuredImageAlt: imageAlt.trim(),
+        metaTitle: metaTitle.trim() || title.trim(),
+        metaDescription: metaDescription.trim() || description.trim(),
       }
 
       const response = await fetch("/api/news/posts", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(submitData),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newsData),
       })
 
       const result = await response.json()
 
       if (result.success) {
-        setMessage({ type: "success", text: "News created successfully!" })
-        // Reset form
-        setFormData({
-          title: "",
-          content: "",
-          excerpt: "",
-          featuredImage: "",
-          featuredImageAlt: "",
-          author: "",
-          category: "Other",
-          tags: "",
-          publishDate: new Date().toISOString().split("T")[0],
-        })
-        setImagePreview("")
-        setImageError(false)
+        toast.success("News created successfully!")
+        router.push("/blog-admin/add-news")
       } else {
-        setMessage({ type: "error", text: result.error || "Failed to create news" })
+        throw new Error(result.error || "Failed to create news")
       }
-    } catch (error) {
-      setMessage({ type: "error", text: "An error occurred while creating news" })
+    } catch (error: any) {
+      console.error(error)
+      toast.error(error.message || "Failed to create news")
     } finally {
-      setLoading(false)
+      setSaving(false)
     }
   }
 
-  const clearForm = () => {
-    setFormData({
-      title: "",
-      content: "",
-      excerpt: "",
-      featuredImage: "",
-      featuredImageAlt: "",
-      author: "",
-      category: "Other",
-      tags: "",
-      publishDate: new Date().toISOString().split("T")[0],
-    })
-    setImagePreview("")
-    setImageError(false)
-    setMessage(null)
-  }
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-purple-50 py-8 text-gray-800">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden"
-        >
-          {/* Header */}
-          <div className="bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <Upload className="w-8 h-8 text-white" />
-                <h1 className="text-2xl sm:text-3xl font-bold text-white">Upload News</h1>
-              </div>
-              <button onClick={clearForm} className="p-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors">
-                <X className="w-5 h-5 text-white" />
-              </button>
-            </div>
+    <div className="bg-gray-50 min-h-screen text-gray-800">
+      <header className="bg-white border-b shadow-sm sticky top-0 z-40">
+        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center">
+            <Link href="/blog-admin/add-news" className="text-purple-600 hover:text-purple-800 mr-4">
+              <ArrowLeft className="h-5 w-5" />
+            </Link>
+            <h1 className="text-2xl font-bold text-gray-800">Create New News Article</h1>
           </div>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setShowSeoSection(!showSeoSection)}
+              className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                showSeoSection ? "bg-purple-100 text-purple-700" : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              }`}
+            >
+              <Search className="h-4 w-4" />
+              SEO Settings
+            </button>
+          </div>
+        </div>
+      </header>
 
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="p-8 space-y-6">
-            {/* Message */}
-            {message && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className={`p-4 rounded-lg ${
-                  message.type === "success"
-                    ? "bg-green-50 text-green-800 border border-green-200"
-                    : "bg-red-50 text-red-800 border border-red-200"
-                }`}
-              >
-                {message.text}
-              </motion.div>
-            )}
+      <main className="max-w-6xl mx-auto px-4 py-8">
+        <form onSubmit={handleSubmit} className="space-y-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Main Content */}
+            <div className="lg:col-span-2 space-y-6">
+              {/* Title & Slug */}
+              <div className="bg-white rounded-lg shadow-sm border p-6">
+                <h2 className="text-lg font-semibold text-gray-800 mb-4">Article Details</h2>
 
-            {/* Title */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Title *</label>
-              <input
-                type="text"
-                name="title"
-                value={formData.title}
-                onChange={handleInputChange}
-                required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                placeholder="Enter news title..."
-              />
-            </div>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Article Title <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={title}
+                      onChange={(e) => handleTitleChange(e.target.value)}
+                      placeholder="Enter article title..."
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
+                    />
+                  </div>
 
-            {/* Author & Category */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Author *</label>
-                <input
-                  type="text"
-                  name="author"
-                  value={formData.author}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                  placeholder="Author name..."
-                />
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <Hash className="inline h-4 w-4 mr-1" />
+                      URL Slug <span className="text-red-500">*</span>
+                    </label>
+                    <div className="flex">
+                      <span className="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+                        /news/
+                      </span>
+                      <input
+                        type="text"
+                        value={slug}
+                        onChange={(e) => handleSlugChange(e.target.value)}
+                        placeholder="article-slug"
+                        required
+                        className="flex-1 px-4 py-3 border border-gray-300 rounded-r-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
+                      />
+                    </div>
+                    <p className="mt-1 text-xs text-gray-500">
+                      This will be the URL for your article page. Use lowercase letters, numbers, and hyphens only.
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Short Description <span className="text-red-500">*</span>
+                    </label>
+                    <textarea
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      placeholder="Brief description for article cards and previews..."
+                      required
+                      rows={3}
+                      maxLength={300}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors resize-none"
+                    />
+                    <p className="mt-1 text-xs text-gray-500">
+                      {description.length}/300 characters - This appears on article cards and search results
+                    </p>
+                  </div>
+                </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Category *</label>
-                <select
-                  name="category"
-                  value={formData.category}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                >
-                  {categories.map((category) => (
-                    <option key={category} value={category}>
-                      {category}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            {/* Featured Image */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Featured Image URL</label>
-              <input
-                type="url"
-                name="featuredImage"
-                value={formData.featuredImage}
-                onChange={handleInputChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                placeholder="https://example.com/image.jpg"
-              />
-
-              {/* URL Validation Message */}
-              {formData.featuredImage && !isValidImageUrl(formData.featuredImage) && (
-                <p className="text-xs text-amber-600 mt-1">
-                  Please enter a complete URL starting with http:// or https://
+              {/* Rich Text Content */}
+              <div className="bg-white rounded-lg shadow-sm border p-6">
+                <h2 className="text-lg font-semibold text-gray-800 mb-4">
+                  Article Content <span className="text-red-500">*</span>
+                </h2>
+                <p className="text-sm text-gray-600 mb-4">
+                  Create detailed content for your article with rich formatting, images, and more.
                 </p>
-              )}
+                <div className="border border-gray-300 rounded-lg overflow-hidden">
+                  <BlogEditor content={content} onChange={setContent} />
+                </div>
+              </div>
+            </div>
 
-              {/* Image Error Message */}
-              {imageError && formData.featuredImage && (
-                <p className="text-xs text-red-600 mt-1">Failed to load image. Please check the URL.</p>
-              )}
+            {/* Sidebar */}
+            <div className="space-y-6">
+              {/* Article Information */}
+              <div className="bg-white rounded-lg shadow-sm border p-6">
+                <h2 className="text-lg font-semibold text-gray-800 mb-4">Article Information</h2>
 
-              {/* Image Preview */}
-              {imagePreview && !imageError && (
-                <div className="mt-4">
-                  <p className="text-sm text-gray-600 mb-2">Image Preview:</p>
-                  <div className="relative w-full h-48 rounded-lg overflow-hidden border border-gray-200">
-                    <Image
-                      src={imagePreview || "/placeholder.svg"}
-                      alt="Preview"
-                      fill
-                      className="object-cover"
-                      onError={handleImageError}
-                      onLoad={() => setImageError(false)}
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Author <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={author}
+                      onChange={(e) => setAuthor(e.target.value)}
+                      placeholder="Author name"
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Category <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      value={category}
+                      onChange={(e) => setCategory(e.target.value)}
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    >
+                      {categories.map((cat) => (
+                        <option key={cat} value={cat}>
+                          {cat}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Publish Date</label>
+                    <input
+                      type="date"
+                      value={publishDate}
+                      onChange={(e) => setPublishDate(e.target.value)}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                     />
                   </div>
                 </div>
-              )}
-            </div>
-
-            {/* Image Alt Text */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Image Alt Text</label>
-              <input
-                type="text"
-                name="featuredImageAlt"
-                value={formData.featuredImageAlt}
-                onChange={handleInputChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                placeholder="Describe the image..."
-              />
-            </div>
-
-            {/* Excerpt */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Excerpt</label>
-              <textarea
-                name="excerpt"
-                value={formData.excerpt}
-                onChange={handleInputChange}
-                rows={3}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all resize-none"
-                placeholder="Brief description of the news..."
-              />
-            </div>
-
-            {/* Content */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Content *</label>
-              <textarea
-                name="content"
-                value={formData.content}
-                onChange={handleInputChange}
-                required
-                rows={10}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all resize-none"
-                placeholder="Write your news content here..."
-              />
-            </div>
-
-            {/* Tags & Publish Date */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Tags</label>
-                <input
-                  type="text"
-                  name="tags"
-                  value={formData.tags}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                  placeholder="tag1, tag2, tag3..."
-                />
-                <p className="text-xs text-gray-500 mt-1">Separate tags with commas</p>
               </div>
 
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Publish Date *</label>
-                <input
-                  type="date"
-                  name="publishDate"
-                  value={formData.publishDate}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                />
-              </div>
-            </div>
+              {/* Featured Image */}
+              <div className="bg-white rounded-lg shadow-sm border p-6">
+                <h2 className="text-lg font-semibold text-gray-800 mb-4">Featured Image</h2>
 
-            {/* Submit Button */}
-            <div className="flex justify-end pt-6">
-              <button
-                type="submit"
-                disabled={loading}
-                className="flex items-center space-x-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-blue-700 transition-all duration-200 transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                    <span>Publishing...</span>
-                  </>
+                {imagePreview ? (
+                  <div className="space-y-4">
+                    <div className="relative">
+                      <Image
+                        src={imagePreview || "/placeholder.svg"}
+                        alt="Article preview"
+                        width={400}
+                        height={200}
+                        className="w-full h-48 object-cover rounded-lg"
+                      />
+                      <button
+                        type="button"
+                        onClick={removeImage}
+                        className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Alt Text <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={imageAlt}
+                        onChange={(e) => setImageAlt(e.target.value)}
+                        placeholder="Describe the image for accessibility"
+                        required={!!image}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
+                      />
+                    </div>
+                  </div>
                 ) : (
-                  <>
-                    <Save className="w-5 h-5" />
-                    <span>Publish News</span>
-                  </>
+                  <div
+                    onClick={() => fileInputRef.current?.click()}
+                    className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-purple-400 transition-colors"
+                  >
+                    <ImageIcon className="h-12 w-12 text-gray-400 mx-auto mb-3" />
+                    <p className="text-gray-600 font-medium mb-1">Click to upload image</p>
+                    <p className="text-gray-500 text-sm">PNG, JPG, WebP up to 5MB</p>
+                  </div>
                 )}
-              </button>
+
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleImageChange}
+                  accept="image/*"
+                  className="hidden"
+                />
+              </div>
+
+              {/* Tags */}
+              <div className="bg-white rounded-lg shadow-sm border p-6">
+                <h2 className="text-lg font-semibold text-gray-800 mb-4">Tags</h2>
+
+                <div className="space-y-3">
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={newTag}
+                      onChange={(e) => setNewTag(e.target.value)}
+                      placeholder="Add tag"
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
+                      onKeyPress={(e) => e.key === "Enter" && (e.preventDefault(), addTag())}
+                    />
+                    <button
+                      type="button"
+                      onClick={addTag}
+                      className="px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm font-medium"
+                    >
+                      Add
+                    </button>
+                  </div>
+
+                  {tags.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {tags.map((tag, index) => (
+                        <span
+                          key={index}
+                          className="inline-flex items-center gap-1 px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm"
+                        >
+                          {tag}
+                          <button
+                            type="button"
+                            onClick={() => removeTag(tag)}
+                            className="text-purple-500 hover:text-purple-700"
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
-          </form>
-        </motion.div>
-      </div>
+          </div>
+
+          {/* SEO Section */}
+          {showSeoSection && (
+            <div className="bg-white rounded-lg shadow-sm border p-6">
+              <h2 className="text-lg font-semibold text-gray-800 mb-4">SEO Settings</h2>
+              <p className="text-sm text-gray-600 mb-6">
+                Optimize your article for search engines and social media sharing.
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Meta Title</label>
+                  <input
+                    type="text"
+                    value={metaTitle}
+                    onChange={(e) => setMetaTitle(e.target.value)}
+                    placeholder="SEO title for search results"
+                    maxLength={60}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  />
+                  <p className="mt-1 text-xs text-gray-500">
+                    {metaTitle.length}/60 characters - Appears in search results
+                  </p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Meta Description</label>
+                  <textarea
+                    value={metaDescription}
+                    onChange={(e) => setMetaDescription(e.target.value)}
+                    placeholder="Brief description for search results"
+                    maxLength={160}
+                    rows={3}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
+                  />
+                  <p className="mt-1 text-xs text-gray-500">
+                    {metaDescription.length}/160 characters - Appears in search results
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Submit Button */}
+          <div className="flex justify-end bg-white rounded-lg shadow-sm border p-6">
+            <button
+              type="submit"
+              disabled={saving}
+              className="flex items-center gap-2 px-8 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:bg-purple-400 disabled:cursor-not-allowed font-medium transition-colors"
+            >
+              {saving ? (
+                <>
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                  <span>Creating Article...</span>
+                </>
+              ) : (
+                <>
+                  <Save className="h-5 w-5" />
+                  <span>Create Article</span>
+                </>
+              )}
+            </button>
+          </div>
+        </form>
+      </main>
     </div>
   )
 }

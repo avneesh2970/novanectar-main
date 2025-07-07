@@ -44,11 +44,11 @@ export default function EditBlogPost({ params }: any) {
 
   // Then use the ID to fetch the post
   useEffect(() => {
-    const isLoggedIn = sessionStorage.getItem("blogLoggedIn");
-    if (!isLoggedIn) {
-      router.push("/blog-admin");
-      return;
-    }
+    // const isLoggedIn = sessionStorage.getItem("blogLoggedIn");
+    // if (!isLoggedIn) {
+    //   router.push("/blog-admin");
+    //   return;
+    // }
 
     if (postId) {
       fetchPost();

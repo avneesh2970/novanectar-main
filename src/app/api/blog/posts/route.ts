@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 // import { connectToDatabase } from "@/lib/mongodb";
 import { connectDB } from "@/lib/dbConnect";
 import { BlogPost } from "@/models/BlogPost";
-import { isAuthenticated } from "@/lib/auth";
+// import { isAuthenticated } from "@/lib/auth";
 
 export async function GET(request: NextRequest) {
   try {
@@ -31,10 +31,10 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const isAdmin = await isAuthenticated(request);
-    if (!isAdmin) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    // const isAdmin = await isAuthenticated(request);
+    // if (!isAdmin) {
+    //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    // }
 
     await connectDB();
     const data = await request.json();

@@ -1,8 +1,9 @@
 "use client"
 import { useEffect, useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { Calendar, Clock, Sparkles, Loader2, MapPin, X, User, ChevronLeft, ChevronRight, Filter } from "lucide-react"
+import { motion } from "framer-motion"
+import { Calendar, Clock, Sparkles, Loader2, Filter, ChevronLeft, ChevronRight } from "lucide-react"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 import FooterSection from "@/components/footer/FooterSection"
 import Navbar from "@/components/navbar/Navbar"
 
@@ -24,147 +25,7 @@ interface IEventPost {
 
 type FilterType = "all" | "upcoming" | "past"
 
-// Event Details Modal Component
-function EventModal({
-  event,
-  isOpen,
-  onClose,
-}: {
-  event: IEventPost | null
-  isOpen: boolean
-  onClose: () => void
-}) {
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose()
-    }
-
-    if (isOpen) {
-      document.addEventListener("keydown", handleEscape)
-      document.body.style.overflow = "hidden"
-    }
-
-    return () => {
-      document.removeEventListener("keydown", handleEscape)
-      document.body.style.overflow = "unset"
-    }
-  }, [isOpen, onClose])
-
-  if (!event) return null
-
-  const date = new Date(event.eventDate)
-  const formattedDate = date.toLocaleDateString("en-US", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  })
-
-  return (
-    <AnimatePresence>
-      {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-          />
-
-          {/* Modal */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            transition={{ type: "spring", duration: 0.5 }}
-            className="relative bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden"
-          >
-            {/* Close Button */}
-            <button
-              onClick={onClose}
-              className="absolute top-4 right-4 z-10 w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-all duration-200 hover:scale-110"
-            >
-              <X className="w-5 h-5 text-gray-600" />
-            </button>
-
-            <div className="overflow-y-auto max-h-[90vh]">
-              {/* Image */}
-              <div className="relative w-full h-64 sm:h-80">
-                {event.featuredImage ? (
-                  <Image
-                    src={event.featuredImage || "/placeholder.svg"}
-                    alt={event.featuredImageAlt || event.title}
-                    fill
-                    className="object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-purple-100 to-blue-100 flex items-center justify-center">
-                    <Calendar className="w-20 h-20 text-purple-400" />
-                  </div>
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-              </div>
-
-              {/* Content */}
-              <div className="p-6 sm:p-8">
-                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 leading-tight">{event.title}</h2>
-
-                <p className="text-gray-600 text-base sm:text-lg mb-8 leading-relaxed">{event.description}</p>
-
-                {/* Event Details Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
-                  <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center flex-shrink-0">
-                      <Calendar className="w-6 h-6 text-purple-600" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-gray-900 mb-1">Date</h3>
-                      <p className="text-gray-600">{formattedDate}</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
-                      <Clock className="w-6 h-6 text-blue-600" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-gray-900 mb-1">Time</h3>
-                      <p className="text-gray-600">{event.eventTime}</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center flex-shrink-0">
-                      <MapPin className="w-6 h-6 text-green-600" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-gray-900 mb-1">Venue</h3>
-                      <p className="text-gray-600">{event.venue}</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 rounded-xl bg-orange-100 flex items-center justify-center flex-shrink-0">
-                      <User className="w-6 h-6 text-orange-600" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-gray-900 mb-1">Organizer</h3>
-                      <p className="text-gray-600">{event.organizer}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      )}
-    </AnimatePresence>
-  )
-}
-
-// Enhanced EventCard component with equal heights
+// Enhanced EventCard component with navigation
 function EventCard({
   event,
   onClick,
@@ -314,11 +175,10 @@ export default function EventPage() {
   const [allEvents, setAllEvents] = useState<IEventPost[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [selectedEvent, setSelectedEvent] = useState<IEventPost | null>(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
   const [filter, setFilter] = useState<FilterType>("upcoming")
   const [currentPage, setCurrentPage] = useState(1)
   const eventsPerPage = 6
+  const router = useRouter()
 
   // Helper function to check if event is upcoming
   const isEventUpcoming = (event: IEventPost) => {
@@ -348,13 +208,8 @@ export default function EventPage() {
   const pastCount = allEvents.length - upcomingCount
 
   const handleEventClick = (event: IEventPost) => {
-    setSelectedEvent(event)
-    setIsModalOpen(true)
-  }
-
-  const closeModal = () => {
-    setIsModalOpen(false)
-    setTimeout(() => setSelectedEvent(null), 300)
+    // Navigate to individual event page using the slug
+    router.push(`/event/${event.slug}`)
   }
 
   const handleFilterChange = (newFilter: FilterType) => {
@@ -574,10 +429,9 @@ export default function EventPage() {
               transition={{ duration: 0.6 }}
               className="text-center mb-8 sm:mb-12"
             >
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 mt-8">Our Events</h1>
-              {/* <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">
-                Discover amazing events happening near you
-              </p> */}
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 mt-8">
+                Our Events
+              </h1>
             </motion.div>
 
             {/* Filter Tabs */}
@@ -656,9 +510,6 @@ export default function EventPage() {
       </main>
 
       <FooterSection />
-
-      {/* Event Details Modal */}
-      <EventModal event={selectedEvent} isOpen={isModalOpen} onClose={closeModal} />
     </div>
   )
 }

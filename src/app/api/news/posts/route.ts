@@ -1,14 +1,24 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { connectDB } from "@/lib/dbConnect"
 import News from "@/models/News"
+import { isAuthenticated } from "@/lib/auth"
 
 // GET - Fetch all news
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     await connectDB()
+    const { searchParams } = new URL(request.url)
+    const slug = searchParams.get("slug")
+
+    if (slug) {
+      const news = await News.findOne({ slug, isPublished: true })
+      if (!news) {
+        return NextResponse.json({ success: false, error: "News not found" }, { status: 404 })
+      }
+      return NextResponse.json({ success: true, data: news })
+    }
 
     const news = await News.find({ isPublished: true }).sort({ publishDate: -1 }).lean()
-
     return NextResponse.json({
       success: true,
       data: news,
@@ -23,30 +33,51 @@ export async function GET() {
 // POST - Create new news
 export async function POST(request: NextRequest) {
   try {
-    await connectDB()
-
-    const body = await request.json()
-
-    // Generate slug from title
-    if (body.title) {
-      body.slug = body.title
-        .toLowerCase()
-        .replace(/[^a-zA-Z0-9 ]/g, "") // Remove special characters
-        .replace(/\s+/g, "-") // Replace spaces with hyphens
-        .trim()
-        .substring(0, 100) // Limit length to 100 characters
-
-      // Add timestamp suffix to ensure uniqueness
-      body.slug = `${body.slug}-${Date.now()}`
+    const isAdmin = await isAuthenticated(request)
+    if (!isAdmin) {
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 })
     }
 
-    // Generate excerpt if not provided
-    if (!body.excerpt && body.content) {
-      body.excerpt = body.content.substring(0, 200) + "..."
+    await connectDB()
+    const body = await request.json()
+
+    // Validate required fields
+    if (!body.title || !body.description || !body.content || !body.author) {
+      return NextResponse.json(
+        { success: false, error: "Title, description, content, and author are required" },
+        { status: 400 },
+      )
+    }
+
+    // Create slug from title if not provided
+    if (!body.slug) {
+      body.slug = body.title
+        .toLowerCase()
+        .replace(/[^\w\s-]/gi, "")
+        .replace(/\s+/g, "-")
+        .substring(0, 50)
+    }
+
+    // Check if slug already exists
+    const existingNews = await News.findOne({ slug: body.slug })
+    if (existingNews) {
+      return NextResponse.json({ success: false, error: "An article with this slug already exists" }, { status: 400 })
+    }
+
+    // Validate alt text if image is present
+    if (body.featuredImage && !body.featuredImageAlt) {
+      body.featuredImageAlt = body.title
+    }
+
+    // Set default meta fields if not provided
+    if (!body.metaTitle) {
+      body.metaTitle = body.title
+    }
+    if (!body.metaDescription) {
+      body.metaDescription = body.description
     }
 
     const news = await News.create(body)
-
     return NextResponse.json(
       {
         success: true,
@@ -57,16 +88,13 @@ export async function POST(request: NextRequest) {
     )
   } catch (error: any) {
     console.error("Error creating news:", error)
-
     if (error.code === 11000) {
       return NextResponse.json({ success: false, error: "News with this title already exists" }, { status: 400 })
     }
-
     if (error.name === "ValidationError") {
       const errors = Object.values(error.errors).map((err: any) => err.message)
       return NextResponse.json({ success: false, error: errors.join(", ") }, { status: 400 })
     }
-
     return NextResponse.json({ success: false, error: "Failed to create news" }, { status: 500 })
   }
 }

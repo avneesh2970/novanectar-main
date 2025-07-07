@@ -1,193 +1,542 @@
-"use client";
+"use client"
 
-import { useRouter } from "next/navigation";
-import { useEffect, useState, useRef } from "react";
-import Link from "next/link";
-import { ArrowLeft, Save, ImageIcon, X, Loader2 } from "lucide-react";
-import { toast } from "react-hot-toast";
-import Image from "next/image";
+import type React from "react"
+
+import { useRouter } from "next/navigation"
+import { useState, useRef } from "react"
+import Link from "next/link"
+import { ArrowLeft, Save, ImageIcon, X, Loader2, Hash, Search } from "lucide-react"
+import { toast } from "react-hot-toast"
+import Image from "next/image"
+import BlogEditor from "@/components/blogs/blog-editor"
 
 export default function AddEvent() {
-  const router = useRouter();
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [eventDate, setEventDate] = useState("");
-  const [eventTime, setEventTime] = useState(""); // added
-  const [venue, setVenue] = useState("");
-  const [image, setImage] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState("");
-  const [saving, setSaving] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter()
+  const [title, setTitle] = useState("")
+  const [slug, setSlug] = useState("")
+  const [description, setDescription] = useState("")
+  const [content, setContent] = useState("")
+  const [eventDate, setEventDate] = useState("")
+  const [eventTime, setEventTime] = useState("")
+  const [venue, setVenue] = useState("")
+  const [organizer, setOrganizer] = useState("Novanectar")
+  const [categories, setCategories] = useState<string[]>([])
+  const [newCategory, setNewCategory] = useState("")
+  const [metaTitle, setMetaTitle] = useState("")
+  const [metaDescription, setMetaDescription] = useState("")
+  const [image, setImage] = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState("")
+  const [imageAlt, setImageAlt] = useState("")
+  const [saving, setSaving] = useState(false)
+  const [showSeoSection, setShowSeoSection] = useState(false)
+  const [autoSlug, setAutoSlug] = useState(true)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  // Auto-generate slug from title (only for auto-generation)
+  const generateSlugFromTitle = (text: string) => {
+    return text
+      .toLowerCase()
+      .replace(/[^\w\s-]/gi, "") // Allow hyphens in the regex
+      .replace(/\s+/g, "-")
+      .substring(0, 50)
+  }
+
+  // Validate and clean manual slug input (preserve hyphens)
+  const cleanSlugInput = (text: string) => {
+    return text
+      .toLowerCase()
+      .replace(/[^\w-]/gi, "") // Only allow word characters and hyphens
+      .replace(/--+/g, "-") // Replace multiple consecutive hyphens with single hyphen
+      .replace(/^-+|-+$/g, "") // Remove hyphens from start and end
+      .substring(0, 50)
+  }
+
+  // Handle title change and auto-generate slug
+  const handleTitleChange = (value: string) => {
+    setTitle(value)
+    if (autoSlug) {
+      setSlug(generateSlugFromTitle(value))
+    }
+    // Auto-generate meta title if empty
+    if (!metaTitle) {
+      setMetaTitle(value)
+    }
+  }
+
+  // Handle manual slug change
+  const handleSlugChange = (value: string) => {
+    setSlug(cleanSlugInput(value))
+    setAutoSlug(false)
+  }
+
+  // Add category
+  const addCategory = () => {
+    if (newCategory.trim() && !categories.includes(newCategory.trim())) {
+      setCategories([...categories, newCategory.trim()])
+      setNewCategory("")
+    }
+  }
+
+  // Remove category
+  const removeCategory = (categoryToRemove: string) => {
+    setCategories(categories.filter((cat) => cat !== categoryToRemove))
+  }
 
   const uploadImageToCloudinary = async (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("upload_preset", process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "");
-      formData.append("cloud_name", process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || "");
+      const formData = new FormData()
+      formData.append("file", file)
+      formData.append("upload_preset", process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "")
+      formData.append("cloud_name", process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || "")
 
-      const xhr = new XMLHttpRequest();
+      const xhr = new XMLHttpRequest()
       xhr.onload = () => {
         if (xhr.status === 200) {
-          const response = JSON.parse(xhr.responseText);
-          resolve(response.secure_url);
+          const response = JSON.parse(xhr.responseText)
+          resolve(response.secure_url)
         } else {
-          reject(new Error("Upload failed"));
+          reject(new Error("Upload failed"))
         }
-      };
-      xhr.onerror = () => reject(new Error("Upload failed"));
-      xhr.open("POST", `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/upload`);
-      xhr.send(formData);
-    });
-  };
-
-  useEffect(() => {
-    const isLoggedIn = sessionStorage.getItem("blogLoggedIn");
-    if (!isLoggedIn) {
-      router.push("/blog-admin");
-    }
-  }, [router]);
+      }
+      xhr.onerror = () => reject(new Error("Upload failed"))
+      xhr.open("POST", `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/upload`)
+      xhr.send(formData)
+    })
+  }
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
+      const file = e.target.files[0]
       if (file.size > 5 * 1024 * 1024) {
-        toast.error("Image size exceeds 5MB limit");
-        return;
+        toast.error("Image size exceeds 5MB limit")
+        return
       }
-      setImage(file);
-      setImagePreview(URL.createObjectURL(file));
+      setImage(file)
+      setImagePreview(URL.createObjectURL(file))
+      // Auto-generate alt text from title if empty
+      if (!imageAlt && title) {
+        setImageAlt(title)
+      }
     }
-  };
+  }
 
   const removeImage = () => {
-    setImage(null);
-    setImagePreview("");
-    if (fileInputRef.current) fileInputRef.current.value = "";
-  };
+    setImage(null)
+    setImagePreview("")
+    setImageAlt("")
+    if (fileInputRef.current) fileInputRef.current.value = ""
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!title.trim() || !description.trim() || !eventDate.trim() || !eventTime.trim() || !venue.trim()) {
-      toast.error("Please fill all fields");
-      return;
+    e.preventDefault()
+
+    // Validation
+    if (!title.trim()) {
+      toast.error("Event title is required")
+      return
+    }
+    if (!slug.trim()) {
+      toast.error("Event slug is required")
+      return
+    }
+    if (!description.trim()) {
+      toast.error("Event description is required")
+      return
+    }
+    if (!content.trim()) {
+      toast.error("Event content is required")
+      return
+    }
+    if (!eventDate.trim()) {
+      toast.error("Event date is required")
+      return
+    }
+    if (!eventTime.trim()) {
+      toast.error("Event time is required")
+      return
+    }
+    if (!venue.trim()) {
+      toast.error("Event venue is required")
+      return
+    }
+    if (image && !imageAlt.trim()) {
+      toast.error("Image alt text is required for accessibility")
+      return
     }
 
-    setSaving(true);
+    setSaving(true)
 
     try {
-      let imageUrl = "";
+      let imageUrl = ""
       if (image) {
-        imageUrl = await uploadImageToCloudinary(image);
+        imageUrl = await uploadImageToCloudinary(image)
       }
 
       const eventData = {
-        title,
-        description,
+        title: title.trim(),
+        slug: slug.trim(),
+        description: description.trim(),
+        content: content.trim(),
         eventDate,
         eventTime,
-        venue,
+        venue: venue.trim(),
+        organizer: organizer.trim(),
+        categories,
         featuredImage: imageUrl,
-      };
+        featuredImageAlt: imageAlt.trim(),
+        metaTitle: metaTitle.trim() || title.trim(),
+        metaDescription: metaDescription.trim() || description.trim(),
+      }
 
       const response = await fetch("/api/event/posts", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(eventData),
-      });
+      })
 
-      if (!response.ok) throw new Error("Failed to create event");
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || "Failed to create event")
+      }
 
-      toast.success("Event created successfully");
-      router.push("/blog-admin/add-event");
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to create event");
+      toast.success("Event created successfully!")
+      router.push("/blog-admin/add-event")
+    } catch (error: any) {
+      console.error(error)
+      toast.error(error.message || "Failed to create event")
     } finally {
-      setSaving(false);
+      setSaving(false)
     }
-  };
+  }
 
   return (
-    <div className="bg-white min-h-screen text-gray-800">
-      <header className="border-b shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center">
-          <Link href="/blog-admin/add-event" className="text-purple-600 hover:text-purple-800 mr-4">
-            <ArrowLeft className="h-5 w-5" />
-          </Link>
-          <h1 className="text-2xl font-bold text-gray-800">Add New Event</h1>
+    <div className="bg-gray-50 min-h-screen text-gray-800">
+      <header className="bg-white border-b shadow-sm sticky top-0 z-40">
+        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center">
+            <Link href="/blog-admin/add-event" className="text-purple-600 hover:text-purple-800 mr-4">
+              <ArrowLeft className="h-5 w-5" />
+            </Link>
+            <h1 className="text-2xl font-bold text-gray-800">Create New Event</h1>
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setShowSeoSection(!showSeoSection)}
+              className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                showSeoSection ? "bg-purple-100 text-purple-700" : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              }`}
+            >
+              <Search className="h-4 w-4" />
+              SEO Settings
+            </button>
+          </div>
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-4 py-8">
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Image Upload */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Event Image</label>
-            {imagePreview ? (
-              <div className="relative">
-                <Image src={imagePreview} alt="Event Image" width={500} height={256} className="w-full h-64 object-cover rounded-lg" />
-                <button type="button" onClick={removeImage} className="absolute top-2 right-2 bg-white rounded-full p-1 shadow-md text-red-500">
-                  <X className="h-5 w-5" />
-                </button>
+      <main className="max-w-6xl mx-auto px-4 py-8">
+        <form onSubmit={handleSubmit} className="space-y-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Main Content */}
+            <div className="lg:col-span-2 space-y-6">
+              {/* Title & Slug */}
+              <div className="bg-white rounded-lg shadow-sm border p-6">
+                <h2 className="text-lg font-semibold text-gray-800 mb-4">Event Details</h2>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Event Title <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={title}
+                      onChange={(e) => handleTitleChange(e.target.value)}
+                      placeholder="Enter event title..."
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <Hash className="inline h-4 w-4 mr-1" />
+                      URL Slug <span className="text-red-500">*</span>
+                    </label>
+                    <div className="flex">
+                      <span className="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+                        /events/
+                      </span>
+                      <input
+                        type="text"
+                        value={slug}
+                        onChange={(e) => handleSlugChange(e.target.value)}
+                        placeholder="event-slug"
+                        required
+                        className="flex-1 px-4 py-3 border border-gray-300 rounded-r-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
+                      />
+                    </div>
+                    <p className="mt-1 text-xs text-gray-500">
+                      This will be the URL for your event page. Use lowercase letters, numbers, and hyphens only.
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Short Description <span className="text-red-500">*</span>
+                    </label>
+                    <textarea
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      placeholder="Brief description for event cards and previews..."
+                      required
+                      rows={3}
+                      maxLength={200}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors resize-none"
+                    />
+                    <p className="mt-1 text-xs text-gray-500">
+                      {description.length}/200 characters - This appears on event cards and search results
+                    </p>
+                  </div>
+                </div>
               </div>
-            ) : (
-              <div onClick={() => fileInputRef.current?.click()} className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer">
-                <ImageIcon className="h-12 w-12 text-gray-400 mx-auto mb-3" />
-                <p className="text-gray-500 mb-1">Click to upload</p>
+
+              {/* Rich Text Content */}
+              <div className="bg-white rounded-lg shadow-sm border p-6">
+                <h2 className="text-lg font-semibold text-gray-800 mb-4">
+                  Event Content <span className="text-red-500">*</span>
+                </h2>
+                <p className="text-sm text-gray-600 mb-4">
+                  Create detailed content for your event page with rich formatting, images, and more.
+                </p>
+                <div className="border border-gray-300 rounded-lg overflow-hidden">
+                  <BlogEditor content={content} onChange={setContent} />
+                </div>
               </div>
-            )}
-            <input type="file" ref={fileInputRef} onChange={handleImageChange} accept="image/*" className="hidden" />
+            </div>
+
+            {/* Sidebar */}
+            <div className="space-y-6">
+              {/* Event Information */}
+              <div className="bg-white rounded-lg shadow-sm border p-6">
+                <h2 className="text-lg font-semibold text-gray-800 mb-4">Event Information</h2>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Event Date <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="date"
+                      value={eventDate}
+                      onChange={(e) => setEventDate(e.target.value)}
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Event Time <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="time"
+                      value={eventTime}
+                      onChange={(e) => setEventTime(e.target.value)}
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Venue <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={venue}
+                      onChange={(e) => setVenue(e.target.value)}
+                      placeholder="Event venue or location"
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Organizer</label>
+                    <input
+                      type="text"
+                      value={organizer}
+                      onChange={(e) => setOrganizer(e.target.value)}
+                      placeholder="Event organizer"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Featured Image */}
+              <div className="bg-white rounded-lg shadow-sm border p-6">
+                <h2 className="text-lg font-semibold text-gray-800 mb-4">Featured Image</h2>
+
+                {imagePreview ? (
+                  <div className="space-y-4">
+                    <div className="relative">
+                      <Image
+                        src={imagePreview || "/placeholder.svg"}
+                        alt="Event preview"
+                        width={400}
+                        height={200}
+                        className="w-full h-48 object-cover rounded-lg"
+                      />
+                      <button
+                        type="button"
+                        onClick={removeImage}
+                        className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Alt Text <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={imageAlt}
+                        onChange={(e) => setImageAlt(e.target.value)}
+                        placeholder="Describe the image for accessibility"
+                        required={!!image}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <div
+                    onClick={() => fileInputRef.current?.click()}
+                    className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-purple-400 transition-colors"
+                  >
+                    <ImageIcon className="h-12 w-12 text-gray-400 mx-auto mb-3" />
+                    <p className="text-gray-600 font-medium mb-1">Click to upload image</p>
+                    <p className="text-gray-500 text-sm">PNG, JPG, WebP up to 5MB</p>
+                  </div>
+                )}
+
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleImageChange}
+                  accept="image/*"
+                  className="hidden"
+                />
+              </div>
+
+              {/* Categories */}
+              <div className="bg-white rounded-lg shadow-sm border p-6">
+                <h2 className="text-lg font-semibold text-gray-800 mb-4">Categories</h2>
+
+                <div className="space-y-3">
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={newCategory}
+                      onChange={(e) => setNewCategory(e.target.value)}
+                      placeholder="Add category"
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
+                      onKeyPress={(e) => e.key === "Enter" && (e.preventDefault(), addCategory())}
+                    />
+                    <button
+                      type="button"
+                      onClick={addCategory}
+                      className="px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm font-medium"
+                    >
+                      Add
+                    </button>
+                  </div>
+
+                  {categories.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {categories.map((category, index) => (
+                        <span
+                          key={index}
+                          className="inline-flex items-center gap-1 px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm"
+                        >
+                          {category}
+                          <button
+                            type="button"
+                            onClick={() => removeCategory(category)}
+                            className="text-purple-500 hover:text-purple-700"
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* Title */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Event Title</label>
-            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required className="w-full px-3 py-2 border rounded" />
-          </div>
+          {/* SEO Section */}
+          {showSeoSection && (
+            <div className="bg-white rounded-lg shadow-sm border p-6">
+              <h2 className="text-lg font-semibold text-gray-800 mb-4">SEO Settings</h2>
+              <p className="text-sm text-gray-600 mb-6">
+                Optimize your event for search engines and social media sharing.
+              </p>
 
-          {/* Event Date */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Event Date</label>
-            <input type="date" value={eventDate} onChange={(e) => setEventDate(e.target.value)} required className="w-full px-3 py-2 border rounded" />
-          </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Meta Title</label>
+                  <input
+                    type="text"
+                    value={metaTitle}
+                    onChange={(e) => setMetaTitle(e.target.value)}
+                    placeholder="SEO title for search results"
+                    maxLength={60}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  />
+                  <p className="mt-1 text-xs text-gray-500">
+                    {metaTitle.length}/60 characters - Appears in search results
+                  </p>
+                </div>
 
-          {/* Event Time */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Event Time</label>
-            <input type="time" value={eventTime} onChange={(e) => setEventTime(e.target.value)} required className="w-full px-3 py-2 border rounded" />
-          </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Meta Description</label>
+                  <textarea
+                    value={metaDescription}
+                    onChange={(e) => setMetaDescription(e.target.value)}
+                    placeholder="Brief description for search results"
+                    maxLength={160}
+                    rows={3}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
+                  />
+                  <p className="mt-1 text-xs text-gray-500">
+                    {metaDescription.length}/160 characters - Appears in search results
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
 
-          {/* Venue */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Venue</label>
-            <input type="text" value={venue} onChange={(e) => setVenue(e.target.value)} required className="w-full px-3 py-2 border rounded" />
-          </div>
-
-          {/* Description */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-            <textarea value={description} onChange={(e) => setDescription(e.target.value)} required rows={3} className="w-full px-3 py-2 border rounded" />
-          </div>
-
-          {/* Content */}
-          {/* <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Content</label>
-            <textarea value={content} onChange={(e) => setContent(e.target.value)} required rows={5} className="w-full px-3 py-2 border rounded" />
-          </div> */}
-
-          {/* Submit */}
-          <div className="flex justify-end">
-            <button type="submit" disabled={saving} className="flex items-center gap-2 px-6 py-3 bg-purple-600 text-white rounded hover:bg-purple-700 disabled:bg-purple-400">
+          {/* Submit Button */}
+          <div className="flex justify-end bg-white rounded-lg shadow-sm border p-6">
+            <button
+              type="submit"
+              disabled={saving}
+              className="flex items-center gap-2 px-8 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:bg-purple-400 disabled:cursor-not-allowed font-medium transition-colors"
+            >
               {saving ? (
                 <>
                   <Loader2 className="h-5 w-5 animate-spin" />
-                  <span>Saving...</span>
+                  <span>Creating Event...</span>
                 </>
               ) : (
                 <>
                   <Save className="h-5 w-5" />
-                  <span>Add Event</span>
+                  <span>Create Event</span>
                 </>
               )}
             </button>
@@ -195,5 +544,5 @@ export default function AddEvent() {
         </form>
       </main>
     </div>
-  );
+  )
 }
