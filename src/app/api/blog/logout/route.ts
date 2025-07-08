@@ -1,46 +1,42 @@
-import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import ActiveBlogUser from "@/models/ActiveBlogUser";
-import { connectDB } from "@/lib/dbConnect";
+import { NextResponse } from "next/server"
+import { cookies } from "next/headers"
+import ActiveBlogUser from "@/models/ActiveBlogUser"
+import { connectDB } from "@/lib/dbConnect"
 
 export async function POST() {
-  await connectDB();
-  // Clear the authentication cookies
-  const cookieStore = await cookies();
+  await connectDB()
 
-  // Read username from cookie
-  const userNameCookie = cookieStore.get("blogUserName")?.value;
+  const cookieStore = await cookies()
 
-  // Clear HTTP-only cookie
+  // Get username before clearing cookies
+  const username = cookieStore.get("blogUserName")?.value
+
+  // Clear all cookies
   cookieStore.set("blogLoggedIn", "", {
     path: "/",
-    expires: new Date(0), // Expire immediately
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
-  });
+    maxAge: 0,
+  })
 
-  // Clear client-side cookie
   cookieStore.set("blogLoggedInClient", "", {
     path: "/",
-    expires: new Date(0), // Expire immediately
     httpOnly: false,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
-  });
+    maxAge: 0,
+  })
 
   cookieStore.set("blogUserName", "", {
     path: "/",
-    expires: new Date(0),
     httpOnly: false,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
-  });
+    maxAge: 0,
+  })
 
-  // Remove user from ActiveBlogUser collection if present
-  if (userNameCookie) {
-    await ActiveBlogUser.deleteOne({ username: userNameCookie });
+  // Remove from ActiveBlogUser collection
+  if (username) {
+    await ActiveBlogUser.deleteOne({ username })
   }
 
-  return NextResponse.json({ success: true });
+  return NextResponse.json({
+    success: true,
+    message: "Logout successful",
+  })
 }

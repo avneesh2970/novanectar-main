@@ -1,9 +1,8 @@
 "use client"
 
 import type React from "react"
-
 import { useRouter } from "next/navigation"
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import Link from "next/link"
 import { ArrowLeft, Save, ImageIcon, X, Loader2, Hash, Search } from "lucide-react"
 import { toast } from "react-hot-toast"
@@ -12,6 +11,10 @@ import BlogEditor from "@/components/blogs/blog-editor"
 
 export default function AddEvent() {
   const router = useRouter()
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+
+  // All your existing state variables...
   const [title, setTitle] = useState("")
   const [slug, setSlug] = useState("")
   const [description, setDescription] = useState("")
@@ -32,44 +35,71 @@ export default function AddEvent() {
   const [autoSlug, setAutoSlug] = useState(true)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  // Auto-generate slug from title (only for auto-generation)
+  // Add authentication check
+  useEffect(() => {
+    const checkAuth = () => {
+      // Check if user is logged in via cookie
+      const isLoggedIn = document.cookie.includes("blogLoggedInClient=true")
+
+      if (!isLoggedIn) {
+        router.push("/blog-admin")
+        return
+      }
+
+      setIsAuthenticated(true)
+      setIsLoading(false)
+    }
+
+    checkAuth()
+  }, [router])
+
+  // Show loading while checking authentication
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
+      </div>
+    )
+  }
+
+  // Don't render anything if not authenticated (will redirect)
+  if (!isAuthenticated) {
+    return null
+  }
+
+  // All your existing functions remain the same...
   const generateSlugFromTitle = (text: string) => {
     return text
       .toLowerCase()
-      .replace(/[^\w\s-]/gi, "") // Allow hyphens in the regex
+      .replace(/[^\w\s-]/gi, "")
       .replace(/\s+/g, "-")
       .substring(0, 50)
   }
 
-  // Validate and clean manual slug input (preserve hyphens)
   const cleanSlugInput = (text: string) => {
     return text
       .toLowerCase()
-      .replace(/[^\w-]/gi, "") // Only allow word characters and hyphens
-      .replace(/--+/g, "-") // Replace multiple consecutive hyphens with single hyphen
-      .replace(/^-+|-+$/g, "") // Remove hyphens from start and end
+      .replace(/[^\w-]/gi, "")
+      .replace(/--+/g, "-")
+      .replace(/^-+|-+$/g, "")
       .substring(0, 50)
   }
 
-  // Handle title change and auto-generate slug
   const handleTitleChange = (value: string) => {
     setTitle(value)
     if (autoSlug) {
       setSlug(generateSlugFromTitle(value))
     }
-    // Auto-generate meta title if empty
     if (!metaTitle) {
       setMetaTitle(value)
     }
   }
 
-  // Handle manual slug change
   const handleSlugChange = (value: string) => {
     setSlug(cleanSlugInput(value))
     setAutoSlug(false)
   }
 
-  // Add category
   const addCategory = () => {
     if (newCategory.trim() && !categories.includes(newCategory.trim())) {
       setCategories([...categories, newCategory.trim()])
@@ -77,7 +107,6 @@ export default function AddEvent() {
     }
   }
 
-  // Remove category
   const removeCategory = (categoryToRemove: string) => {
     setCategories(categories.filter((cat) => cat !== categoryToRemove))
   }
@@ -113,7 +142,6 @@ export default function AddEvent() {
       }
       setImage(file)
       setImagePreview(URL.createObjectURL(file))
-      // Auto-generate alt text from title if empty
       if (!imageAlt && title) {
         setImageAlt(title)
       }
@@ -209,6 +237,7 @@ export default function AddEvent() {
     }
   }
 
+  // Rest of your JSX remains exactly the same...
   return (
     <div className="bg-gray-50 min-h-screen text-gray-800">
       <header className="bg-white border-b shadow-sm sticky top-0 z-40">

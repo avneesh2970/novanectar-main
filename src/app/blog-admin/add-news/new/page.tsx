@@ -8,7 +8,8 @@ import Link from "next/link"
 import { ArrowLeft, Save, ImageIcon, X, Loader2, Hash, Search } from "lucide-react"
 import { toast } from "react-hot-toast"
 import Image from "next/image"
-import BlogEditor from "@/components/blogs/blog-editor"
+import BlogEditor from "@/components/blogs/blog-editor"// Adjust path as needed
+import { useEffect } from "react"
 
 const categories = ["Technology", "Business", "Sports", "Entertainment", "Health", "Politics", "Other"]
 
@@ -32,6 +33,27 @@ export default function AddNews() {
   const [showSeoSection, setShowSeoSection] = useState(false)
   const [autoSlug, setAutoSlug] = useState(true)
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+
+  // Add authentication check
+  useEffect(() => {
+    const checkAuth = () => {
+      // Check if user is logged in via cookie
+      const isLoggedIn = document.cookie.includes("blogLoggedInClient=true")
+
+      if (!isLoggedIn) {
+        router.push("/blog-admin")
+        return
+      }
+
+      setIsAuthenticated(true)
+      setIsLoading(false)
+    }
+
+    checkAuth()
+  }, [router])
 
   // Auto-generate slug from title (only for auto-generation)
   const generateSlugFromTitle = (text: string) => {
@@ -200,6 +222,20 @@ export default function AddNews() {
     } finally {
       setSaving(false)
     }
+  }
+
+  // Show loading while checking authentication
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
+      </div>
+    )
+  }
+
+  // Don't render anything if not authenticated (will redirect)
+  if (!isAuthenticated) {
+    return null
   }
 
   return (
