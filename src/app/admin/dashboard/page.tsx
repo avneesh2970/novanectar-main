@@ -1993,7 +1993,7 @@ export default function AdminDashboard() {
                       <div className="mt-12">
                         <Link
                           href="/blog-admin/active-users"
-                          className="text-gray-800 font-semibold border p-2 rounded-xl border-black hover:bg-blue-500 hover:text-white"
+                          className="inline-block px-6 py-3 text-white font-semibold bg-blue-600 rounded-xl shadow hover:bg-blue-700 transition duration-300"
                         >
                           Active Access
                         </Link>

@@ -38,5 +38,6 @@ export async function POST() {
   return NextResponse.json({
     success: true,
     message: "Logout successful",
+    clearLocalStorage: true, // Signal to clear localStorage
   })
 }
