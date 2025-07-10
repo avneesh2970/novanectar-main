@@ -35,29 +35,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  // Career pages
-  const careerMainPage = {
-    url: `${baseUrl}/career`,
-    lastModified: new Date(),
-    changeFrequency: "weekly" as const,
-    priority: 0.8,
-  };
-
-  const careerPositions = [
-    "b-d-e",
-    "it-sales",
-    "ui-ux",
-    "graphic-designer",
-    "social-media-executive",
-    "video-editor",
-  ];
-
-  const careerPositionUrls = careerPositions.map((position) => ({
-    url: `${baseUrl}/career/${position}`,
-    lastModified: new Date(),
-    changeFrequency: "weekly" as const,
-    priority: 0.7,
-  }));
 
   // Blog main page
   const blogMainPage = {
@@ -87,8 +64,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     ...mainPages,
     ...serviceUrls,
-    careerMainPage,
-    ...careerPositionUrls,
     blogMainPage,
     ...newsEventsPages,
   ];

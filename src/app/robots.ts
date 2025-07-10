@@ -7,6 +7,7 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: [
         "/admin/",
+        "/blog-admin/",
         "/_next/static/media/",
         "/_next/static/chunks/",
         "/_next/image/",

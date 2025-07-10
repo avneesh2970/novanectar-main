@@ -36,10 +36,10 @@ const navItems: NavItem[] = [
     href: "https://edu.novanectar.co.in/internships",
     label: "Career",
     items: [
-      {
-        label: "Open Positions",
-        href: "/career",
-      },
+      // {
+      //   label: "Open Positions",
+      //   href: "/career",
+      // },
       {
         label: "Internship",
         href: "https://internship.novanectar.co.in/",
