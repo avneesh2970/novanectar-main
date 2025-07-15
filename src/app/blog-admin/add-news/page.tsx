@@ -14,6 +14,7 @@ import {
   Filter,
   X,
   Clock,
+  Edit,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -587,6 +588,13 @@ export default function NewsManagementPage() {
                           >
                             <Eye className="w-4 h-4" />
                           </button>
+                          <Link
+                            href={`/blog-admin/add-news/edit/${item._id}`}
+                            title="Edit Article"
+                            className="p-1.5 text-green-600 hover:bg-green-50 rounded-md transition-colors"
+                          >
+                            <Edit className="w-4 h-4" />
+                          </Link>
                           <button
                             onClick={() => handleDelete(item._id)}
                             disabled={deleting === item._id}
