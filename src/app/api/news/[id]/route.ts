@@ -49,7 +49,7 @@ export async function GET(request: NextRequest, { params }:any) {
   }
 }
 
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, { params }:any) {
   try {
     // ADDED: Authentication check
     const isAdmin = await isAuthenticated(request)
@@ -58,7 +58,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     }
 
     await connectDB()
-    const { id } = params
+    const { id } = await params
     const body = await request.json()
 
     // ADDED: Validation for required fields on update
