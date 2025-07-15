@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { format } from "date-fns";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Edit, Trash2, Plus, Search, ArrowLeft } from "lucide-react";
 import { toast } from "react-hot-toast";
 
@@ -214,12 +213,12 @@ export default function EventDashboard() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <div className="flex justify-end gap-2">
-                        {/* <Link
+                        <Link
                           href={`/blog-admin/add-event/edit/${post._id}`}
                           className="text-blue-600 hover:text-blue-900"
                         >
                           <Edit className="h-5 w-5" />
-                        </Link> */}
+                        </Link> 
                         <button
                           onClick={() => confirmDelete(post._id)}
                           className="text-red-600 hover:text-red-900"
