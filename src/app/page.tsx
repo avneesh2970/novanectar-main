@@ -39,7 +39,7 @@ export default function Home() {
       </Suspense>
 
       <Suspense fallback={<LoadingSpinner />}>
-        <div id="project-section" className="content-visibility-auto">
+        <div className="content-visibility-auto">
           <ProjectSession />
         </div>
       </Suspense>

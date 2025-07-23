@@ -27,19 +27,18 @@ const navItems: NavItem[] = [
       { label: "App Development", href: "/services/mobile-development" },
       { label: "Graphic Design", href: "/services/graphic-designing" },
       { label: "Digital Marketing", href: "/services/digital-marketing" },
-      { label: "Social Media Management", href: "/services/social-media-management" },
+      {
+        label: "Social Media Management",
+        href: "/services/social-media-management",
+      },
       { label: "SEO", href: "/services/seo" },
     ],
   },
-  { href: "/", label: "Our Work" },
+  { href: "/our-work", label: "Our Work" },
   {
     href: "https://edu.novanectar.co.in/internships",
     label: "Career",
     items: [
-      // {
-      //   label: "Open Positions",
-      //   href: "/career",
-      // },
       {
         label: "Internship",
         href: "https://internship.novanectar.co.in/",
@@ -110,7 +109,7 @@ export default function Navbar() {
       setExpandedItem(null);
 
       if (mobileMenuRef.current) {
-        mobileMenuRef.current.style.overflow = "hidden"
+        mobileMenuRef.current.style.overflow = "hidden";
         gsap.to(mobileMenuRef.current, {
           opacity: 0,
           height: 0,
@@ -328,8 +327,8 @@ export default function Navbar() {
 
 function NavItem({
   item,
-  scrollToSection,
-}: {
+}: // scrollToSection,
+{
   item: NavItem;
   scrollToSection: (sectionId: string) => void;
 }) {
@@ -337,7 +336,7 @@ function NavItem({
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (item.label === "Our Work") {
       e.preventDefault();
-      scrollToSection("project-section");
+      // scrollToSection("project-section");
     }
   };
   return (

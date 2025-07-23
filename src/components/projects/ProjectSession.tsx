@@ -81,7 +81,6 @@ const ProjectCard = ({ item, index }: any) => {
       initial="hidden"
       animate="visible"
       whileHover={{ y: -5 }}
-      // id="project-section"
     >
       <div className="aspect-[14/9] relative overflow-hidden">
         <motion.div
