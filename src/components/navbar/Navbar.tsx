@@ -11,13 +11,7 @@ import { ContactPopup } from "../contact/ContactPopup";
 import { DMSans } from "@/fonts/font";
 import { scrollToSection } from "@/helpers/utils";
 
-interface NavItem {
-  label: string;
-  href: string;
-  items?: { label: string; href: string }[];
-}
-
-const navItems: NavItem[] = [
+const navItems: any = [
   { href: "/", label: "Home" },
   {
     href: "/",
@@ -34,7 +28,19 @@ const navItems: NavItem[] = [
       { label: "SEO", href: "/services/seo" },
     ],
   },
-  { href: "/our-work", label: "Our Work" },
+  { href: "/portfolio", label: "Our work" },
+  { href: "/about-us", label: "About us" },
+
+  {
+    href: "/blog",
+    label: "Resources",
+    items: [
+      // { label: "Career", href: "/career" },
+      { label: "Blog", href: "/blog" },
+      { label: "Event", href: "/event" },
+      { label: "News", href: "/news" },
+    ],
+  },
   {
     href: "https://edu.novanectar.co.in/internships",
     label: "Career",
@@ -47,27 +53,6 @@ const navItems: NavItem[] = [
         label: "Training",
         href: "https://edu.novanectar.co.in",
       },
-    ],
-  },
-  // {
-  //   href: "https://edu.novanectar.co.in",
-  //   label: "Training",
-  //   items: [
-  //     { label: "Frontend Development", href: "https://edu.novanectar.co.in" },
-  //     { label: "Backend Development", href: "https://edu.novanectar.co.in" },
-  //     { label: "Full Stack Development", href: "https://edu.novanectar.co.in" },
-  //   ],
-  // },
-  // { href: "/career", label: "Career" },
-  // { href: "/blog", label: "Blog" },
-  {
-    href: "/blog",
-    label: "Innovation",
-    items: [
-      // { label: "Career", href: "/career" },
-      { label: "Blog", href: "/blog" },
-      { label: "Event", href: "/event" },
-      { label: "News", href: "/news" },
     ],
   },
 ];
@@ -151,7 +136,7 @@ export default function Navbar() {
 
             {/* Center navigation items */}
             <div className="hidden lg:flex items-center justify-center flex-1 mx-8">
-              {navItems.map((item) => (
+              {navItems.map((item: any) => (
                 <NavItem
                   key={item.label}
                   item={item}
@@ -188,7 +173,7 @@ export default function Navbar() {
               {" "}
               {/* Added padding bottom for scroll space */}
               <div className="space-y-4">
-                {navItems.map((item, index) => (
+                {navItems.map((item: any, index: any) => (
                   <motion.div
                     key={item.label}
                     initial={{ opacity: 0, y: -20 }}
@@ -254,29 +239,31 @@ export default function Navbar() {
                               className="overflow-hidden"
                             >
                               <div className="pb-4 space-y-4">
-                                {item.items.map((subItem, subIndex) => (
-                                  <motion.div
-                                    key={subItem.label}
-                                    initial={{ opacity: 0, y: -10 }}
-                                    animate={{
-                                      opacity: 1,
-                                      y: 0,
-                                      transition: {
-                                        delay: subIndex * 0.1,
-                                        duration: 0.6,
-                                        ease: [0.4, 0, 0.2, 1],
-                                      },
-                                    }}
-                                  >
-                                    <Link
-                                      href={subItem.href}
-                                      onClick={toggleMenu}
-                                      className="block py-2 pl-4 text-gray-600 hover:text-blue-600 transition-colors"
+                                {item.items.map(
+                                  (subItem: any, subIndex: any) => (
+                                    <motion.div
+                                      key={subItem.label}
+                                      initial={{ opacity: 0, y: -10 }}
+                                      animate={{
+                                        opacity: 1,
+                                        y: 0,
+                                        transition: {
+                                          delay: subIndex * 0.1,
+                                          duration: 0.6,
+                                          ease: [0.4, 0, 0.2, 1],
+                                        },
+                                      }}
                                     >
-                                      {subItem.label}
-                                    </Link>
-                                  </motion.div>
-                                ))}
+                                      <Link
+                                        href={subItem.href}
+                                        onClick={toggleMenu}
+                                        className="block py-2 pl-4 text-gray-600 hover:text-blue-600 transition-colors"
+                                      >
+                                        {subItem.label}
+                                      </Link>
+                                    </motion.div>
+                                  )
+                                )}
                               </div>
                             </motion.div>
                           )}
@@ -329,7 +316,7 @@ function NavItem({
   item,
 }: // scrollToSection,
 {
-  item: NavItem;
+  item: any;
   scrollToSection: (sectionId: string) => void;
 }) {
   const [isHovered, setIsHovered] = useState(false);
@@ -372,7 +359,7 @@ function NavItem({
               className="absolute left-0 top-full pt-2"
             >
               <div className="bg-white rounded-md shadow-lg py-2 min-w-[200px]">
-                {item.items.map((subItem) => (
+                {item.items.map((subItem: any) => (
                   <Link
                     key={subItem.label}
                     href={subItem.href}
