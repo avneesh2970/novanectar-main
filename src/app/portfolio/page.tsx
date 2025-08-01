@@ -83,7 +83,7 @@ export default function OurWorkPage() {
                       "linear-gradient(135deg, #f5f1e8 0%, #e8dcc0 100%)",
                   }}
                 >
-                  <div className="p-6 sm:p-8 lg:p-12 h-64 lg:h-96 flex items-center justify-center relative">
+                  <div className="p-6 sm:p-8 lg:p-12 h-96 lg:h-[28rem] flex items-center justify-center relative scale-110 md:scale-125">
                     <Image
                       src={project.imageUrl}
                       fill
@@ -109,7 +109,7 @@ export default function OurWorkPage() {
                   </div>
                 </div> */}
                 {/* Project Info */}
-                <div className="space-y-1.5 sm:space-y-2">
+                <div className="">
                   <h3 className="text-lg sm:text-xl font-semibold leading-tight">
                     {project.title}
                   </h3>
@@ -119,10 +119,10 @@ export default function OurWorkPage() {
                     {project.tags.map((tag: any, tagIndex: any) => (
                       <span
                         key={tagIndex}
-                        className="pr-2 sm:pr-3 py-1 text-black/50 text-xs sm:text-sm rounded-full font-medium"
+                        className="pr-2 sm:pr-3 py-1 text-black/50 text-xs sm:text-sm rounded-full font-medium flex items-center"
                       >
                         {tagIndex !== 0 && (
-                          <span className="text-black/50 pr-1 text-lg sm:text-xl">
+                          <span className="text-black/50 pr-1 text-lg sm:text-xl inline-flex items-center">
                             •
                           </span>
                         )}

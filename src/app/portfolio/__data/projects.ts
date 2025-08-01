@@ -1,29 +1,29 @@
 // import sharedImage from "@/assets/our-work/ourWork.jpg";
-import amritya1 from "@/assets/our-work/amritya1.png";
-import amritya2 from "@/assets/our-work/amritya2.png";
-import amritya3 from "@/assets/our-work/amritya3.png";
-import trjeweler1 from "@/assets/our-work/trjweler1.png";
-import bombay2 from "@/assets/our-work/bombay2.png";
-import bombay3 from "@/assets/our-work/bombay3.png";
-import caninKart1 from "@/assets/our-work/caninkart1.png";
-import caninKart2 from "@/assets/our-work/caninkart2.png";
-import himalayan1 from "@/assets/our-work/himalayan1.png";
-import himalayan2 from "@/assets/our-work/himalayan2.png";
-import iconic1 from "@/assets/our-work/iconic1.png";
-import iconic2 from "@/assets/our-work/iconic2.png";
-import iconic3 from "@/assets/our-work/iconic3.png";
-import nanje1 from "@/assets/our-work/nanje1.png";
-import nanje2 from "@/assets/our-work/nanje2.png";
-import pool1 from "@/assets/our-work/pool1.png";
-import pool2 from "@/assets/our-work/pool2.png";
-import pool3 from "@/assets/our-work/pool3.png";
-import pool4 from "@/assets/our-work/pool4.png";
-import pool5 from "@/assets/our-work/pool5.png";
-import tawa1 from "@/assets/our-work/tawa1.png";
-import tawa2 from "@/assets/our-work/tawa2.png";
-import tawa3 from "@/assets/our-work/tawa3.png";
-import kkd1 from "@/assets/our-work/kkd1.png";
-import kkd2 from "@/assets/our-work/kkd2.png";
+import amritya1 from "@/assets/our-work/amritya1.webp";
+import amritya2 from "@/assets/our-work/amritya2.webp";
+import amritya3 from "@/assets/our-work/amritya3.webp";
+import trjeweler1 from "@/assets/our-work/trjweler1.webp";
+import bombay2 from "@/assets/our-work/bombay2.webp";
+import bombay3 from "@/assets/our-work/bombay3.webp";
+import caninKart1 from "@/assets/our-work/caninkart1.webp";
+import caninKart2 from "@/assets/our-work/caninkart2.webp";
+import himalayan1 from "@/assets/our-work/himalayan1.webp";
+import himalayan2 from "@/assets/our-work/himalayan2.webp";
+import iconic1 from "@/assets/our-work/iconic1.webp";
+import iconic2 from "@/assets/our-work/iconic2.webp";
+import iconic3 from "@/assets/our-work/iconic3.webp";
+import nanje1 from "@/assets/our-work/nanje1.webp";
+import nanje2 from "@/assets/our-work/nanje2.webp";
+import pool1 from "@/assets/our-work/pool1.webp";
+import pool2 from "@/assets/our-work/pool2.webp";
+import pool3 from "@/assets/our-work/pool3.webp";
+import pool4 from "@/assets/our-work/pool4.webp";
+import pool5 from "@/assets/our-work/pool5.webp";
+import tawa1 from "@/assets/our-work/tawa1.webp";
+import tawa2 from "@/assets/our-work/tawa2.webp";
+import tawa3 from "@/assets/our-work/tawa3.webp";
+import kkd1 from "@/assets/our-work/kkd1.webp";
+import kkd2 from "@/assets/our-work/kkd2.webp";
 
 export const projects: any = [
   {
@@ -207,7 +207,7 @@ export const projects: any = [
   },
   {
     id: 14,
-    title: "Canin Kart",
+    title: "CaninKart",
     tags: ["Custom Coded Website"," UI/UX", "Testing"],
     category: ["Website Development"],
     overview:
@@ -296,9 +296,9 @@ export const projects: any = [
     category: ["Graphic & Visual Design"],
     overview:
       "NovaNectar designed a classy and ageless logo for Bombay Jewellers, a company famous for its rich heritage and beautiful jewelry collection. Our graphic design experts worked on developing a visual identity that embodies trustworthiness, sophistication and tradition. The logo was carefully designed with a clean and sleek touch integrating features that express luxury and shine subtly.",
-    imageUrl: bombay2,
-    imageUrlDetail: bombay2,
-    restImages: [bombay3],
+    imageUrl: bombay3,
+    imageUrlDetail: bombay3,
+    restImages: [bombay2],
     duration: "7 days",
   },
   {

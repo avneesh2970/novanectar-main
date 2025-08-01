@@ -73,11 +73,11 @@ export default async function ProjectDetailPage({ params }: any) {
             />
           </div>
 
-          <div className="space-y-">
+          <div className="">
             <h1 className="text-3xl lg:text-4xl font-bold leading-tight">
               {currentProject.title}
             </h1>
-            <div className="flex flex-wrap items-center gap-2 pb-8">
+            <div className="flex flex-wrap items-center gap-2 md:pb-8">
               {currentProject.tags.map((tag: string, index: number) => (
                 <span key={index} className="text-sm text-gray-600">
                   {index > 0 && <span className="text-gray-400 mr-2">•</span>}
