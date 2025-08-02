@@ -35,10 +35,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-
   // Blog main page
   const blogMainPage = {
     url: `${baseUrl}/blog`,
+    lastModified: new Date(),
+    changeFrequency: "daily" as const,
+    priority: 0.9,
+  };
+
+  // our portfolio  page
+  const ourWorkPage = {
+    url: `${baseUrl}/portfolio`,
+    lastModified: new Date(),
+    changeFrequency: "daily" as const,
+    priority: 0.9,
+  };
+
+  // About page
+  const aboutPage = {
+    url: `${baseUrl}/about-us`,
     lastModified: new Date(),
     changeFrequency: "daily" as const,
     priority: 0.9,
@@ -65,6 +80,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...mainPages,
     ...serviceUrls,
     blogMainPage,
+    ourWorkPage,
+    aboutPage,
     ...newsEventsPages,
   ];
 }

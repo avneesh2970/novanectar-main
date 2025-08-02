@@ -92,7 +92,7 @@ const ProjectCard = ({ item, index }: any) => {
             background: "linear-gradient(135deg, #f5f1e8 0%, #e8dcc0 100%)",
           }}
         >
-          <div className="p-6 sm:p-8 lg:p-12 h-64 lg:h-96 flex items-center justify-center relative">
+          <div className="p-6 sm:p-8 lg:p-12 h-96 lg:h-[28rem] flex items-center justify-center relative scale-110 md:scale-125">
             <Image
               src={item.imageUrl}
               fill
@@ -130,8 +130,11 @@ const ProjectCard = ({ item, index }: any) => {
 };
 
 const ProjectSession = () => {
+  const allowedItems = ["Iconic 11", "The Tawa Restaurant", "KKD", "CaninKart"];
   return (
-    <div className={`${DMSans400.className} min-h-screen bg-[#fff2f2] px-4 py-12 sm:px-6 lg:px-8`}>
+    <div
+      className={`${DMSans400.className} min-h-screen bg-[#fff2f2] px-4 py-12 sm:px-6 lg:px-8`}
+    >
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -150,12 +153,17 @@ const ProjectSession = () => {
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-          {gridItems.slice(0, 4).map((item: any, index: any) => (
-            <ProjectCard key={item.id} item={item} index={index} />
-          ))}
+          {gridItems
+            .filter((item: any) => allowedItems.includes(item.title))
+            .map((item: any, index: any) => (
+              <ProjectCard key={item.id} item={item} index={index} />
+            ))}
         </div>
         <div className="pt-4 text-center">
-          <Link href="/portfolio" className="py-3 px-4 text-center rounded-md bg-[#4169E1] text-white font-medium hover:bg-blue-600 transition-colors">
+          <Link
+            href="/portfolio"
+            className="py-3 px-4 text-center rounded-md bg-[#4169E1] text-white font-medium hover:bg-blue-600 transition-colors"
+          >
             See more
           </Link>
         </div>
