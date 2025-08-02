@@ -56,64 +56,71 @@ export default function page() {
   return (
     <div className={`${DMSans400.className} bg-white`}>
       <Navbar />
-      <section
-        className={`${DMSans400.className} bg-[#F5F5F5] py-16 px-4 sm:px-6 lg:px-8`}
+      <div
+        className={`${DMSans400.className} bg-[#F5F5F5] py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8`}
       >
-        <div className="max-w-7xl mx-auto bg-[#FFFFFF] px-8 py-16 rounded-3xl">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-stretch">
+        <div className="max-w-7xl mx-auto bg-[#FFFFFF] px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 rounded-xl sm:rounded-2xl lg:rounded-3xl shadow-sm mt-14">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-center">
             {/* Left Content */}
-            <div className="space-y-6">
-              <div className="space-y-4">
-                <p className="text-sm font-medium text-gray-500 tracking-wider uppercase">
+            <div className="space-y-4 sm:space-y-6 order-2 lg:order-1">
+              <div className="space-y-3 sm:space-y-4">
+                <p className="text-xs sm:text-sm font-medium text-gray-500 tracking-wider uppercase">
                   ABOUT US
                 </p>
-                <h1 className="text-3xl sm:text-4xl fon-bold text-gray-900 leading-tight">
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight">
                   We provide Smart IT Solution to help your Business Grow
                 </h1>
               </div>
-              <p className="text-base sm:text-lg text-gray-700 leading-relaxed font-medium">
-                At NovaNectar Smart IT Solutions Our mission is simple and
-                powerful serving businesses as they grow. Focusing on putting
-                the client first in all parts of our process. Founded in March,
-                2024 today we are a trusted technology partner with over 200+
-                clients around the world. We Novanectar Smart IT Solutions made
-                possible with a dedicated team of over 60 people who are
-                passionate about what we do.
+              <p className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed font-medium">
+                Novanectar Services Private Limited is a provider of technology
+                solutions that work to equip individuals and organizations with
+                graphic design, web design, app development and improving all
+                artifacts. Fueling Progress with Smart IT Solutions, we offer
+                high quality digital solutions that are often thought out to
+                meet the various requirements of our Clients.
               </p>
             </div>
 
             {/* Right Image */}
-            <div className="relative">
-              <div className="h-full relative overflow-hidden rounded-lg shadow-lg">
+            <div className="relative order-1 lg:order-2">
+              <div className="relative w-full h-64 sm:h-80 lg:h-96 overflow-hidden rounded-lg shadow-lg">
                 <Image
                   src={about || "/placeholder.svg"}
-                  alt="smart it solution"
+                  alt="Smart IT solution services"
                   fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  className="object-cover object-center"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 50vw"
+                  priority
                 />
               </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
-      <section className="w-full py-8 px-4 text-center">
-        <h2 className="text-lg font-medium text-gray-700 mb-6">
+      <section className="w-full pt-8 px-4 md:px-8 bg-white">
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-800 text-center">
           Certified by India&apos;s Leading Authorities
         </h2>
-        <div className="flex flex-wrap justify-center items-center gap-6 md:gap-16">
-          {certifications.map((cert, index) => (
-            <div key={index} className="relative w-20 h-10 md:w-28 md:h-16">
-              <Image
-                src={cert.src}
-                alt={cert.alt}
-                fill
-                className="object-contain"
-                sizes="(max-width: 768px) 80px, 120px"
-              />
+
+        <div className="rounded-lg p-4 sm:p-6 lg:p-8">
+          <div className="flex justify-center">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8 lg:gap-12 justify-items-center items-center">
+              {certifications.map((cert, index) => (
+                <div key={index} className="flex justify-center items-center">
+                  <div className="relative w-20 h-10 sm:w-24 sm:h-12 md:w-28 md:h-14 lg:w-32 lg:h-16 xl:w-40 xl:h-20 transition-transform hover:scale-105 duration-300 ease-in-out">
+                    <Image
+                      src={cert.src}
+                      alt={cert.alt}
+                      fill
+                      className="object-contain"
+                      sizes="(max-width: 640px) 80px, (max-width: 768px) 96px, (max-width: 1024px) 112px, (max-width: 1280px) 128px, 160px"
+                    />
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
       </section>
 
@@ -138,7 +145,7 @@ export default function page() {
                 src={image}
                 alt={title}
                 fill
-                className="object-contain"
+                className="object-cover"
                 sizes="(max-width: 768px) 100vw, 50vw"
                 priority={index === 0}
               />
@@ -147,7 +154,7 @@ export default function page() {
         ))}
       </section>
 
-      <section className="w-full py-16 px-4 sm:px-6 lg:px-8 text-center bg-white">
+      <section className="w-full py-4 px-4 sm:px-6 lg:px-8 text-center bg-white">
         <TeamSection />
       </section>
       <FooterSection />

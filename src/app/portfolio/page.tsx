@@ -43,12 +43,12 @@ export default function OurWorkPage() {
       className={`${DMSans.className} min-h-screen bg-[#F5F5F5] text-[#333335]`}
     >
       <Navbar />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-20 sm:pt-32 py-8 sm:py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-28 sm:pt-32 py-8 sm:py-12">
         {/* Header */}
         <h1
           className={`${DMSans500.className} text-2xl sm:text-3xl lg:text-4xl font-bold text-[#333335] mb-4 sm:mb-5`}
         >
-          Our Project
+          Our Projects
         </h1>
 
         {/* Filter Categories */}

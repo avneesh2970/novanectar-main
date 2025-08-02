@@ -9,12 +9,12 @@ const TeamSection = () => {
   ];
 
   return (
-    <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
+    <section className="pb-16 bg-white">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-5xl font-bold text-center text-gray-900 mb-8">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center text-gray-900 mb-4">
           Our Leader
         </h2>
-        <p className="max-w-5xl text-xl text-gray-600 text-center mb-12 mx-auto">
+        <p className="text-lg text-gray-600 text-left mb-12 mx-auto">
           Behind NovaNectar&apos;s success is a passionate and visionary team
           dedicated to creating purposeful digital experiences. At the
           leadership of our team is{" "}
@@ -44,7 +44,7 @@ const TeamSection = () => {
           >
             {teamData.map((member, index) => (
               <div key={index} className="text-center">
-                <div className="relative w-72 h-96 mx-auto mb-4">
+                <div className="relative w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl mx-auto mb-4 aspect-[3/4]">
                   <Image
                     src={member.image}
                     alt={`${member.name} - ${member.position}`}
@@ -52,10 +52,12 @@ const TeamSection = () => {
                     className="rounded-lg object-cover"
                   />
                 </div>
-                <h3 className="text-2xl font-semibold text-gray-900">
+                <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-900 px-2">
                   {member.name}
                 </h3>
-                <p className="text-xl text-gray-600">{member.position}</p>
+                <p className="text-base sm:text-lg md:text-xl text-gray-600 px-2">
+                  {member.position}
+                </p>
               </div>
             ))}
           </div>
