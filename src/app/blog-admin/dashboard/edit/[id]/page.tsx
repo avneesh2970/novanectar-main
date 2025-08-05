@@ -519,6 +519,52 @@ export default function EditBlogPost({ params }: any) {
                   </p>
                 </div>
 
+
+
+     <div>
+                  <label
+                    htmlFor="metaTitle"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    Meta Title
+                  </label>
+                  <input
+                    type="text"
+                    id="metaTitle"
+                    value={metaTitle}
+                    onChange={(e) => setMetaTitle(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-700"
+                    placeholder="Custom title for search engines (leave empty to use post title)"
+                  />
+                  <p className="mt-1 text-xs text-gray-500">
+                    Recommended length: 50-60 characters. Currently:{" "}
+                    {metaTitle.length} characters
+                  </p>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="metaDescription"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    Meta Description
+                  </label>
+                  <textarea
+                    id="metaDescription"
+                    value={metaDescription}
+                    onChange={(e) => setMetaDescription(e.target.value)}
+                    rows={2}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-700"
+                    placeholder="Custom description for search engines (leave empty to use excerpt)"
+                  ></textarea>
+                  <p className="mt-1 text-xs text-gray-500">
+                    Recommended length: 150-160 characters. Currently:{" "}
+                    {metaDescription.length} characters
+                  </p>
+                </div>
+
+
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Categories
