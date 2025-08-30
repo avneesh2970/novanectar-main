@@ -125,7 +125,7 @@ export default function Navbar() {
           <div className="flex items-center justify-between h-20">
             <Link href="/" className="flex-shrink-0">
               <Image
-                src="/logo.png"
+                src="/novanectar.png"
                 alt="Novanectar Logo"
                 width={200}
                 height={50}
