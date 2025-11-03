@@ -1,7 +1,7 @@
 "use client"
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
-import { Calendar, Clock, Sparkles, Loader2, Filter, ChevronLeft, ChevronRight } from "lucide-react"
+import { Calendar, Clock, Sparkles, Loader2, ChevronLeft, ChevronRight } from "lucide-react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import FooterSection from "@/components/footer/FooterSection"
@@ -22,8 +22,6 @@ interface IEventPost {
   updatedAt: string
   __v?: number
 }
-
-type FilterType = "all" | "upcoming" | "past"
 
 // Enhanced EventCard component with navigation
 function EventCard({
@@ -175,47 +173,25 @@ export default function EventPage() {
   const [allEvents, setAllEvents] = useState<IEventPost[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [filter, setFilter] = useState<FilterType>("upcoming")
+  // const [filter, setFilter] = useState<FilterType>("upcoming")
   const [currentPage, setCurrentPage] = useState(1)
   const eventsPerPage = 6
   const router = useRouter()
 
-  // Helper function to check if event is upcoming
-  const isEventUpcoming = (event: IEventPost) => {
-    const eventDateTime = new Date(`${event.eventDate.split("T")[0]}T${event.eventTime}`)
-    const now = new Date()
-    return eventDateTime > now
-  }
-
-  // Filter events based on selected filter
-  const getFilteredEvents = () => {
-    switch (filter) {
-      case "upcoming":
-        return allEvents.filter(isEventUpcoming)
-      case "past":
-        return allEvents.filter((event) => !isEventUpcoming(event))
-      default:
-        return allEvents
-    }
-  }
-
-  const filteredEvents = getFilteredEvents()
-  const totalPages = Math.ceil(filteredEvents.length / eventsPerPage)
+  // const filteredEvents = getFilteredEvents()
+  const totalPages = Math.ceil(allEvents.length / eventsPerPage)
   const startIndex = (currentPage - 1) * eventsPerPage
-  const paginatedEvents = filteredEvents.slice(startIndex, startIndex + eventsPerPage)
-
-  const upcomingCount = allEvents.filter(isEventUpcoming).length
-  const pastCount = allEvents.length - upcomingCount
+  const paginatedEvents = allEvents.slice(startIndex, startIndex + eventsPerPage)
 
   const handleEventClick = (event: IEventPost) => {
     // Navigate to individual event page using the slug
     router.push(`/event/${event.slug}`)
   }
 
-  const handleFilterChange = (newFilter: FilterType) => {
-    setFilter(newFilter)
-    setCurrentPage(1) // Reset to first page when filter changes
-  }
+  // const handleFilterChange = (newFilter: FilterType) => {
+  //   setFilter(newFilter)
+  //   setCurrentPage(1) // Reset to first page when filter changes
+  // }
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -434,56 +410,13 @@ export default function EventPage() {
               </h1>
             </motion.div>
 
-            {/* Filter Tabs */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8 sm:mb-12"
-            >
-              <div className="flex items-center gap-2 bg-white rounded-xl p-2 shadow-lg border border-gray-100">
-                <Filter className="w-5 h-5 text-gray-500 ml-2" />
-                <button
-                  onClick={() => handleFilterChange("upcoming")}
-                  className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
-                    filter === "upcoming" ? "bg-purple-600 text-white shadow-md" : "text-gray-600 hover:bg-gray-100"
-                  }`}
-                >
-                  Upcoming ({upcomingCount})
-                </button>
-                <button
-                  onClick={() => handleFilterChange("past")}
-                  className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
-                    filter === "past" ? "bg-purple-600 text-white shadow-md" : "text-gray-600 hover:bg-gray-100"
-                  }`}
-                >
-                  Past ({pastCount})
-                </button>
-                <button
-                  onClick={() => handleFilterChange("all")}
-                  className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
-                    filter === "all" ? "bg-purple-600 text-white shadow-md" : "text-gray-600 hover:bg-gray-100"
-                  }`}
-                >
-                  All ({allEvents.length})
-                </button>
-              </div>
-            </motion.div>
-
             {/* Events Grid */}
-            {filteredEvents.length === 0 ? (
+            {allEvents.length === 0 ? (
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center py-16">
                 <div className="w-20 h-20 bg-gradient-to-r from-purple-100 to-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
                   <Calendar className="w-10 h-10 text-purple-400" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">No {filter} events found</h3>
-                <p className="text-gray-600">
-                  {filter === "upcoming"
-                    ? "Check back later for new upcoming events!"
-                    : filter === "past"
-                      ? "No past events to display yet."
-                      : "No events available at the moment."}
-                </p>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">No event found</h3>
               </motion.div>
             ) : (
               <>
