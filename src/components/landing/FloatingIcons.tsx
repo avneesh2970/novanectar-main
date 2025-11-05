@@ -344,7 +344,7 @@ const FloatingTechLayout: React.FC<FloatingTechLayoutProps> = ({ children }) => 
   }
 
   return (
-    <div className="relative w-full overflow-hidden" ref={containerRef}>
+    <div className="relative w-full overflow-hidden max-w-[1400px] mx-auto" ref={containerRef}>
       {/* Floating icons layer */}
       <div className="absolute inset-0 pointer-events-none">
         {techIcons.map((icon, index) => (

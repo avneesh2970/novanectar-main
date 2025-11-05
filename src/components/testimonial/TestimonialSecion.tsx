@@ -4,8 +4,6 @@ import type React from "react";
 
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
-// import Link from "next/link";
-// import { ArrowRight, ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import { DMSans } from "@/fonts/font";
 import { initGSAP, cleanupGSAP, gsap } from "@/lib/gsapUtils";
@@ -382,14 +380,14 @@ const TestimonialSection = () => {
   return (
     <div
       ref={sectionRef}
-      className="relative w-full min-h-screen overflow-hidden bg-[#f6f4f0]"
+      className="relative w-full overflow-hidden bg-[#f6f4f0] max-w-[1400] mx-auto"
     >
       {/* Background Elements */}
       <div className="absolute top-0 left-0 w-64 h-64 bg-green-300 rounded-full blur-3xl opacity-30" />
       <div className="absolute bottom-0 right-0 w-64 h-64 bg-blue-300 rounded-full blur-3xl opacity-30" />
 
       {/* Main Container */}
-      <div className="relative w-full min-h-screen flex flex-col justify-center">
+      <div className="relative w-full flex flex-col justify-center">
         {/* Background Image with Parallax */}
         <div ref={bgImageRef} className="absolute inset-0 w-full h-full">
           <Image

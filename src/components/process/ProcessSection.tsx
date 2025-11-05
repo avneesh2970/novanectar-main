@@ -222,7 +222,7 @@ export default function ProcessSection() {
       <div
         className={`${
           isMobile ? "" : "sticky top-0"
-        } h-screen flex flex-col items-start justify-center overflow-hidden`}
+        } h-screen flex flex-col items-start justify-center overflow-hidden max-w-[1400px] mx-auto`}
       >
         {/* <Image
           alt="Process"

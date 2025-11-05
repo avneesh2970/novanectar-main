@@ -178,7 +178,7 @@ export default function Clients() {
 
   return (
     <section
-      className="w-full py-14 px-4 bg-[white] relative"
+      className="w-full py-14 px-4 bg-[white] relative max-w-[1400px] mx-auto"
       onMouseDown={pauseAnimation}
       onMouseUp={resumeAnimation}
       onMouseLeave={resumeAnimation}
@@ -186,7 +186,7 @@ export default function Clients() {
       onTouchEnd={resumeAnimation}
     >
       <div className=""></div>
-      <div className="max-w-[1400px] mx-auto relative z-10">
+      <div className="relative z-10">
         {/* <h2
           className={`font-medium text-gray-900 text-4xl mb-14 text-center underline pt-8 ${DMSans.className}`}
         >

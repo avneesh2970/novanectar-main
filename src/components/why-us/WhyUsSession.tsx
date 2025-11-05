@@ -75,7 +75,7 @@ export const WhyChooseUs = () => {
     <div
       className={`bg-[#FFFFFF] py-10 px-4 sm:px-6 lg:px-8 w-full ${DMSans.className}`}
     >
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-[1400px] mx-auto">
         {/* <h2
           className={`font-medium text-[#6C6C6C] text-3xl mb-8 text-center ${DMSans.className}`}
         >

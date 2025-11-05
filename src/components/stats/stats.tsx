@@ -140,7 +140,7 @@ export default function StatsCounter() {
   ];
 
   return (
-    <div className={`${DMSans.className} py-8 sm:py-12 lg:py-16 bg-white`}>
+    <div className={`${DMSans.className} py-8 sm:py-12 lg:py-16 bg-white max-w-[1400px] mx-auto`}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0 }}

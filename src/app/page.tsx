@@ -6,6 +6,7 @@ import { MainContent } from "@/components/landing/MainContent";
 import LoadingSpinner from "@/components/ui/loading-spinner";
 import { HomeFaqs } from "@/data/faqsData";
 import StatsCounter from "@/components/stats/stats";
+import Slideshow from "@/components/ourProducts/Slider";
 
 // Lazy load below-the-fold components
 const ProcessSection = lazy(
@@ -46,6 +47,12 @@ export default function Home() {
 
       <Suspense fallback={<LoadingSpinner />}>
         <div className="content-visibility-auto">
+          <Slideshow/>
+        </div>
+      </Suspense>
+
+      <Suspense fallback={<LoadingSpinner />}>
+        <div className="content-visibility-auto">
           <Clients />
         </div>
       </Suspense>
@@ -72,7 +79,7 @@ export default function Home() {
       </Suspense>
 
       <Suspense fallback={<LoadingSpinner />}>
-        <div className="content-visibility-auto">
+        <div className="content-visibility-auto bg-[#F6F4F0]">
           <TestimonialSection />
         </div>
       </Suspense>

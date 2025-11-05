@@ -85,7 +85,7 @@ const FAQSection = ({faqs}:any) => {
 
   return (
     <div className={`bg-[#0B2341] px-4 py-12 ${DMSans.className}`}>
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-[1400px] mx-auto">
         {/* Split layout container */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
           {/* Left column - Text content */}
