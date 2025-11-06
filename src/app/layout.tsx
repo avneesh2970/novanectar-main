@@ -69,7 +69,7 @@ export const metadata: Metadata = {
     siteName: "Novanectar Services Pvt. Ltd.",
     images: [
       {
-        url: "https://novanectar.co.in/twitter-image.jpg",
+        url: "https://novanectar.co.in/twitter-image.png",
         width: 1200,
         height: 630,
         alt: "Novanectar Services Banner",
