@@ -88,15 +88,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })) || [];
 
   // 🆕 Fetch all dynamic events
-  const blogRes = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/blog/posts`, { next: { revalidate: 60 } });
-  const blogData = await blogRes.json();
-  const blogUrls =
-    blogData?.map((post: any) => ({
-      url: `${baseUrl}/event/${post.slug}`,
-      lastModified: new Date(post.updatedAt || post.createdAt || new Date()),
-      changeFrequency: "weekly" as const,
-      priority: 0.8,
-    })) || [];
+  // const blogRes = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/blog/posts`, { next: { revalidate: 60 } });
+  // const blogData = await blogRes.json();
+  //      console.log("blog.slug: ", blogData[1].slug)
+  // const blogUrls =
+  //   blogData?.map((post: any) => ({
+  //     url: `${baseUrl}/event/${post.slug}`,
+  //     lastModified: new Date(post.updatedAt || post.createdAt || new Date()),
+  //     changeFrequency: "weekly" as const,
+  //     priority: 0.8,
+  //   })) || [];
 
   // Combine all URLs
   return [
@@ -107,6 +108,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     aboutPage,
     ...newsEventsPages,
     ...eventUrls,
-    ...blogUrls,
+    // ...blogUrls,
   ];
 }
