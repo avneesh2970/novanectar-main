@@ -75,6 +75,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
+   // 🆕 Fetch all dynamic events
+  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/event/posts`, { next: { revalidate: 60 } });
+  const data = await res.json();
+
+  
+  const eventUrls =
+    data?.posts?.map((post: any) => ({
+      url: `${baseUrl}/event/${post.slug}`,
+      lastModified: new Date(post.updatedAt || post.createdAt || new Date()),
+      changeFrequency: "weekly" as const,
+      priority: 0.8,
+    })) || [];
+
   // Combine all URLs
   return [
     ...mainPages,
@@ -83,5 +96,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ourWorkPage,
     aboutPage,
     ...newsEventsPages,
+    ...eventUrls
   ];
 }
