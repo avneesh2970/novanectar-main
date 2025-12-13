@@ -224,6 +224,7 @@ const ProjectCard = ({ item, index }: any) => {
               alt={item.title}
               className="object-cover"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              unoptimized
             />
           </motion.div>
         </div>
