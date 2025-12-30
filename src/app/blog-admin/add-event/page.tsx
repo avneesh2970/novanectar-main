@@ -175,23 +175,23 @@ export default function EventDashboard() {
             )}
           </div>
         ) : (
-          <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className="bg-white rounded-lg shadow overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Title
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell">
                     Date
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">
                     Time
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden lg:table-cell">
                     Venue
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-3 sm:px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
@@ -199,26 +199,32 @@ export default function EventDashboard() {
               <tbody className="bg-white divide-y divide-gray-200">
                 {filteredPosts.map((post) => (
                   <tr key={post._id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      {post.title}
+                    <td className="px-3 sm:px-6 py-4 text-sm font-medium text-gray-900">
+                      <div className="max-w-[150px] sm:max-w-none truncate sm:whitespace-normal">
+                        {post.title}
+                      </div>
+                      {/* Show date on mobile */}
+                      <div className="text-xs text-gray-500 mt-1 sm:hidden">
+                        {format(new Date(post.eventDate), "dd MMM yyyy")}
+                      </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden sm:table-cell">
                       {format(new Date(post.eventDate), "dd MMM yyyy")}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden md:table-cell">
                       {post.eventTime}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {post.venue}
+                    <td className="px-3 sm:px-6 py-4 text-sm text-gray-500 hidden lg:table-cell">
+                      <div className="max-w-[200px] truncate">{post.venue}</div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <div className="flex justify-end gap-2">
                         <Link
                           href={`/blog-admin/add-event/edit/${post._id}`}
                           className="text-blue-600 hover:text-blue-900"
                         >
                           <Edit className="h-5 w-5" />
-                        </Link> 
+                        </Link>
                         <button
                           onClick={() => confirmDelete(post._id)}
                           className="text-red-600 hover:text-red-900"
