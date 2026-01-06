@@ -43,31 +43,33 @@ export default function NewsDetailPage() {
   const params = useParams();
   const slug = params.slug as string;
 
-  useEffect(() => {
-      if (slug) {
-        const canonicalUrl = `https://novanectar.co.in/news/${slug}`
+  // const canonicalLinkRef = useRef<HTMLLinkElement | null>(null)
 
-        // Remove existing canonical tags to avoid duplicates
-        const existingCanonical = document.querySelector('link[rel="canonical"]')
-        if (existingCanonical) {
-          existingCanonical.remove()
-        }
+  // useEffect(() => {
+  //     if (slug) {
+  //       const canonicalUrl = `https://novanectar.co.in/news/${slug}`
 
-        // Add new canonical tag
-        const link = document.createElement("link")
-        link.rel = "canonical"
-        link.href = canonicalUrl
-        document.head.appendChild(link)
+  //       // Remove existing canonical tags to avoid duplicates
+  //       const existingCanonical = document.querySelector('link[rel="canonical"]')
+  //       if (existingCanonical) {
+  //         existingCanonical.remove()
+  //       }
 
-        // Cleanup function to remove the tag when component unmounts or slug changes
-        return () => {
-          const canonical = document.querySelector(`link[rel="canonical"][href="${canonicalUrl}"]`)
-          if (canonical) {
-            canonical.remove()
-          }
-        }
-      }
-  }, [slug]);
+  //       // Add new canonical tag
+  //       const link = document.createElement("link")
+  //       link.rel = "canonical"
+  //       link.href = canonicalUrl
+  //       document.head.appendChild(link)
+
+  //       // Cleanup function to remove the tag when component unmounts or slug changes
+  //       return () => {
+  //         const canonical = document.querySelector(`link[rel="canonical"][href="${canonicalUrl}"]`)
+  //         if (canonical) {
+  //           canonical.remove()
+  //         }
+  //       }
+  //     }
+  // }, [slug]);
 
   useEffect(() => {
     const fetchNews = async () => {
