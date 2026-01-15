@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+
 import NewsDetailPageClient from "./news-detail-client";
 import { notFound } from "next/navigation";
 
@@ -39,12 +39,8 @@ async function getNews(slug: string): Promise<NewsItem | null> {
   }
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string };
-}): Promise<Metadata> {
-  const { slug } = params;
+export async function generateMetadata({ params }: any) {
+  const { slug } = await params;
   const news = await getNews(slug);
 
   if (!news) {
@@ -96,12 +92,8 @@ export async function generateMetadata({
   };
 }
 
-export default async function NewsDetailPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
-  const { slug } = params;
+export default async function NewsDetailPage({ params }: any) {
+  const { slug } = await params;
   const news = await getNews(slug);
 
   if (!news) {

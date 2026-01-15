@@ -1,46 +1,48 @@
-import type { Metadata } from "next"
-import { notFound } from "next/navigation"
-import { DMSans } from "@/fonts/font"
-import Navbar from "@/components/navbar/Navbar"
-import { projects } from "../__data/projects"
-import FooterSection from "@/components/footer/FooterSection"
-import Image from "next/image"
-import Link from "next/link"
-import { ArrowLeft } from "lucide-react"
 
-// Base URL for canonical tags - update this to your production domain
-const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://novanectar.co.in"
+import { notFound } from "next/navigation";
+import { DMSans } from "@/fonts/font";
+import Navbar from "@/components/navbar/Navbar";
+import { projects } from "../__data/projects";
+import FooterSection from "@/components/footer/FooterSection";
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 
-// Generate static params for all projects
+const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://novanectar.co.in";
+
 export async function generateStaticParams() {
   return projects.map((project: any) => ({
     slug: project.id.toString(),
-  }))
+  }));
 }
 
 // Generate metadata with canonical URL and SEO tags
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>
-}): Promise<Metadata> {
-  const { slug } = await params
-  const projectId = Number.parseInt(slug)
-  const project = projects.find((p: any) => p.id === projectId)
+export async function generateMetadata({ params }: any) {
+  const { slug } = await params;
+  const projectId = Number.parseInt(slug);
+  const project = projects.find((p: any) => p.id === projectId);
 
   if (!project) {
     return {
       title: "Project Not Found",
       description: "The requested project could not be found.",
-    }
+    };
   }
 
-  const canonicalUrl = `${BASE_URL}/portfolio/${slug}`
+  const canonicalUrl = `${BASE_URL}/portfolio/${slug}`;
 
   return {
     title: `${project.title} | Portfolio | NovaNectar`,
-    description: project.overview?.slice(0, 160) || `View details about ${project.title} project`,
-    keywords: [...project.tags, ...(project.category || []), "NovaNectar", "portfolio", "project"],
+    description:
+      project.overview?.slice(0, 160) ||
+      `View details about ${project.title} project`,
+    keywords: [
+      ...project.tags,
+      ...(project.category || []),
+      "NovaNectar",
+      "portfolio",
+      "project",
+    ],
     authors: [{ name: "NovaNectar" }],
     // Canonical URL
     alternates: {
@@ -49,7 +51,9 @@ export async function generateMetadata({
     // Open Graph tags
     openGraph: {
       title: `${project.title} | Portfolio`,
-      description: project.overview?.slice(0, 160) || `View details about ${project.title} project`,
+      description:
+        project.overview?.slice(0, 160) ||
+        `View details about ${project.title} project`,
       url: canonicalUrl,
       siteName: "NovaNectar",
       type: "article",
@@ -69,9 +73,13 @@ export async function generateMetadata({
     twitter: {
       card: "summary_large_image",
       title: `${project.title} | Portfolio`,
-      description: project.overview?.slice(0, 160) || `View details about ${project.title} project`,
+      description:
+        project.overview?.slice(0, 160) ||
+        `View details about ${project.title} project`,
       images: [
-        typeof project.imageUrl === "string" ? project.imageUrl : project.imageUrl?.src || `${BASE_URL}/og-image.jpg`,
+        typeof project.imageUrl === "string"
+          ? project.imageUrl
+          : project.imageUrl?.src || `${BASE_URL}/og-image.jpg`,
       ],
     },
     // Robots
@@ -86,24 +94,22 @@ export async function generateMetadata({
         "max-snippet": -1,
       },
     },
-  }
+  };
 }
 
-export default async function ProjectDetailPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>
-}) {
-  const { slug } = await params
-  const projectId = Number.parseInt(slug)
-  const currentProject = projects.find((p: any) => p.id === projectId)
+export default async function ProjectDetailPage({ params }: any) {
+  const { slug } = await params;
+  const projectId = Number.parseInt(slug);
+  const currentProject = projects.find((p: any) => p.id === projectId);
 
   if (!currentProject) {
-    notFound()
+    notFound();
   }
 
   // Get similar projects (excluding current project)
-  const similarProjects = projects.filter((p: any) => p.id !== projectId).slice(0, 6)
+  const similarProjects = projects
+    .filter((p: any) => p.id !== projectId)
+    .slice(0, 6);
 
   // JSON-LD structured data for SEO
   const jsonLd = {
@@ -117,12 +123,15 @@ export default async function ProjectDetailPage({
     },
     keywords: currentProject.tags.join(", "),
     url: `${BASE_URL}/portfolio/${slug}`,
-  }
+  };
 
   return (
     <>
       {/* JSON-LD Structured Data */}
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
 
       <div className={`${DMSans.className} bg-[#F5F5F5] text-[#333335]`}>
         <Navbar />
@@ -148,7 +157,9 @@ export default async function ProjectDetailPage({
             </div>
 
             <div className="">
-              <h1 className="text-3xl lg:text-4xl font-bold leading-tight">{currentProject.title}</h1>
+              <h1 className="text-3xl lg:text-4xl font-bold leading-tight">
+                {currentProject.title}
+              </h1>
               <div className="flex flex-wrap items-center gap-2 md:pb-8">
                 {currentProject.tags.map((tag: string, index: number) => (
                   <span key={index} className="text-sm text-gray-600">
@@ -163,14 +174,18 @@ export default async function ProjectDetailPage({
                   <div className="flex flex-col-reverse lg:flex-row gap-12">
                     <div className="flex-1">
                       <div className="text-gray-700 leading-relaxed">
-                        <h2 className="text-xl sm:text-2xl font-semibold mb-4">Project Overview</h2>
+                        <h2 className="text-xl sm:text-2xl font-semibold mb-4">
+                          Project Overview
+                        </h2>
                         {currentProject.overview || "No description available."}
                       </div>
                     </div>
 
                     <div className="flex-1 relative w-full h-96 rounded-lg overflow-hidden">
                       <Image
-                        src={currentProject.restImages?.[0] || "/placeholder.svg"}
+                        src={
+                          currentProject.restImages?.[0] || "/placeholder.svg"
+                        }
                         alt="Project visual"
                         fill
                         className="object-cover rounded-lg shadow"
@@ -209,14 +224,23 @@ export default async function ProjectDetailPage({
                           {project.title}
                         </h3>
                         <div className="flex flex-wrap items-center gap-1">
-                          {project.tags.slice(0, 2).map((tag: string, index: number) => (
-                            <span key={index} className="text-xs text-gray-500">
-                              {index > 0 && <span className="text-gray-400 mr-1">•</span>}
-                              {tag}
-                            </span>
-                          ))}
+                          {project.tags
+                            .slice(0, 2)
+                            .map((tag: string, index: number) => (
+                              <span
+                                key={index}
+                                className="text-xs text-gray-500"
+                              >
+                                {index > 0 && (
+                                  <span className="text-gray-400 mr-1">•</span>
+                                )}
+                                {tag}
+                              </span>
+                            ))}
                           {project.tags.length > 2 && (
-                            <span className="text-xs text-gray-400">• +{project.tags.length - 2} more</span>
+                            <span className="text-xs text-gray-400">
+                              • +{project.tags.length - 2} more
+                            </span>
                           )}
                         </div>
                       </div>
@@ -230,5 +254,5 @@ export default async function ProjectDetailPage({
         <FooterSection />
       </div>
     </>
-  )
+  );
 }

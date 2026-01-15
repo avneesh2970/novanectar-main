@@ -1,11 +1,7 @@
 import BlogPostContent from "@/components/blogs/blog-post-content";
-
-// Updated function to generate metadata with proper params handling
 export async function generateMetadata({ params }:any) {
   try {
-     // Await params before accessing its properties
     const { slug } = await params
-    // Construct the URL with the slug
     const url = new URL(
       "/api/blog/posts",
       process.env.NEXT_PUBLIC_APP_URL ||
