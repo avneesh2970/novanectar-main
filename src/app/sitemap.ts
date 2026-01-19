@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { projects } from "./portfolio/__data/projects";
 
 export const dynamic = "force-dynamic";
 
@@ -77,10 +78,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-   // 🆕 Fetch all dynamic events
-  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/event/posts`, { next: { revalidate: 60 } });
+  // Portfolio detail pages (static from projects data)
+  const portfolioUrls = projects.map((project: any) => ({
+    url: `${baseUrl}/portfolio/${project.id}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }));
+
+  // 🆕 Fetch all dynamic events
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_APP_URL}/api/event/posts`,
+    { next: { revalidate: 60 } },
+  );
   const data = await res.json();
-  
+
   const eventUrls =
     data?.map((post: any) => ({
       url: `${baseUrl}/event/${post.slug}`,
@@ -90,7 +102,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })) || [];
 
   // 🆕 Fetch all dynamic blogs
-  const blogRes = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/blog/posts`, { next: { revalidate: 60 } });
+  const blogRes = await fetch(
+    `${process.env.NEXT_PUBLIC_APP_URL}/api/blog/posts`,
+    { next: { revalidate: 60 } },
+  );
   const blogData = await blogRes.json();
   const blogUrls =
     blogData?.map((post: any) => ({
@@ -100,9 +115,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     })) || [];
 
-
-// 🆕 Fetch all dynamic news
-  const newsRes = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/news/posts`, { next: { revalidate: 60 } });
+  // 🆕 Fetch all dynamic news
+  const newsRes = await fetch(
+    `${process.env.NEXT_PUBLIC_APP_URL}/api/news/posts`,
+    { next: { revalidate: 60 } },
+  );
   const newsData = await newsRes.json();
   const newsUrls =
     newsData?.data?.map((post: any) => ({
@@ -120,6 +137,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ourWorkPage,
     aboutPage,
     ...newsEventsPages,
+    ...portfolioUrls,
     ...eventUrls,
     ...blogUrls,
     ...newsUrls,
