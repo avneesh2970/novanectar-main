@@ -47,12 +47,12 @@ export default function Page() {
               <div className="flex items-center space-x-2">
                 <GlobeIcon className="h-5 w-5 text-gray-400 flex-shrink-0" />
                 <a
-                  href="https://www.novanectar.co.in"
+                  href="https://novanectar.co.in"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-gray-900 transition-colors truncate"
                 >
-                  www.novanectar.co.in
+                  novanectar.co.in
                 </a>
               </div>
               <div className="flex items-center space-x-2">
