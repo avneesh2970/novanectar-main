@@ -284,35 +284,35 @@ body {
 
 
 /* Style for blog content in preview and display modes */
-.blog-content h1 {
-  font-size: 1.875rem !important; /* text-3xl */
+/* .blog-content h1 {
+  font-size: 1.875rem !important; 
   font-weight: bold !important;
   margin-top: 2rem !important;
   margin-bottom: 1rem !important;
-  color: #1f2937 !important; /* text-gray-800 */
+  color: #1f2937 !important; 
 }
 
 .blog-content h2 {
-  font-size: 1.5rem !important; /* text-2xl */
+  font-size: 1.5rem !important;
   font-weight: bold !important;
   margin-top: 2rem !important;
   margin-bottom: 1rem !important;
-  color: #1f2937 !important; /* text-gray-800 */
+  color: #1f2937 !important; 
 }
 
 .blog-content h3 {
-  font-size: 1.25rem !important; /* text-xl */
-  font-weight: 600 !important; /* font-semibold */
+  font-size: 1.25rem !important;
+  font-weight: 600 !important; 
   margin-top: 1.5rem !important;
   margin-bottom: 0.75rem !important;
-  color: #1f2937 !important; /* text-gray-800 */
+  color: #1f2937 !important; 
 }
 
 .blog-content p {
   margin-top: 1rem !important;
   margin-bottom: 1rem !important;
-  color: #4b5563 !important; /* text-gray-600 */
-  line-height: 1.625 !important; /* leading-relaxed */
+  color: #4b5563 !important; 
+  line-height: 1.625 !important; 
 }
 
 .blog-content ul {
@@ -339,37 +339,37 @@ body {
 }
 
 .blog-content blockquote {
-  border-left: 4px solid #d1d5db !important; /* border-gray-300 */
+  border-left: 4px solid #d1d5db !important; 
   padding-left: 1rem !important;
   padding-top: 0.5rem !important;
   padding-bottom: 0.5rem !important;
   margin-top: 1rem !important;
   margin-bottom: 1rem !important;
   font-style: italic !important;
-  color: #4b5563 !important; /* text-gray-600 */
-}
+  color: #4b5563 !important; 
+} */
 
 /* Ensure images in blog content are properly displayed */
-.blog-content img {
+/* .blog-content img {
   max-width: 100% !important;
   height: auto !important;
-  border-radius: 0.375rem !important; /* rounded-md */
+  border-radius: 0.375rem !important; 
   margin: 1rem 0;
-}
+} */
 
 /* Style links in blog content */
-.blog-content a {
-  color: #2563eb !important; /* blue-600 */
+/* .blog-content a {
+  color: #2563eb !important; 
   text-decoration: underline !important;
 }
 
 .blog-content a:hover {
-  color: #1d4ed8 !important; /* blue-700 */
-}
+  color: #1d4ed8 !important; 
+} */
 
 
 /* //////////////////project section //////////////////////////////////// */
-@keyframes fadeIn {
+/* @keyframes fadeIn {
   from {
     opacity: 0;
     transform: translateY(20px);
@@ -382,7 +382,7 @@ body {
 
 .animate-fadeIn {
   animation: fadeIn 0.5s ease-out forwards;
-}
+} */
 
 /* global.css */
 .scrollbar-hide::-webkit-scrollbar {
@@ -394,4 +394,3 @@ body {
   scrollbar-width: none;     /* Firefox */
 }
 
-/* bullet point make bold in blog detail page  */

@@ -193,7 +193,7 @@ export default function RootLayout({
       />
 
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${roboto_mono.variable} ${playfair.variable} ${DMSans.variable} ${DMSans400.variable} ${DMSans500.variable} antialiased bg-white`}
+        className={`${geistSans.variable} ${DMSans.variable} ${inter.variable} antialiased bg-white`}
       >
         <main>
           <AnalyticsListener />

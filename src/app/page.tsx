@@ -1,3 +1,5 @@
+export const dynamic = "force-static";
+export const revalidate = 60;
 
 import { Suspense, lazy } from "react";
 import { MainContent } from "@/components/landing/MainContent";

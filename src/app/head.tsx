@@ -25,8 +25,8 @@ export default function Head() {
       <link rel="preload" href="/assets/landing/icons/js.png" as="image" />
 
       {/* Preconnect to external domains */}
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      {/* <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" /> */}
     </>
   )
 }
