@@ -3,6 +3,7 @@ import { useEffect, useState, lazy, Suspense } from "react";
 import { scrollToSection } from "@/helpers/utils";
 import { DMSans, WorkSans } from "@/fonts/font";
 import Navbar from "../navbar/Navbar";
+import AboutSection from "@/components/about/AboutSection"
 
 // Lazy load non-critical components
 const FloatingTechLayout = lazy(() =>
@@ -17,11 +18,6 @@ const ServicesSection = lazy(() =>
   }))
 );
 
-const AboutSection = lazy(() =>
-  import("../about/AboutSection").then((mod) => ({
-    default: mod.default,
-  }))
-);
 
 const ServiceScroll = lazy(() =>
   import("../services/servicesScroll/ServiceScroll").then((mod) => ({
@@ -306,9 +302,9 @@ export const MainContent = () => {
               <ServiceScroll />
             </Suspense>
             <div id="about-section">
-              <Suspense fallback={<LoadingFallback />}>
+              {/* <Suspense fallback={<LoadingFallback />}> */}
                 <AboutSection />
-              </Suspense>
+              {/* </Suspense> */}
             </div>
 
             <div className="bg-[#F5F5F5] text-black text-3xl text-center">

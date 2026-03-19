@@ -6,6 +6,7 @@ import Image from "next/image";
 import { ArrowRight, Search, Calendar } from "lucide-react";
 import { DMSans } from "@/fonts/font";
 import { format } from "date-fns";
+import FooterSection from "@/components/footer/FooterSection";
 
 interface BlogPost {
   _id: string;
@@ -139,7 +140,7 @@ export default function BlogPage() {
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {filteredPosts.map((post) => (
               <div
                 key={post._id}
@@ -195,7 +196,7 @@ export default function BlogPage() {
                     </p>
 
                     {/* Categories */}
-                    <div className="flex flex-wrap gap-2 mt-3">
+                    <div className="flex gap-2 mt-3 overflow-x-auto whitespace-nowrap scrollbar-hide">
                       {post.categories.map((category, i) => (
                         <span
                           key={i}
@@ -214,6 +215,7 @@ export default function BlogPage() {
           </div>
         )}
       </div>
+      <FooterSection/>
     </main>
   );
 }

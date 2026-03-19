@@ -41,6 +41,45 @@ body {
   }
 }
 
+@layer base {
+  .prose p {
+    margin-top: 1em;
+    margin-bottom: 1em;
+  }
+
+  .prose h1,
+  .prose h2,
+  .prose h3,
+  .prose h4 {
+    margin-top: 1.5em;
+    margin-bottom: 0.75em;
+  }
+
+   .prose h1 {
+    font-size: 2.25rem; /* 36px */
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .prose h2 {
+    font-size: 1.75rem; /* ~28px */
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .prose h3 {
+    font-size: 1.4rem; /* ~22px */
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .prose h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+}
+
 .no-select {
   user-select: none; /* Disable text/image selection */
   -webkit-user-drag: none; /* Disable dragging in WebKit browsers */
@@ -345,3 +384,14 @@ body {
   animation: fadeIn 0.5s ease-out forwards;
 }
 
+/* global.css */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE/Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
+/* bullet point make bold in blog detail page  */

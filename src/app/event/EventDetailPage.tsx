@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import FooterSection from "@/components/footer/FooterSection";
 import Navbar from "@/components/navbar/Navbar";
+import { DMSans } from "@/fonts/font";
 
 interface IEventPost {
   _id: string;
@@ -73,7 +74,7 @@ export default function EventDetailPage({ event }: { event: IEventPost }) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-purple-50">
+    <div className={`${DMSans.className}  min-h-screen bg-gradient-to-br from-slate-50 via-white to-purple-50`}>
       <Navbar />
 
       {/* Background Animation */}

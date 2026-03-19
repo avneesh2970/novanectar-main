@@ -1,37 +1,51 @@
-"use client"
-import { Calendar, Clock, User, ArrowLeft, Sparkles, Tag, Share2 } from "lucide-react"
-import Image from "next/image"
-import Link from "next/link"
-import { motion } from "framer-motion"
-import FooterSection from "@/components/footer/FooterSection"
-import Navbar from "@/components/navbar/Navbar"
+"use client";
+import {
+  Calendar,
+  Clock,
+  User,
+  ArrowLeft,
+  Sparkles,
+  Tag,
+  Share2,
+} from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import FooterSection from "@/components/footer/FooterSection";
+import Navbar from "@/components/navbar/Navbar";
+import { DMSans } from "@/fonts/font";
+import { format } from "date-fns";
 
 interface NewsItem {
-  _id: string
-  title: string
-  slug: string
-  description: string
-  content: string
-  featuredImage?: string
-  featuredImageAlt?: string
-  author: string
-  category: string
-  tags: string[]
-  publishDate: string
-  views: number
-  metaTitle?: string
-  metaDescription?: string
-  createdAt: string
-  updatedAt: string
+  _id: string;
+  title: string;
+  slug: string;
+  description: string;
+  content: string;
+  featuredImage?: string;
+  featuredImageAlt?: string;
+  author: string;
+  category: string;
+  tags: string[];
+  publishDate: string;
+  views: number;
+  metaTitle?: string;
+  metaDescription?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 interface ShareButtonProps {
-  title: string
-  description: string
-  variant?: "icon" | "button"
+  title: string;
+  description: string;
+  variant?: "icon" | "button";
 }
 
-function ShareButton({ title, description, variant = "icon" }: ShareButtonProps) {
+function ShareButton({
+  title,
+  description,
+  variant = "icon",
+}: ShareButtonProps) {
   const handleShare = async () => {
     if (navigator.share) {
       try {
@@ -39,15 +53,15 @@ function ShareButton({ title, description, variant = "icon" }: ShareButtonProps)
           title,
           text: description,
           url: window.location.href,
-        })
+        });
       } catch (err) {
-        console.log("Error sharing:", err)
+        console.log("Error sharing:", err);
       }
     } else {
-      navigator.clipboard.writeText(window.location.href)
-      alert("Link copied to clipboard!")
+      navigator.clipboard.writeText(window.location.href);
+      alert("Link copied to clipboard!");
     }
-  }
+  };
 
   if (variant === "button") {
     return (
@@ -58,7 +72,7 @@ function ShareButton({ title, description, variant = "icon" }: ShareButtonProps)
         <Share2 className="w-4 h-4" />
         <span>Share Article</span>
       </button>
-    )
+    );
   }
 
   return (
@@ -68,7 +82,7 @@ function ShareButton({ title, description, variant = "icon" }: ShareButtonProps)
     >
       <Share2 className="w-5 h-5 text-gray-600" />
     </button>
-  )
+  );
 }
 
 function NewsAnimations() {
@@ -81,7 +95,7 @@ function NewsAnimations() {
         ease: "easeInOut",
       },
     },
-  }
+  };
 
   return (
     <div className="fixed inset-0 overflow-hidden pointer-events-none">
@@ -103,28 +117,31 @@ function NewsAnimations() {
         className="absolute bottom-20 left-1/4 w-20 h-20 sm:w-24 sm:h-24 bg-pink-500/20 rounded-full blur-xl"
       />
     </div>
-  )
+  );
 }
 
 function getReadingTime(content: string) {
-  const wordsPerMinute = 200
-  const words = content.split(" ").length
-  const minutes = Math.ceil(words / wordsPerMinute)
-  return `${minutes} min read`
+  const wordsPerMinute = 200;
+  const words = content.split(" ").length;
+  const minutes = Math.ceil(words / wordsPerMinute);
+  return `${minutes} min read`;
 }
 
 export default function NewsDetailPageClient({ news }: { news: NewsItem }) {
-  const date = new Date(news.publishDate)
-  const formattedDate = date.toLocaleDateString("en-US", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  })
+  // const date = new Date(news.publishDate)
+  // const formattedDate = date.toLocaleDateString("en-US", {
+  //   weekday: "long",
+  //   year: "numeric",
+  //   month: "long",
+  //   day: "numeric",
+  // })
+  const formattedDate = format(new Date(news.publishDate), "dd MMMM yyyy");
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-purple-50">
+      <div
+        className={`${DMSans.className} min-h-screen bg-gradient-to-br from-slate-50 via-white to-purple-50`}
+      >
         <Navbar />
 
         {/* Background Elements - moved to client component for animations */}
@@ -167,7 +184,10 @@ export default function NewsDetailPageClient({ news }: { news: NewsItem }) {
                   <span className="px-4 py-2 bg-white/90 backdrop-blur-sm text-purple-800 text-sm font-semibold rounded-full shadow-lg">
                     {news.category}
                   </span>
-                  <ShareButton title={news.title} description={news.description} />
+                  <ShareButton
+                    title={news.title}
+                    description={news.description}
+                  />
                 </div>
 
                 {/* Title Overlay */}
@@ -222,7 +242,9 @@ export default function NewsDetailPageClient({ news }: { news: NewsItem }) {
                       <Clock className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                      <p className="text-sm font-semibold">{getReadingTime(news.content)}</p>
+                      <p className="text-sm font-semibold">
+                        {getReadingTime(news.content)}
+                      </p>
                       <p className="text-xs text-gray-500">Reading time</p>
                     </div>
                   </div>
@@ -237,7 +259,9 @@ export default function NewsDetailPageClient({ news }: { news: NewsItem }) {
 
                 {/* Rich Content */}
                 <div className="mb-8">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-6">Full Article</h2>
+                  <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                    Full Article
+                  </h2>
                   <div className="prose prose-lg max-w-none">
                     <div
                       className="[&>h1]:text-3xl [&>h1]:font-bold [&>h1]:mt-8 [&>h1]:mb-4 [&>h1]:text-gray-800
@@ -283,10 +307,16 @@ export default function NewsDetailPageClient({ news }: { news: NewsItem }) {
                     <div className="text-sm text-gray-500">
                       <p>Published on {formattedDate}</p>
                       {news.createdAt !== news.publishDate && (
-                        <p className="mt-1">Last updated: {new Date(news.updatedAt).toLocaleDateString()}</p>
+                        <p className="mt-1">
+                          Last updated: {format(new Date(news.updatedAt), "dd MMM yyyy")}
+                        </p>
                       )}
                     </div>
-                    <ShareButton title={news.title} description={news.description} variant="button" />
+                    <ShareButton
+                      title={news.title}
+                      description={news.description}
+                      variant="button"
+                    />
                   </div>
                 </div>
               </div>
@@ -297,5 +327,5 @@ export default function NewsDetailPageClient({ news }: { news: NewsItem }) {
         <FooterSection />
       </div>
     </>
-  )
+  );
 }

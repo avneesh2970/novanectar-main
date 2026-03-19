@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React from "react";
-import about from "@/assets/about/about.png";
+import about from "@/assets/about/about.webp";
 import { DMSans400 } from "@/fonts/font";
 import Navbar from "@/components/navbar/Navbar";
 import FooterSection from "@/components/footer/FooterSection";

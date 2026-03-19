@@ -17,56 +17,56 @@ const features = [
     icon: reliability,
     title: "Reliability",
     description:
-      "Trusted by millions Uniswap products are powered by the Uniswap Protocol. The protocol is the largest onchain marketplace",
+      "At Novanectar Services Pvt. Ltd., we ensure consistent, transparent digital marketing, website development and IT solutions delivering measurable long-term growth.",
   },
   {
     id: 2,
     icon: scalability,
     title: "Scalability",
     description:
-      "Trusted by millions Uniswap products are powered by the Uniswap Protocol. The protocol is the largest onchain marketplace",
+      "Our scalable digital strategies and custom software solutions grow with your business, handling increasing traffic, leads and customers seamlessly.",
   },
   {
     id: 3,
     icon: security,
     title: "Security",
     description:
-      "Trusted by millions Uniswap products are powered by the Uniswap Protocol. The protocol is the largest onchain marketplace",
+      "We prioritize advanced security standards to protect your website, campaigns, customer data and digital assets from potential risks.",
   },
   {
     id: 4,
     icon: time,
     title: "Time Efficiency",
     description:
-      "Trusted by millions Uniswap products are powered by the Uniswap Protocol. The protocol is the largest onchain marketplace",
+      "Our structured planning and fast execution ensure timely project delivery without compromising digital marketing quality or results.",
   },
   {
     id: 5,
     icon: customization,
     title: "Customization",
     description:
-      "Trusted by millions Uniswap products are powered by the Uniswap Protocol. The protocol is the largest onchain marketplace",
+      "We create personalized digital marketing strategies tailored to your industry, audience and goals for maximum engagement and growth.",
   },
   {
     id: 6,
     icon: expertTeam,
     title: "Expert Teams",
     description:
-      "Trusted by millions Uniswap products are powered by the Uniswap Protocol. The protocol is the largest onchain marketplace",
+      "Our experienced SEO specialists, developers, designers, and marketers collaborate to deliver strategic, data-driven, growth-focused digital solutions.",
   },
   {
     id: 7,
     icon: support,
     title: "24/7 Support",
     description:
-      "Trusted by millions Uniswap products are powered by the Uniswap Protocol. The protocol is the largest onchain marketplace",
+      "We provide responsive, round-the-clock assistance to address campaign updates, technical issues and ongoing digital performance needs.",
   },
   {
     id: 8,
     icon: delivery,
     title: "On time delivery",
     description:
-      "Trusted by millions Uniswap products are powered by the Uniswap Protocol. The protocol is the largest onchain marketplace",
+      "With milestone tracking and organized workflows, we guarantee high-quality digital solutions delivered within committed timelines.",
   },
 ];
 

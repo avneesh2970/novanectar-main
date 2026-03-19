@@ -48,7 +48,7 @@ export const DMSans = DM_Sans({
 // Fix: Use correct weight values
 export const DMSans500 = DM_Sans({
   subsets: ["latin"],
-  weight: ["500"], // Changed from 300 to 500 to match the variable name
+  weight: ["400", "500", "700", "800"], // Changed from 300 to 500 to match the variable name
   style: ["normal"],
   display: "swap",
   preload: true, // Changed to true for critical font

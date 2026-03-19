@@ -29,6 +29,49 @@ import img26 from "@/assets/clients/26.png";
 import img27 from "@/assets/clients/27.png";
 import img28 from "@/assets/clients/28.png";
 import img29 from "@/assets/clients/29.png";
+import img30 from "@/assets/clients/30.png";
+
+import img31 from "@/assets/clients/31.png";
+import img32 from "@/assets/clients/32.png";
+import img33 from "@/assets/clients/33.png";
+import img34 from "@/assets/clients/34.png";
+import img35 from "@/assets/clients/35.png";
+import img36 from "@/assets/clients/36.png";
+import img37 from "@/assets/clients/37.png";
+import img38 from "@/assets/clients/38.png";
+import img39 from "@/assets/clients/39.png";
+import img40 from "@/assets/clients/40.png";
+
+import img41 from "@/assets/clients/41.png";
+import img42 from "@/assets/clients/42.png";
+import img43 from "@/assets/clients/43.png";
+import img44 from "@/assets/clients/44.png";
+import img45 from "@/assets/clients/45.png";
+import img46 from "@/assets/clients/46.png";
+import img47 from "@/assets/clients/47.png";
+import img48 from "@/assets/clients/48.png";
+import img49 from "@/assets/clients/49.png";
+import img50 from "@/assets/clients/50.png";
+
+import img51 from "@/assets/clients/51.png";
+import img52 from "@/assets/clients/52.png";
+import img53 from "@/assets/clients/53.png";
+import img54 from "@/assets/clients/54.png";
+import img55 from "@/assets/clients/55.png";
+import img56 from "@/assets/clients/56.png";
+import img57 from "@/assets/clients/57.png";
+import img58 from "@/assets/clients/58.png";
+import img59 from "@/assets/clients/59.png";
+import img60 from "@/assets/clients/60.png";
+
+import img61 from "@/assets/clients/61.png";
+import img62 from "@/assets/clients/62.png";
+import img63 from "@/assets/clients/63.png";
+import img64 from "@/assets/clients/64.png";
+import img65 from "@/assets/clients/65.png";
+import img66 from "@/assets/clients/66.png";
+import img67 from "@/assets/clients/67.png";
+import img68 from "@/assets/clients/68.png";
 
 import { useRef, useEffect, useState, useCallback } from "react";
 import Image from "next/image";
@@ -69,6 +112,50 @@ export default function Clients() {
     img27,
     img28,
     img29,
+    img30,
+
+    img31,
+    img32,
+    img33,
+    img34,
+    img35,
+    img36,
+    img37,
+    img38,
+    img39,
+    img40,
+
+    img41,
+    img42,
+    img43,
+    img44,
+    img45,
+    img46,
+    img47,
+    img48,
+    img49,
+    img50,
+
+    img51,
+    img52,
+    img53,
+    img54,
+    img55,
+    img56,
+    img57,
+    img58,
+    img59,
+    img60,
+
+    img61,
+    img62,
+    img63,
+    img64,
+    img65,
+    img66,
+    img67,
+    img68,
+
   ];
   const imageSizes = [
     { id: 1, width: 150, height: 120 },
@@ -98,6 +185,45 @@ export default function Clients() {
     { id: 27, width: 150, height: 120 },
     { id: 28, width: 150, height: 120 },
     { id: 29, width: 150, height: 120 },
+    { id: 30, width: 150, height: 120 },
+    { id: 31, width: 150, height: 120 },
+    { id: 32, width: 150, height: 120 },
+    { id: 33, width: 150, height: 120 },
+    { id: 34, width: 150, height: 120 },
+    { id: 35, width: 150, height: 120 },
+    { id: 36, width: 150, height: 120 },
+    { id: 37, width: 150, height: 120 },
+    { id: 38, width: 150, height: 120 },
+    { id: 39, width: 150, height: 120 },
+    { id: 40, width: 150, height: 120 },
+    { id: 41, width: 150, height: 120 },
+    { id: 42, width: 150, height: 120 },
+    { id: 43, width: 150, height: 120 },
+    { id: 44, width: 150, height: 120 },
+    { id: 45, width: 150, height: 120 },
+    { id: 46, width: 150, height: 120 },
+    { id: 47, width: 150, height: 120 },
+    { id: 48, width: 150, height: 120 },
+    { id: 49, width: 150, height: 120 },
+    { id: 50, width: 150, height: 120 },
+    { id: 51, width: 150, height: 120 },
+    { id: 52, width: 150, height: 120 },
+    { id: 53, width: 150, height: 120 },
+    { id: 54, width: 150, height: 120 },
+    { id: 55, width: 150, height: 120 },
+    { id: 56, width: 150, height: 120 },
+    { id: 57, width: 150, height: 120 },
+    { id: 58, width: 150, height: 120 },
+    { id: 59, width: 150, height: 120 },
+    { id: 60, width: 150, height: 120 },
+    { id: 61, width: 150, height: 120 },
+    { id: 62, width: 150, height: 120 },
+    { id: 63, width: 150, height: 120 },
+    { id: 64, width: 150, height: 120 },
+    { id: 65, width: 150, height: 120 },
+    { id: 66, width: 150, height: 120 },
+    { id: 67, width: 150, height: 120 },
+    { id: 68, width: 150, height: 120 },
   ];
 
   const totalWidth =

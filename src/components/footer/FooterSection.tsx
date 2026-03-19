@@ -173,7 +173,7 @@ const FooterSection = () => {
               <h3 className="text-sm font-medium mb-4">CAREER</h3>
               <ul className="space-y-2">
                 {[
-                  { name: "Jobs", link: "/career" },
+                  { name: "Jobs", link: "https://nnhire.com/job" },
                   {
                     name: "Internship",
                     link: "https://edu.novanectar.co.in/internships",
