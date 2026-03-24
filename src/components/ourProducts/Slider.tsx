@@ -8,8 +8,8 @@ import { motion } from "framer-motion";
 import { DMSans } from "@/fonts/font";
 
 const slideImages = [
-    { url: "/images/product/sszone.png" },
-    { url: "/images/product/nnhire.png" },
+  { url: "/images/product/sszone.png" },
+  { url: "/images/product/nnhire.png" },
   { url: "/images/product/tap-to-taste.png" },
   { url: "/images/product/billing.png" },
 ];
@@ -38,7 +38,7 @@ const Slideshow = () => {
         indicators
         pauseOnHover
         infinite
-        autoplay={true} 
+        autoplay={true}
       >
         {slideImages.map((fadeImage, index) => (
           <div key={index} className="each-fade flex justify-center">
