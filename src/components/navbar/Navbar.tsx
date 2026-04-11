@@ -47,7 +47,7 @@ const navItems: any = [
     items: [
       {
         label: "Internship",
-        href: "https://internship.novanectar.co.in/",
+        href: "https://edu.novanectar.co.in/internships",
       },
       {
         label: "Training",
