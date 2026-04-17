@@ -1,28 +1,27 @@
 import type { MetadataRoute } from "next";
 import { projects } from "./portfolio/__data/projects";
-
-export const dynamic = "force-dynamic";
+import { getBlogPosts, getEvents, getNewsItems } from "@/lib/content";
+import { SITE_URL } from "@/lib/site";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = "https://novanectar.co.in";
+  const baseUrl = SITE_URL;
+  const staticLastModified = new Date("2026-04-15");
 
-  // Main pages
   const mainPages = [
     {
       url: baseUrl,
-      lastModified: new Date(),
+      lastModified: staticLastModified,
       changeFrequency: "weekly" as const,
       priority: 1,
     },
     {
       url: `${baseUrl}/privacy`,
-      lastModified: new Date(),
+      lastModified: staticLastModified,
       changeFrequency: "monthly" as const,
       priority: 0.5,
     },
   ];
 
-  // Services pages
   const services = [
     "seo",
     "social-media-management",
@@ -31,105 +30,97 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "mobile-development",
     "web-development",
   ];
+
   const serviceUrls = services.map((service) => ({
     url: `${baseUrl}/services/${service}`,
-    lastModified: new Date(),
+    lastModified: staticLastModified,
     changeFrequency: "monthly" as const,
     priority: 0.8,
   }));
 
-  // Blog main page
   const blogMainPage = {
     url: `${baseUrl}/blog`,
-    lastModified: new Date(),
+    lastModified: staticLastModified,
     changeFrequency: "daily" as const,
     priority: 0.9,
   };
 
-  // our portfolio  page
   const ourWorkPage = {
     url: `${baseUrl}/portfolio`,
-    lastModified: new Date(),
-    changeFrequency: "daily" as const,
+    lastModified: staticLastModified,
+    changeFrequency: "monthly" as const,
     priority: 0.9,
   };
 
-  // About page
   const aboutPage = {
     url: `${baseUrl}/about-us`,
-    lastModified: new Date(),
-    changeFrequency: "daily" as const,
+    lastModified: staticLastModified,
+    changeFrequency: "monthly" as const,
     priority: 0.9,
   };
 
-  // News and Events pages
   const newsEventsPages = [
     {
       url: `${baseUrl}/news`,
-      lastModified: new Date(),
+      lastModified: staticLastModified,
       changeFrequency: "daily" as const,
       priority: 0.8,
     },
     {
       url: `${baseUrl}/event`,
-      lastModified: new Date(),
+      lastModified: staticLastModified,
       changeFrequency: "weekly" as const,
       priority: 0.8,
     },
   ];
 
-  // Portfolio detail pages (static from projects data)
   const portfolioUrls = projects.map((project: any) => ({
     url: `${baseUrl}/portfolio/${project.id}`,
-    lastModified: new Date(),
+    lastModified: staticLastModified,
     changeFrequency: "monthly" as const,
     priority: 0.7,
   }));
 
-  // 🆕 Fetch all dynamic events
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_APP_URL}/api/event/posts`,
-    { next: { revalidate: 60 } },
-  );
-  const data = await res.json();
+  let eventUrls: MetadataRoute.Sitemap = [];
+  let blogUrls: MetadataRoute.Sitemap = [];
+  let newsUrls: MetadataRoute.Sitemap = [];
 
-  const eventUrls =
-    data?.map((post: any) => ({
+  try {
+    const events = await getEvents();
+    eventUrls = events.map((post) => ({
       url: `${baseUrl}/event/${post.slug}`,
-      lastModified: new Date(post.updatedAt || post.createdAt || new Date()),
+      lastModified: new Date(post.updatedAt || post.createdAt),
       changeFrequency: "weekly" as const,
       priority: 0.8,
-    })) || [];
+    }));
+  } catch (error) {
+    console.error("Failed to include event URLs in sitemap:", error);
+  }
 
-  // 🆕 Fetch all dynamic blogs
-  const blogRes = await fetch(
-    `${process.env.NEXT_PUBLIC_APP_URL}/api/blog/posts`,
-    { next: { revalidate: 60 } },
-  );
-  const blogData = await blogRes.json();
-  const blogUrls =
-    blogData?.map((post: any) => ({
+  try {
+    const blogPosts = await getBlogPosts();
+    blogUrls = blogPosts.map((post) => ({
       url: `${baseUrl}/blog/${post.slug}`,
-      lastModified: new Date(post.updatedAt || post.createdAt || new Date()),
+      lastModified: new Date(post.updatedAt || post.createdAt),
       changeFrequency: "weekly" as const,
       priority: 0.8,
-    })) || [];
+    }));
+  } catch (error) {
+    console.error("Failed to include blog URLs in sitemap:", error);
+  }
 
-  // 🆕 Fetch all dynamic news
-  const newsRes = await fetch(
-    `${process.env.NEXT_PUBLIC_APP_URL}/api/news/posts`,
-    { next: { revalidate: 60 } },
-  );
-  const newsData = await newsRes.json();
-  const newsUrls =
-    newsData?.data?.map((post: any) => ({
+  try {
+    const newsItems = await getNewsItems();
+    newsUrls = newsItems.map((post) => ({
       url: `${baseUrl}/news/${post.slug}`,
-      lastModified: new Date(post.updatedAt || post.createdAt || new Date()),
+      lastModified: new Date(post.updatedAt || post.createdAt),
       changeFrequency: "weekly" as const,
       priority: 0.8,
-    })) || [];
+    }));
+  } catch (error) {
+    console.error("Failed to include news URLs in sitemap:", error);
+  }
 
-  // Combine all URLs
   return [
     ...mainPages,
     ...serviceUrls,

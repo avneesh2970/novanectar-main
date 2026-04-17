@@ -1,12 +1,14 @@
 
 import type { Metadata } from "next";
 import WebsiteDevelopmentClientPage from "./WebsiteDevelopmentClientPage";
+import { buildPageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Website Development in Dehradun | Smart IT Solution",
+export const metadata: Metadata = buildPageMetadata({
+  title: "Website Development in Dehradun",
   description:
-    "Novanectar - Smart IT Solution is one of the best website development in dehradun. we create stunning websites that are easy to navigate and make sense.",
-};
+    "Design and build fast, modern, search-friendly websites with NovaNectar's website development services in Dehradun.",
+  path: "/services/web-development",
+});
 
 export default function WebsiteDevelopmentPage() {
   return <WebsiteDevelopmentClientPage />;

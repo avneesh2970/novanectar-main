@@ -1,5 +1,6 @@
 import Image from "next/image";
 import React from "react";
+import type { Metadata } from "next";
 import about from "@/assets/about/about.webp";
 import { DMSans400 } from "@/fonts/font";
 import Navbar from "@/components/navbar/Navbar";
@@ -12,6 +13,14 @@ import mcaLogo from "@/assets/about/certifications/mca.png";
 import ourVision from "@/assets/about/ourVision.jpg";
 import ourStory from "@/assets/about/ourStory.jpg";
 import TeamSection from "@/components/team/TeamSection";
+import { buildPageMetadata } from "@/lib/site";
+
+export const metadata: Metadata = buildPageMetadata({
+  title: "About NovaNectar",
+  description:
+    "Learn about NovaNectar Services Pvt. Ltd., our story, certifications, vision, and the team behind our smart IT solutions in Dehradun.",
+  path: "/about-us",
+});
 
 export default function page() {
   const certifications = [

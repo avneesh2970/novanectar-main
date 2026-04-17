@@ -1,57 +1,25 @@
-
 import NewsDetailPageClient from "./news-detail-client";
 import { notFound } from "next/navigation";
-
-interface NewsItem {
-  _id: string;
-  title: string;
-  slug: string;
-  description: string;
-  content: string;
-  featuredImage?: string;
-  featuredImageAlt?: string;
-  author: string;
-  category: string;
-  tags: string[];
-  publishDate: string;
-  views: number;
-  metaTitle?: string;
-  metaDescription?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://novanectar.co.in";
-
-async function getNews(slug: string): Promise<NewsItem | null> {
-  try {
-    const response = await fetch(`${BASE_URL}/api/news/posts?slug=${slug}`, {
-      next: { revalidate: 60 }, // Revalidate every 60 seconds
-    });
-    const result = await response.json();
-    if (result.success) {
-      return result.data;
-    }
-    return null;
-  } catch (err) {
-    console.error("Failed to fetch news:", err);
-    return null;
-  }
-}
+import { getNewsItem } from "@/lib/content";
+import { absoluteUrl, SITE_NAME, SITE_URL } from "@/lib/site";
 
 export async function generateMetadata({ params }: any) {
   const { slug } = await params;
-  const news = await getNews(slug);
+  const news = await getNewsItem(slug);
 
   if (!news) {
     return {
       title: "Article Not Found | NovaNectar",
       description:
         "The article you're looking for doesn't exist or has been removed.",
+      robots: {
+        index: false,
+        follow: false,
+      },
     };
   }
 
-  const canonicalUrl = `${BASE_URL}/news/${slug}`;
+  const canonicalUrl = absoluteUrl(`/news/${slug}`);
 
   return {
     title: news.metaTitle || `${news.title} | NovaNectar News`,
@@ -62,7 +30,7 @@ export async function generateMetadata({ params }: any) {
       title: news.metaTitle || news.title,
       description: news.metaDescription || news.description,
       url: canonicalUrl,
-      siteName: "NovaNectar",
+      siteName: SITE_NAME,
       type: "article",
       publishedTime: news.publishDate,
       modifiedTime: news.updatedAt,
@@ -94,11 +62,45 @@ export async function generateMetadata({ params }: any) {
 
 export default async function NewsDetailPage({ params }: any) {
   const { slug } = await params;
-  const news = await getNews(slug);
+  const news = await getNewsItem(slug);
 
   if (!news) {
     notFound();
   }
 
-  return <NewsDetailPageClient news={news} />;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    headline: news.metaTitle || news.title,
+    description: news.metaDescription || news.description,
+    datePublished: news.publishDate,
+    dateModified: news.updatedAt,
+    author: {
+      "@type": "Person",
+      name: news.author,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: SITE_NAME,
+      logo: {
+        "@type": "ImageObject",
+        url: `${SITE_URL}/logo.png`,
+      },
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": absoluteUrl(`/news/${news.slug}`),
+    },
+    image: news.featuredImage ? [news.featuredImage] : [],
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <NewsDetailPageClient news={news} />
+    </>
+  );
 }

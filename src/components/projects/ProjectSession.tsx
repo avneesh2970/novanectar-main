@@ -293,7 +293,7 @@ const ProjectSession = () => {
             href="/portfolio"
             className="py-3 px-6 text-center rounded-md bg-[#4169E1] text-white font-medium hover:bg-blue-600 transition-colors"
           >
-            See more
+            View Portfolio
           </Link>
         </div>
       </div>

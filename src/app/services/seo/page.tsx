@@ -1,11 +1,14 @@
 import React from "react";
 import SeoServicePage from "./SeoClientPage";
 import { Metadata } from "next";
+import { buildPageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "SEO Service in Dehradun | Smart IT Solution",
-  description: "Boost your online presence with SEO services in dehradun by a Smart IT Solution. we create unique content and follow the best SEO practices",
-};
+export const metadata: Metadata = buildPageMetadata({
+  title: "SEO Services in Dehradun",
+  description:
+    "Improve rankings, organic traffic, and local search visibility with NovaNectar's SEO services in Dehradun.",
+  path: "/services/seo",
+});
 
 export default function SeoService() {
   return <SeoServicePage />;

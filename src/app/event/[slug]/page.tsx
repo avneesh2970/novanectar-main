@@ -1,30 +1,10 @@
 import EventDetailPage from "../EventDetailPage";
+import { notFound } from "next/navigation";
+import { getEvent } from "@/lib/content";
+import { absoluteUrl, SITE_NAME, SITE_URL } from "@/lib/site";
 
-async function getEvent(slug: string) {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_APP_URL}/api/event/posts?slug=${slug}`,
-      {
-        next: { revalidate: 60 }, // cache for 1 minute
-      }
-    );
-
-    if (!res.ok) {
-      console.error("Failed to fetch event:", res.status);
-      return null;
-    }
-
-    return await res.json();
-  } catch (error) {
-    console.error("Error fetching event:", error);
-    return null;
-  }
-}
-
-// ✅ Generate SEO metadata (title, description, canonical, Open Graph)
 export async function generateMetadata({ params }: any) {
   const { slug } = await params;
-
   const event = await getEvent(slug);
 
   if (!event) {
@@ -32,31 +12,33 @@ export async function generateMetadata({ params }: any) {
       title: "Event Not Found | NovaNectar",
       description:
         "The event you're looking for doesn't exist or may have been removed.",
-      alternates: {
-        canonical: `${process.env.NEXT_PUBLIC_APP_URL}/event/${params.slug}`,
+      robots: {
+        index: false,
+        follow: false,
       },
     };
   }
 
-  const url = `${process.env.NEXT_PUBLIC_APP_URL}/event/${event.slug}`;
+  const url = absoluteUrl(`/event/${event.slug}`);
 
   return {
     title: event.metaTitle || `${event.title} | NovaNectar`,
     description: event.metaDescription || event.description?.slice(0, 160),
     alternates: {
-      canonical: url, // ✅ canonical tag fix
+      canonical: url,
     },
     openGraph: {
-      title: event.title,
-      description: event.description,
+      title: event.metaTitle || event.title,
+      description: event.metaDescription || event.description,
       url,
+      siteName: SITE_NAME,
       images: event.featuredImage ? [{ url: event.featuredImage }] : [],
       type: "article",
     },
     twitter: {
       card: "summary_large_image",
-      title: event.title,
-      description: event.description,
+      title: event.metaTitle || event.title,
+      description: event.metaDescription || event.description,
       images: event.featuredImage ? [event.featuredImage] : [],
     },
   };
@@ -65,5 +47,40 @@ export async function generateMetadata({ params }: any) {
 export default async function EventPage({ params }: any) {
   const { slug } = await params;
   const event = await getEvent(slug);
-  return <EventDetailPage event={event} />;
+
+  if (!event) {
+    notFound();
+  }
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    name: event.title,
+    description: event.metaDescription || event.description,
+    startDate: `${event.eventDate.split("T")[0]}T${event.eventTime}`,
+    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+    eventStatus: "https://schema.org/EventScheduled",
+    location: {
+      "@type": "Place",
+      name: event.venue,
+      address: event.venue,
+    },
+    organizer: {
+      "@type": "Organization",
+      name: event.organizer || SITE_NAME,
+      url: SITE_URL,
+    },
+    image: event.featuredImage ? [event.featuredImage] : [],
+    url: absoluteUrl(`/event/${event.slug}`),
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <EventDetailPage event={event} />
+    </>
+  );
 }

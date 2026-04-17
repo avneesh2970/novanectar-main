@@ -2,7 +2,9 @@ export const dynamic = "force-static";
 export const revalidate = 60;
 
 import { Suspense, lazy } from "react";
+import type { Metadata } from "next";
 import { MainContent } from "@/components/landing/MainContent";
+import { buildPageMetadata } from "@/lib/site";
 
 // Eagerly load critical above-the-fold components
 import LoadingSpinner from "@/components/ui/loading-spinner";
@@ -27,6 +29,20 @@ const FAQSection = lazy(() => import("@/components/faq/FaqSection"));
 const FooterSection = lazy(() => import("@/components/footer/FooterSection"));
 const WhatsappIcon = lazy(() => import("@/components/whatsapp/Whatsapp"));
 const CallingIcon = lazy(() => import("@/components/calling/Call"));
+
+export const metadata: Metadata = buildPageMetadata({
+  title: "Smart IT Solutions for Web, App, SEO and Design",
+  description:
+    "Explore NovaNectar's IT services for website development, mobile apps, digital marketing, SEO, branding, and creative design for growing businesses.",
+  path: "/",
+  keywords: [
+    "NovaNectar",
+    "IT company in Dehradun",
+    "web development company",
+    "SEO agency",
+    "digital marketing services",
+  ],
+});
 
 export default function Home() {
   return (

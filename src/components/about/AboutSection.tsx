@@ -51,7 +51,7 @@ export default function AboutPage() {
                 href="/about-us"
                 className="inline-block bg-blue-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold text-sm sm:text-base shadow-md hover:bg-blue-700 hover:scale-105 transition-all duration-300 ease-in-out"
               >
-                See More
+                Learn more about NovaNectar
               </Link>
             </div>
           </div>

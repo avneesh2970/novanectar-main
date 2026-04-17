@@ -1,19 +1,21 @@
-"use client";
-
 import Navbar from "@/components/navbar/Navbar";
 import { projects } from "./__data/projects";
 import { DMSans, DMSans500 } from "@/fonts/font";
 // import ourWork from "@/assets/our-work/ourWork.jpg";
 import Image from "next/image";
 import FooterSection from "@/components/footer/FooterSection";
-import { useState } from "react";
 import Link from "next/link";
+import type { Metadata } from "next";
+import { buildPageMetadata } from "@/lib/site";
+
+export const metadata: Metadata = buildPageMetadata({
+  title: "Portfolio and Client Work",
+  description:
+    "Browse NovaNectar's portfolio of web, product, branding, and marketing projects delivered for startups and growing businesses.",
+  path: "/portfolio",
+});
 
 export default function OurWorkPage() {
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [filteredProjects, setFilteredProjects] = useState(projects);
-
   return (
     <div
       className={`${DMSans.className} min-h-screen bg-[#F5F5F5] text-[#333335]`}
@@ -29,7 +31,7 @@ export default function OurWorkPage() {
 
         {/* Projects Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12">
-          {filteredProjects.map((project: any) => (
+          {projects.map((project: any) => (
             <div key={project.id} className="group">
               <Link href={`/portfolio/${project.id}`}>
                 {/* Project Image Container */}
@@ -44,7 +46,7 @@ export default function OurWorkPage() {
                     <Image
                       src={project.imageUrl}
                       fill
-                      alt="our-projects"
+                      alt={project.title}
                       className="object-cover"
                     />
                   </div>

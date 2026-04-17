@@ -1,12 +1,14 @@
 import React from "react";
 import SocialMediaManagement from "./SocialMediaManagement";
 import { Metadata } from "next";
+import { buildPageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Social Media Management | Novenectar - Smart IT Solution",
+export const metadata: Metadata = buildPageMetadata({
+  title: "Social Media Management Services",
   description:
-    "Grow your brand with expert social media management by Smart IT Solution - Create Schedule and engage across top platform with ease.",
-};
+    "Strengthen your brand presence with NovaNectar's social media management services, including planning, publishing, engagement, and creative support.",
+  path: "/services/social-media-management",
+});
 
 export default function SocialMediaManagementPage() {
   return <SocialMediaManagement />;

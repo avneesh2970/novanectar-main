@@ -1,111 +1,93 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import BlogPostContent from "@/components/blogs/blog-post-content";
-export async function generateMetadata({ params }:any) {
-  try {
-    const { slug } = await params
-    const url = new URL(
-      "/api/blog/posts",
-      process.env.NEXT_PUBLIC_APP_URL ||
-        "https://novanectar.co.in" ||
-        "http://localhost:3000"
-    );
-    url.searchParams.append("slug", slug);  
+import { getBlogPost } from "@/lib/content";
+import { absoluteUrl, SITE_NAME, SITE_URL } from "@/lib/site";
 
-    const response = await fetch(url.toString(), {
-      next: { revalidate: 3600 },
-    });
+export async function generateMetadata({ params }: any): Promise<Metadata> {
+  const { slug } = await params;
+  const post = await getBlogPost(slug);
 
-    if (!response.ok) {
-      return {
-        title: "Blog Post Not Found",
-        description: "The requested blog post could not be found.",
-      };
-    }
-
-    const post = await response.json();
-
-    if (!post) {
-      return {
-        title: "Blog Post Not Found",
-        description: "The requested blog post could not be found.",
-      };
-    }
-
-    // Create structured data
-    const jsonLd = {
-      "@context": "https://schema.org",
-      "@type": "BlogPosting",
-      headline: post.metaTitle || post.title,
-      description: post.metaDescription || post.excerpt,
-      image: post.featuredImage ? [post.featuredImage] : [],
-      author: {
-        "@type": "Person",
-        name: post.author,
-      },
-      datePublished: post.createdAt,
-      dateModified: post.updatedAt || post.createdAt,
-      publisher: {
-        "@type": "Organization",
-        name: "novanectar",
-        logo: {
-          "@type": "ImageObject",
-          url: "https://novanectar.co.in/logo.png",
-        },
-      },
-      mainEntityOfPage: {
-        "@type": "WebPage",
-        "@id": `${
-          process.env.NEXT_PUBLIC_APP_URL || "https://novanectar.co.in"
-        }/blog/${post.slug}`,
-      },
-    };
-
+  if (!post) {
     return {
-      title: post.metaTitle || post.title,
-      description: post.metaDescription || post.excerpt,
-      openGraph: {
-        title: post.metaTitle || post.title,
-        description: post.metaDescription || post.excerpt,
-        images: post.featuredImage
-          ? [
-              {
-                url: post.featuredImage,
-                alt: post.featuredImageAlt || post.title,
-              },
-            ]
-          : [],
-        type: "article",
-        authors: post.author ? [post.author] : undefined,
+      title: "Blog Post Not Found",
+      description: "The requested blog post could not be found.",
+      robots: {
+        index: false,
+        follow: false,
       },
-      twitter: {
-        card: "summary_large_image",
-        title: post.metaTitle || post.title,
-        description: post.metaDescription || post.excerpt,
-        images: post.featuredImage
-          ? [
-              {
-                url: post.featuredImage,
-                alt: post.featuredImageAlt || post.title,
-              },
-            ]
-          : [],
-      },
-      alternates: {
-        canonical: `${process.env.NEXT_PUBLIC_APP_URL}/blog/${post.slug}`,
-      },
-      other: {
-        "script:ld+json": JSON.stringify(jsonLd),
-      },
-    };
-  } catch (error) {
-    console.error("Error generating metadata:", error);
-    return {
-      title: "Blog",
-      description: "Read our latest blog posts",
     };
   }
+
+  return {
+    title: post.metaTitle || post.title,
+    description: post.metaDescription || post.excerpt,
+    alternates: {
+      canonical: absoluteUrl(`/blog/${post.slug}`),
+    },
+    openGraph: {
+      title: post.metaTitle || post.title,
+      description: post.metaDescription || post.excerpt,
+      url: absoluteUrl(`/blog/${post.slug}`),
+      siteName: SITE_NAME,
+      type: "article",
+      authors: post.author ? [post.author] : undefined,
+      publishedTime: post.createdAt,
+      modifiedTime: post.updatedAt || post.createdAt,
+      images: post.featuredImage
+        ? [{ url: post.featuredImage, alt: post.featuredImageAlt || post.title }]
+        : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.metaTitle || post.title,
+      description: post.metaDescription || post.excerpt,
+      images: post.featuredImage ? [post.featuredImage] : undefined,
+    },
+  };
 }
 
 export default async function Page({ params }: any) {
-    const { slug } = await params
-  return <BlogPostContent slug={slug} />;
+  const { slug } = await params;
+  const post = await getBlogPost(slug);
+
+  if (!post) {
+    notFound();
+  }
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.metaTitle || post.title,
+    description: post.metaDescription || post.excerpt,
+    image: post.featuredImage ? [post.featuredImage] : [],
+    author: {
+      "@type": "Person",
+      name: post.author,
+    },
+    datePublished: post.createdAt,
+    dateModified: post.updatedAt || post.createdAt,
+    publisher: {
+      "@type": "Organization",
+      name: SITE_NAME,
+      logo: {
+        "@type": "ImageObject",
+        url: `${SITE_URL}/logo.png`,
+      },
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": absoluteUrl(`/blog/${post.slug}`),
+    },
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <BlogPostContent post={post} />
+    </>
+  );
 }

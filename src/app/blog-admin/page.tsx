@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import { Eye, EyeOff } from "lucide-react"
 
@@ -13,11 +13,7 @@ const BlogAdmin = () => {
   const [showPassword, setShowPassword] = useState(false)
   const router = useRouter()
 
-  useEffect(() => {
-    checkExistingSession()
-  }, [router])
-
-  const checkExistingSession = async () => {
+  const checkExistingSession = useCallback(async () => {
     // Check owner session (sessionStorage - unchanged)
     const isOwnerLoggedIn = sessionStorage.getItem("blogLoggedIn") === "true"
     const isLoggedInCookie = document.cookie.includes("blogLoggedInClient=true")
@@ -54,7 +50,11 @@ const BlogAdmin = () => {
         localStorage.removeItem("guestUserName")
       }
     }
-  }
+  }, [router])
+
+  useEffect(() => {
+    void checkExistingSession()
+  }, [checkExistingSession])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
