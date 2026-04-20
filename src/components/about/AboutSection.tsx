@@ -18,7 +18,6 @@ export default function AboutPage() {
                 alt="Smart IT solution services"
                 width={800}
                 height={500}
-                priority
                 className="object-cover object-center w-full h-auto rounded-lg shadow-lg"
                 sizes="(max-width: 768px) 100vw, 50vw"
                 quality={70}

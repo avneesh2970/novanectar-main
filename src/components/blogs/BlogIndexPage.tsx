@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Search, Calendar } from "lucide-react";
@@ -14,9 +14,41 @@ export default function BlogIndexPage({
 }: {
   initialPosts: BlogPostRecord[];
 }) {
+  const [posts, setPosts] = useState(initialPosts);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isRefreshing, setIsRefreshing] = useState(initialPosts.length === 0);
 
-  const filteredPosts = initialPosts.filter(
+  useEffect(() => {
+    if (initialPosts.length > 0) return;
+
+    let isMounted = true;
+
+    async function hydratePosts() {
+      try {
+        const response = await fetch("/api/blog/posts", { cache: "no-store" });
+        if (!response.ok) return;
+
+        const data = (await response.json()) as BlogPostRecord[];
+        if (isMounted) {
+          setPosts(data);
+        }
+      } catch (error) {
+        console.error("Failed to refresh blog posts on the client:", error);
+      } finally {
+        if (isMounted) {
+          setIsRefreshing(false);
+        }
+      }
+    }
+
+    void hydratePosts();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [initialPosts.length]);
+
+  const filteredPosts = posts.filter(
     (post) =>
       post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       post.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -67,7 +99,11 @@ export default function BlogIndexPage({
       </div>
 
       <div className="max-w-6xl mx-auto px-4 py-12">
-        {filteredPosts.length === 0 ? (
+        {isRefreshing ? (
+          <div className="flex justify-center items-center h-48">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-600" />
+          </div>
+        ) : filteredPosts.length === 0 ? (
           <div className="text-center py-16 bg-white rounded-xl shadow-sm">
             <div className="max-w-md mx-auto">
               <h2 className="text-2xl font-semibold text-gray-800 mb-2">

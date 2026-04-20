@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
   Calendar,
@@ -156,7 +156,40 @@ function Pagination({
 }
 
 export default function EventIndexPage({ items }: { items: EventRecord[] }) {
-  const sortedEvents = [...items].sort((a, b) => {
+  const [events, setEvents] = useState(items);
+  const [isRefreshing, setIsRefreshing] = useState(items.length === 0);
+
+  useEffect(() => {
+    if (items.length > 0) return;
+
+    let isMounted = true;
+
+    async function hydrateEvents() {
+      try {
+        const response = await fetch("/api/event/posts", { cache: "no-store" });
+        if (!response.ok) return;
+
+        const data = (await response.json()) as EventRecord[];
+        if (isMounted) {
+          setEvents(data);
+        }
+      } catch (error) {
+        console.error("Failed to refresh events on the client:", error);
+      } finally {
+        if (isMounted) {
+          setIsRefreshing(false);
+        }
+      }
+    }
+
+    void hydrateEvents();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [items.length]);
+
+  const sortedEvents = [...events].sort((a, b) => {
     const dateA = new Date(`${a.eventDate.split("T")[0]}T${a.eventTime}`);
     const dateB = new Date(`${b.eventDate.split("T")[0]}T${b.eventTime}`);
     const now = new Date();
@@ -222,7 +255,11 @@ export default function EventIndexPage({ items }: { items: EventRecord[] }) {
       </div>
 
       <main className="relative z-10 pb-16">
-        {sortedEvents.length === 0 ? (
+        {isRefreshing ? (
+          <div className="flex justify-center items-center h-48">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-600" />
+          </div>
+        ) : sortedEvents.length === 0 ? (
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-16 sm:py-24">
             <motion.div
               initial={{ scale: 0 }}

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Calendar, User, Clock, BookOpen } from "lucide-react";
 import Image from "next/image";
@@ -16,6 +17,39 @@ function getReadingTime(content: string) {
 }
 
 export default function NewsIndexPage({ items }: { items: NewsRecord[] }) {
+  const [newsItems, setNewsItems] = useState(items);
+  const [isRefreshing, setIsRefreshing] = useState(items.length === 0);
+
+  useEffect(() => {
+    if (items.length > 0) return;
+
+    let isMounted = true;
+
+    async function hydrateNews() {
+      try {
+        const response = await fetch("/api/news/posts", { cache: "no-store" });
+        if (!response.ok) return;
+
+        const result = await response.json();
+        if (isMounted && result.success) {
+          setNewsItems(result.data as NewsRecord[]);
+        }
+      } catch (error) {
+        console.error("Failed to refresh news items on the client:", error);
+      } finally {
+        if (isMounted) {
+          setIsRefreshing(false);
+        }
+      }
+    }
+
+    void hydrateNews();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [items.length]);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-purple-50">
       <Navbar />
@@ -34,7 +68,11 @@ export default function NewsIndexPage({ items }: { items: NewsRecord[] }) {
       </div>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {items.length === 0 ? (
+        {isRefreshing ? (
+          <div className="flex justify-center items-center h-48">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-600" />
+          </div>
+        ) : newsItems.length === 0 ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -50,7 +88,7 @@ export default function NewsIndexPage({ items }: { items: NewsRecord[] }) {
           </motion.div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {items.map((item, index) => (
+            {newsItems.map((item, index) => (
               <motion.article
                 key={item._id}
                 initial={{ opacity: 0, y: 30 }}

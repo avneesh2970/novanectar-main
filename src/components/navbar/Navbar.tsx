@@ -1,17 +1,19 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useEffect, useMemo, useState, lazy, Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import HamburgerIcon from "./HambergerIcon";
-import { gsap } from "gsap";
-import { ContactPopup } from "../contact/ContactPopup";
 import { DMSans } from "@/fonts/font";
-import { scrollToSection } from "@/helpers/utils";
 
-const navItems: any = [
+const ContactPopup = lazy(() =>
+  import("../contact/ContactPopup").then((mod) => ({
+    default: mod.ContactPopup,
+  })),
+);
+
+const navItems = [
   { href: "/", label: "Home" },
   {
     href: "/",
@@ -30,12 +32,10 @@ const navItems: any = [
   },
   { href: "/portfolio", label: "Our work" },
   { href: "/about-us", label: "About us" },
-
   {
     href: "/blog",
     label: "Resources",
     items: [
-      // { label: "Career", href: "/career" },
       { label: "Blog", href: "/blog" },
       { label: "Event", href: "/event" },
       { label: "News", href: "/news" },
@@ -60,66 +60,27 @@ const navItems: any = [
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [expandedItem, setExpandedItem] = useState<string | null>(null);
-  const navRef = useRef<HTMLElement>(null);
-  const mobileMenuRef = useRef<HTMLDivElement>(null);
-
   const [isContactPopupOpen, setIsContactPopupOpen] = useState(false);
 
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-
-      // Slower and smoother GSAP animation
-      gsap.fromTo(
-        mobileMenuRef.current,
-        {
-          opacity: 0,
-          height: 0,
-        },
-        {
-          opacity: 1,
-          height: "100vh",
-          duration: 0.8, // Increased duration
-          ease: "power2.inOut",
-          onComplete: () => {
-            if (mobileMenuRef.current) {
-              mobileMenuRef.current.style.overflow = "visible";
-              mobileMenuRef.current.style.height = "100vh";
-            }
-          },
-        }
-      );
-    } else {
-      document.body.style.overflow = "unset";
-      setExpandedItem(null);
-
-      if (mobileMenuRef.current) {
-        mobileMenuRef.current.style.overflow = "hidden";
-        gsap.to(mobileMenuRef.current, {
-          opacity: 0,
-          height: 0,
-          duration: 0.8, // Increased duration
-          ease: "power2.inOut",
-        });
-      }
-    }
-
+    document.body.style.overflow = isOpen ? "hidden" : "unset";
     return () => {
       document.body.style.overflow = "unset";
     };
   }, [isOpen]);
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const toggleContactPopup = () => setIsContactPopupOpen(!isContactPopupOpen);
+  const desktopNav = useMemo(
+    () =>
+      navItems.map((item) => (
+        <NavItem key={item.label} item={item} />
+      )),
+    [],
+  );
 
   return (
     <>
       <nav
-        ref={navRef}
-        className={`fixed top-0 left-0 w-full bg-white shadow-md z-50 ${DMSans.className}`}
+        className={`fixed top-0 left-0 w-full bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/90 shadow-sm z-50 ${DMSans.className}`}
       >
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-20">
@@ -134,198 +95,115 @@ export default function Navbar() {
               />
             </Link>
 
-            {/* Center navigation items */}
             <div className="hidden lg:flex items-center justify-center flex-1 mx-8">
-              {navItems.map((item: any) => (
-                <NavItem
-                  key={item.label}
-                  item={item}
-                  scrollToSection={scrollToSection}
-                />
-              ))}
+              {desktopNav}
             </div>
 
-            {/* Contact button aligned to right */}
             <button
-              // href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                toggleContactPopup();
-              }}
+              onClick={() => setIsContactPopupOpen(true)}
               className="hidden lg:block px-4 py-2 rounded-md bg-[#4169E1] text-white font-medium hover:bg-blue-600 transition-colors"
             >
               Contact
             </button>
 
-            <div className="lg:hidden z-50">
-              <HamburgerIcon isOpen={isOpen} toggleMenu={toggleMenu} />
+            <div className="lg:hidden">
+              <HamburgerIcon
+                isOpen={isOpen}
+                toggleMenu={() => setIsOpen((prev) => !prev)}
+              />
             </div>
           </div>
         </div>
 
-        <div
-          ref={mobileMenuRef}
-          className="lg:hidden overflow-hidden"
-          style={{ height: "100vh" }}
-        >
-          <div className="bg-[#F8F9FA] max-h-[100vh] overflow-y-auto">
-            <div className="px-4 pt-4 pb-40">
-              {" "}
-              {/* Added padding bottom for scroll space */}
-              <div className="space-y-4">
-                {navItems.map((item: any, index: any) => (
-                  <motion.div
-                    key={item.label}
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{
-                      delay: index * 0.15, // Increased delay for smoother stagger
-                      duration: 0.6, // Increased duration
-                      ease: [0.4, 0, 0.2, 1], // Custom easing
-                    }}
-                    className="border-b border-gray-200"
-                  >
-                    {item.items ? (
-                      <div>
-                        <button
-                          onClick={() => {
-                            if (expandedItem === item.label) {
-                              setExpandedItem(null);
-                            } else {
-                              setExpandedItem(item.label);
-                            }
-                          }}
-                          className="flex items-center justify-between w-full py-4 text-gray-800"
-                        >
-                          <span className="text-base">{item.label}</span>
-                          <motion.div
-                            animate={{
-                              rotate: expandedItem === item.label ? 180 : 0,
-                            }}
-                            transition={{
-                              duration: 0.6,
-                              ease: [0.4, 0, 0.2, 1],
-                            }}
-                          >
-                            <ChevronDown className="w-5 h-5 text-gray-500" />
-                          </motion.div>
-                        </button>
-                        <AnimatePresence>
-                          {expandedItem === item.label && (
-                            <motion.div
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{
-                                height: "auto",
-                                opacity: 1,
-                                transition: {
-                                  height: {
-                                    duration: 0.6,
-                                    ease: [0.4, 0, 0.2, 1],
-                                  },
-                                  opacity: { duration: 0.4, delay: 0.2 },
-                                },
-                              }}
-                              exit={{
-                                height: 0,
-                                opacity: 0,
-                                transition: {
-                                  height: {
-                                    duration: 0.6,
-                                    ease: [0.4, 0, 0.2, 1],
-                                  },
-                                  opacity: { duration: 0.2 },
-                                },
-                              }}
-                              className="overflow-hidden"
-                            >
-                              <div className="pb-4 space-y-4">
-                                {item.items.map(
-                                  (subItem: any, subIndex: any) => (
-                                    <motion.div
-                                      key={subItem.label}
-                                      initial={{ opacity: 0, y: -10 }}
-                                      animate={{
-                                        opacity: 1,
-                                        y: 0,
-                                        transition: {
-                                          delay: subIndex * 0.1,
-                                          duration: 0.6,
-                                          ease: [0.4, 0, 0.2, 1],
-                                        },
-                                      }}
-                                    >
-                                      <Link
-                                        href={subItem.href}
-                                        onClick={toggleMenu}
-                                        className="block py-2 pl-4 text-gray-600 hover:text-blue-600 transition-colors"
-                                      >
-                                        {subItem.label}
-                                      </Link>
-                                    </motion.div>
-                                  )
-                                )}
-                              </div>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </div>
-                    ) : (
-                      <Link
-                        href={item.href}
-                        onClick={toggleMenu}
-                        className="block py-4 text-gray-800"
+        {isOpen && (
+          <div className="lg:hidden border-t border-gray-100 bg-[#F8F9FA] max-h-[calc(100vh-5rem)] overflow-y-auto">
+            <div className="px-4 py-4 space-y-2">
+              {navItems.map((item) => (
+                <div key={item.label} className="border-b border-gray-200">
+                  {item.items ? (
+                    <div>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setExpandedItem((prev) =>
+                            prev === item.label ? null : item.label,
+                          )
+                        }
+                        className="flex items-center justify-between w-full py-4 text-gray-800"
                       >
-                        {item.label}
-                      </Link>
-                    )}
-                  </motion.div>
-                ))}
-                <motion.div
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    delay: navItems.length * 0.15,
-                    duration: 0.6,
-                    ease: [0.4, 0, 0.2, 1],
+                        <span className="text-base">{item.label}</span>
+                        <ChevronDown
+                          className={`w-5 h-5 text-gray-500 transition-transform duration-200 ${
+                            expandedItem === item.label ? "rotate-180" : ""
+                          }`}
+                        />
+                      </button>
+                      {expandedItem === item.label && (
+                        <div className="pb-4 space-y-2">
+                          {item.items.map((subItem) => (
+                            <Link
+                              key={subItem.label}
+                              href={subItem.href}
+                              onClick={() => setIsOpen(false)}
+                              className="block py-2 pl-4 text-gray-600 hover:text-blue-600 transition-colors"
+                            >
+                              {subItem.label}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <Link
+                      href={item.href}
+                      onClick={() => setIsOpen(false)}
+                      className="block py-4 text-gray-800"
+                    >
+                      {item.label}
+                    </Link>
+                  )}
+                </div>
+              ))}
+
+              <div className="pt-4">
+                <button
+                  onClick={() => {
+                    setIsOpen(false);
+                    setIsContactPopupOpen(true);
                   }}
-                  className="pt-4" // Added padding top for better spacing
+                  className="block w-full py-4 text-center rounded-md bg-[#4169E1] text-white font-medium hover:bg-blue-600 transition-colors"
                 >
-                  <button
-                    // href="#"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      toggleMenu();
-                      toggleContactPopup();
-                    }}
-                    className="block w-full py-4 text-center rounded-md bg-[#4169E1] text-white font-medium hover:bg-blue-600 transition-colors"
-                  >
-                    Contact
-                  </button>
-                </motion.div>
+                  Contact
+                </button>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </nav>
-      <ContactPopup isOpen={isContactPopupOpen} onClose={toggleContactPopup} />
+
+      {isContactPopupOpen && (
+        <Suspense fallback={null}>
+          <ContactPopup
+            isOpen={isContactPopupOpen}
+            onClose={() => setIsContactPopupOpen(false)}
+          />
+        </Suspense>
+      )}
     </>
   );
 }
 
 function NavItem({
   item,
-}: // scrollToSection,
-{
-  item: any;
-  scrollToSection: (sectionId: string) => void;
+}: {
+  item: {
+    href: string;
+    label: string;
+    items?: { label: string; href: string }[];
+  };
 }) {
   const [isHovered, setIsHovered] = useState(false);
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (item.label === "Our Work") {
-      e.preventDefault();
-      // scrollToSection("project-section");
-    }
-  };
+
   return (
     <div
       className="relative px-4"
@@ -335,43 +213,31 @@ function NavItem({
       <Link
         href={item.href}
         className="flex items-center space-x-1 py-2 text-gray-800 hover:text-blue-600 transition-colors"
-        onClick={handleClick}
       >
         <span className="whitespace-nowrap">{item.label}</span>
         {item.items && (
-          <motion.div
-            animate={{ rotate: isHovered ? 180 : 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            <ChevronDown className="w-4 h-4" />
-          </motion.div>
+          <ChevronDown
+            className={`w-4 h-4 transition-transform duration-200 ${
+              isHovered ? "rotate-180" : ""
+            }`}
+          />
         )}
       </Link>
 
-      {item.items && (
-        <AnimatePresence>
-          {isHovered && (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 10 }}
-              transition={{ duration: 0.2 }}
-              className="absolute left-0 top-full pt-2"
-            >
-              <div className="bg-white rounded-md shadow-lg py-2 min-w-[200px]">
-                {item.items.map((subItem: any) => (
-                  <Link
-                    key={subItem.label}
-                    href={subItem.href}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
-                  >
-                    {subItem.label}
-                  </Link>
-                ))}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+      {item.items && isHovered && (
+        <div className="absolute left-0 top-full pt-2">
+          <div className="bg-white rounded-md shadow-lg py-2 min-w-[200px]">
+            {item.items.map((subItem) => (
+              <Link
+                key={subItem.label}
+                href={subItem.href}
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
+              >
+                {subItem.label}
+              </Link>
+            ))}
+          </div>
+        </div>
       )}
     </div>
   );

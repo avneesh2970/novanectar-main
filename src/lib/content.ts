@@ -71,54 +71,84 @@ export async function getBlogPosts(): Promise<BlogPostRecord[]> {
   if (!hasDatabaseConfig()) {
     return [];
   }
-  await connectDB();
-  const posts = await BlogPost.find().sort({ createdAt: -1 }).lean();
-  return serialize(posts) as unknown as BlogPostRecord[];
+  try {
+    await connectDB();
+    const posts = await BlogPost.find().sort({ createdAt: -1 }).lean();
+    return serialize(posts) as unknown as BlogPostRecord[];
+  } catch (error) {
+    console.error("Failed to load blog posts:", error);
+    return [];
+  }
 }
 
 export async function getBlogPost(slug: string): Promise<BlogPostRecord | null> {
   if (!hasDatabaseConfig()) {
     return null;
   }
-  await connectDB();
-  const post = await BlogPost.findOne({ slug }).lean();
-  return post ? (serialize(post) as unknown as BlogPostRecord) : null;
+  try {
+    await connectDB();
+    const post = await BlogPost.findOne({ slug }).lean();
+    return post ? (serialize(post) as unknown as BlogPostRecord) : null;
+  } catch (error) {
+    console.error(`Failed to load blog post for slug "${slug}":`, error);
+    return null;
+  }
 }
 
 export async function getNewsItems(): Promise<NewsRecord[]> {
   if (!hasDatabaseConfig()) {
     return [];
   }
-  await connectDB();
-  const news = await News.find({ isPublished: true })
-    .sort({ publishDate: -1 })
-    .lean();
-  return serialize(news) as unknown as NewsRecord[];
+  try {
+    await connectDB();
+    const news = await News.find({ isPublished: true })
+      .sort({ publishDate: -1 })
+      .lean();
+    return serialize(news) as unknown as NewsRecord[];
+  } catch (error) {
+    console.error("Failed to load news items:", error);
+    return [];
+  }
 }
 
 export async function getNewsItem(slug: string): Promise<NewsRecord | null> {
   if (!hasDatabaseConfig()) {
     return null;
   }
-  await connectDB();
-  const news = await News.findOne({ slug, isPublished: true }).lean();
-  return news ? (serialize(news) as unknown as NewsRecord) : null;
+  try {
+    await connectDB();
+    const news = await News.findOne({ slug, isPublished: true }).lean();
+    return news ? (serialize(news) as unknown as NewsRecord) : null;
+  } catch (error) {
+    console.error(`Failed to load news item for slug "${slug}":`, error);
+    return null;
+  }
 }
 
 export async function getEvents(): Promise<EventRecord[]> {
   if (!hasDatabaseConfig()) {
     return [];
   }
-  await connectDB();
-  const events = await EventPost.find().sort({ createdAt: -1 }).lean();
-  return serialize(events) as unknown as EventRecord[];
+  try {
+    await connectDB();
+    const events = await EventPost.find().sort({ createdAt: -1 }).lean();
+    return serialize(events) as unknown as EventRecord[];
+  } catch (error) {
+    console.error("Failed to load events:", error);
+    return [];
+  }
 }
 
 export async function getEvent(slug: string): Promise<EventRecord | null> {
   if (!hasDatabaseConfig()) {
     return null;
   }
-  await connectDB();
-  const event = await EventPost.findOne({ slug }).lean();
-  return event ? (serialize(event) as unknown as EventRecord) : null;
+  try {
+    await connectDB();
+    const event = await EventPost.findOne({ slug }).lean();
+    return event ? (serialize(event) as unknown as EventRecord) : null;
+  } catch (error) {
+    console.error(`Failed to load event for slug "${slug}":`, error);
+    return null;
+  }
 }

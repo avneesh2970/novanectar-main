@@ -3,6 +3,8 @@ import BlogIndexPage from "@/components/blogs/BlogIndexPage";
 import { getBlogPosts } from "@/lib/content";
 import { buildPageMetadata } from "@/lib/site";
 
+export const revalidate = 60;
+
 export const metadata: Metadata = buildPageMetadata({
   title: "Blog",
   description:

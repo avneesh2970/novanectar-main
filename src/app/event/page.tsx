@@ -3,6 +3,8 @@ import EventIndexPage from "@/components/events/EventIndexPage";
 import { getEvents } from "@/lib/content";
 import { buildPageMetadata } from "@/lib/site";
 
+export const revalidate = 60;
+
 export const metadata: Metadata = buildPageMetadata({
   title: "Events",
   description:

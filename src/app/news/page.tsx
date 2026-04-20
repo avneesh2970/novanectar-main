@@ -3,6 +3,8 @@ import NewsIndexPage from "@/components/news/NewsIndexPage";
 import { getNewsItems } from "@/lib/content";
 import { buildPageMetadata } from "@/lib/site";
 
+export const revalidate = 60;
+
 export const metadata: Metadata = buildPageMetadata({
   title: "News",
   description:
