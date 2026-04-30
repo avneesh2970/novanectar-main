@@ -1,24 +1,29 @@
 import { type NextRequest, NextResponse } from "next/server";
-// import { connectToDatabase } from "@/lib/mongodb";
 import { connectDB } from "@/lib/dbConnect";
 import { BlogPost } from "@/models/BlogPost";
-// import { isAuthenticated } from "@/lib/auth";
+import { isAuthenticated } from "@/lib/auth";
 
 export async function GET(request: NextRequest) {
   try {
     await connectDB();
     const { searchParams } = new URL(request.url);
     const slug = searchParams.get("slug");
+    const includeDrafts = searchParams.get("includeDrafts") === "true";
+    const canViewDrafts = includeDrafts && (await isAuthenticated(request));
 
     if (slug) {
-      const post = await BlogPost.findOne({ slug });
+      const post = await BlogPost.findOne(
+        canViewDrafts ? { slug } : { slug, isPublished: true },
+      );
       if (!post) {
         return NextResponse.json({ error: "Post not found" }, { status: 404 });
       }
       return NextResponse.json(post);
     }
 
-    const posts = await BlogPost.find().sort({ createdAt: -1 });
+    const posts = await BlogPost.find(
+      canViewDrafts ? {} : { isPublished: true },
+    ).sort({ createdAt: -1 });
     return NextResponse.json(posts);
   } catch (error) {
     console.error("Error fetching posts:", error);
@@ -31,13 +36,14 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    // const isAdmin = await isAuthenticated(request);
-    // if (!isAdmin) {
-    //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    // }
+    const isAdmin = await isAuthenticated(request);
+    if (!isAdmin) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
     await connectDB();
     const data = await request.json();
+    data.isPublished = data.isPublished !== false;
 
     // Validate required fields
     if (!data.title || !data.content) {
@@ -64,10 +70,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-     // Validate alt text if image is present
+    // Validate alt text if image is present
     if (data.featuredImage && !data.featuredImageAlt) {
       // If no alt text is provided but image is, use the title as fallback
-      data.featuredImageAlt = data.title
+      data.featuredImageAlt = data.title;
     }
 
     const newPost = new BlogPost(data);

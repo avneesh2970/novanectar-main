@@ -9,16 +9,20 @@ export async function GET(request: NextRequest) {
     await connectDB()
     const { searchParams } = new URL(request.url)
     const slug = searchParams.get("slug")
+    const includeDrafts = searchParams.get("includeDrafts") === "true"
+    const canViewDrafts = includeDrafts && (await isAuthenticated(request))
 
     if (slug) {
-      const news = await News.findOne({ slug, isPublished: true })
+      const news = await News.findOne(canViewDrafts ? { slug } : { slug, isPublished: true })
       if (!news) {
         return NextResponse.json({ success: false, error: "News not found" }, { status: 404 })
       }
       return NextResponse.json({ success: true, data: news })
     }
 
-    const news = await News.find({ isPublished: true }).sort({ publishDate: -1 }).lean()
+    const news = await News.find(canViewDrafts ? {} : { isPublished: true })
+      .sort({ publishDate: -1 })
+      .lean()
     return NextResponse.json({
       success: true,
       data: news,
@@ -40,6 +44,7 @@ export async function POST(request: NextRequest) {
 
     await connectDB()
     const body = await request.json()
+    body.isPublished = body.isPublished !== false
 
     // Validate required fields
     if (!body.title || !body.description || !body.content || !body.author) {

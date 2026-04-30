@@ -38,6 +38,10 @@ const EventPostSchema = new Schema<any>(
       type: String,
       default: "Novanectar",
     },
+    isPublished: {
+      type: Boolean,
+      default: true,
+    },
     featuredImage: {
       type: String,
     },

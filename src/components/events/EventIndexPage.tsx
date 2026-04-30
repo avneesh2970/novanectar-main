@@ -6,14 +6,13 @@ import {
   Calendar,
   Clock,
   Sparkles,
-  ChevronLeft,
-  ChevronRight,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import FooterSection from "@/components/footer/FooterSection";
 import Navbar from "@/components/navbar/Navbar";
 import type { EventRecord } from "@/lib/content";
+import ContentPaginationControls from "@/components/ui/ContentPaginationControls";
 
 function EventCard({ event }: { event: EventRecord }) {
   const date = new Date(event.eventDate);
@@ -76,88 +75,11 @@ function EventCard({ event }: { event: EventRecord }) {
   );
 }
 
-function Pagination({
-  currentPage,
-  totalPages,
-  onPageChange,
-}: {
-  currentPage: number;
-  totalPages: number;
-  onPageChange: (page: number) => void;
-}) {
-  if (totalPages <= 1) return null;
-
-  const getVisiblePages = () => {
-    const delta = 2;
-    const range = [];
-    const rangeWithDots = [];
-
-    for (
-      let i = Math.max(2, currentPage - delta);
-      i <= Math.min(totalPages - 1, currentPage + delta);
-      i++
-    ) {
-      range.push(i);
-    }
-
-    if (currentPage - delta > 2) {
-      rangeWithDots.push(1, "...");
-    } else {
-      rangeWithDots.push(1);
-    }
-
-    rangeWithDots.push(...range);
-
-    if (currentPage + delta < totalPages - 1) {
-      rangeWithDots.push("...", totalPages);
-    } else {
-      rangeWithDots.push(totalPages);
-    }
-
-    return rangeWithDots;
-  };
-
-  return (
-    <div className="flex items-center justify-center space-x-2 mt-12">
-      <button
-        onClick={() => onPageChange(currentPage - 1)}
-        disabled={currentPage === 1}
-        className="p-2 rounded-lg border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-      >
-        <ChevronLeft className="w-5 h-5" />
-      </button>
-
-      {getVisiblePages().map((page, index) => (
-        <button
-          key={index}
-          onClick={() => typeof page === "number" && onPageChange(page)}
-          disabled={page === "..."}
-          className={`px-4 py-2 rounded-lg transition-colors ${
-            page === currentPage
-              ? "bg-purple-600 text-white"
-              : page === "..."
-                ? "cursor-default"
-                : "border border-gray-300 hover:bg-gray-50"
-          }`}
-        >
-          {page}
-        </button>
-      ))}
-
-      <button
-        onClick={() => onPageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
-        className="p-2 rounded-lg border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-      >
-        <ChevronRight className="w-5 h-5" />
-      </button>
-    </div>
-  );
-}
-
 export default function EventIndexPage({ items }: { items: EventRecord[] }) {
   const [events, setEvents] = useState(items);
   const [isRefreshing, setIsRefreshing] = useState(items.length === 0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(20);
 
   useEffect(() => {
     if (items.length > 0) return;
@@ -207,11 +129,13 @@ export default function EventIndexPage({ items }: { items: EventRecord[] }) {
     return dateB.getTime() - dateA.getTime();
   });
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const eventsPerPage = 6;
-  const totalPages = Math.ceil(sortedEvents.length / eventsPerPage);
-  const startIndex = (currentPage - 1) * eventsPerPage;
-  const paginatedEvents = sortedEvents.slice(startIndex, startIndex + eventsPerPage);
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [pageSize]);
+
+  const totalPages = Math.max(1, Math.ceil(sortedEvents.length / pageSize));
+  const startIndex = (currentPage - 1) * pageSize;
+  const paginatedEvents = sortedEvents.slice(startIndex, startIndex + pageSize);
 
   const floatingVariants = {
     animate: {
@@ -322,10 +246,14 @@ export default function EventIndexPage({ items }: { items: EventRecord[] }) {
               ))}
             </div>
 
-            <Pagination
+            <ContentPaginationControls
               currentPage={currentPage}
+              totalItems={sortedEvents.length}
               totalPages={totalPages}
+              pageSize={pageSize}
               onPageChange={setCurrentPage}
+              onPageSizeChange={setPageSize}
+              itemLabel="events"
             />
           </div>
         )}

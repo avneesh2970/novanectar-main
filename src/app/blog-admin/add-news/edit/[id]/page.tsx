@@ -33,8 +33,10 @@ export default function EditNews() {
   const [imagePreview, setImagePreview] = useState("")
   const [imageAlt, setImageAlt] = useState("")
   const [saving, setSaving] = useState(false)
+  const [saveAction, setSaveAction] = useState<"draft" | "publish">("publish")
   const [showSeoSection, setShowSeoSection] = useState(false)
   const [autoSlug, setAutoSlug] = useState(false) // Disabled by default on edit
+  const [isPublished, setIsPublished] = useState(true)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   // Auth and loading state
@@ -74,6 +76,7 @@ export default function EditNews() {
           setMetaDescription(data.metaDescription || "")
           setImagePreview(data.featuredImage || "")
           setImageAlt(data.featuredImageAlt || "")
+          setIsPublished(data.isPublished !== false)
         } else {
           throw new Error(result.error || "Failed to fetch news data")
         }
@@ -160,8 +163,7 @@ export default function EditNews() {
   }
 
   // MODIFIED: handleSubmit to update the article
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const submitNews = async (nextPublished: boolean) => {
     if (!title.trim() || !slug.trim() || !description.trim() || !content.trim() || !author.trim()) {
       toast.error("Please fill all required fields.")
       return
@@ -170,6 +172,7 @@ export default function EditNews() {
       toast.error("Image alt text is required for accessibility.")
       return
     }
+    setSaveAction(nextPublished ? "publish" : "draft")
     setSaving(true)
     try {
       let imageUrl = imagePreview
@@ -189,6 +192,7 @@ export default function EditNews() {
         featuredImageAlt: imageAlt.trim(),
         metaTitle: metaTitle.trim() || title.trim(),
         metaDescription: metaDescription.trim() || description.trim(),
+        isPublished: nextPublished,
       }
       const response = await fetch(`/api/news/${id}`, {
         method: "PUT",
@@ -197,7 +201,8 @@ export default function EditNews() {
       })
       const result = await response.json()
       if (result.success) {
-        toast.success("News updated successfully!")
+        setIsPublished(nextPublished)
+        toast.success(nextPublished ? "News updated successfully!" : "News draft saved successfully!")
         router.push("/blog-admin/add-news")
       } else {
         throw new Error(result.error || "Failed to update news")
@@ -207,6 +212,15 @@ export default function EditNews() {
     } finally {
       setSaving(false)
     }
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    await submitNews(true)
+  }
+
+  const handleSaveDraft = async () => {
+    await submitNews(false)
   }
 
   if (isLoading || !isAuthenticated) {
@@ -483,24 +497,52 @@ export default function EditNews() {
           )}
 
           {/* Submit Button */}
-          <div className="flex justify-end bg-white rounded-lg shadow-sm border p-6">
-            <button
-              type="submit"
-              disabled={saving}
-              className="flex items-center gap-2 px-8 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:bg-purple-400 disabled:cursor-not-allowed font-medium transition-colors"
-            >
-              {saving ? (
-                <>
-                  <Loader2 className="h-5 w-5 animate-spin" />
-                  <span>Updating Article...</span>
-                </>
-              ) : (
-                <>
-                  <Save className="h-5 w-5" />
-                  <span>Update Article</span>
-                </>
-              )}
-            </button>
+          <div className="flex flex-col gap-4 bg-white rounded-lg shadow-sm border p-6 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm text-gray-600">
+              Current status:{" "}
+              <span className={`font-semibold ${isPublished ? "text-green-600" : "text-amber-600"}`}>
+                {isPublished ? "Published" : "Draft"}
+              </span>
+            </p>
+
+            <div className="flex flex-wrap justify-end gap-3">
+              <button
+                type="button"
+                onClick={handleSaveDraft}
+                disabled={saving}
+                className="flex items-center gap-2 rounded-lg border border-gray-300 px-6 py-3 font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {saving && saveAction === "draft" ? (
+                  <>
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                    <span>Saving Draft...</span>
+                  </>
+                ) : (
+                  <>
+                    <Save className="h-5 w-5" />
+                    <span>Save Draft</span>
+                  </>
+                )}
+              </button>
+
+              <button
+                type="submit"
+                disabled={saving}
+                className="flex items-center gap-2 px-8 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:bg-purple-400 disabled:cursor-not-allowed font-medium transition-colors"
+              >
+                {saving && saveAction === "publish" ? (
+                  <>
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                    <span>Updating Article...</span>
+                  </>
+                ) : (
+                  <>
+                    <Save className="h-5 w-5" />
+                    <span>Update Article</span>
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         </form>
       </main>

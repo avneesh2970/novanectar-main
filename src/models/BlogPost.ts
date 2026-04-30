@@ -6,6 +6,7 @@ export interface IBlogPost extends Document {
   excerpt: string;
   content: string;
   author: string;
+  isPublished: boolean;
   featuredImage?: string;
   featuredImageAlt?: string;
   categories: string[];
@@ -41,6 +42,10 @@ const BlogPostSchema = new Schema<IBlogPost>(
       type: String,
       required: true,
       default: "Novanectar",
+    },
+    isPublished: {
+      type: Boolean,
+      default: true,
     },
     featuredImage: {
       type: String,

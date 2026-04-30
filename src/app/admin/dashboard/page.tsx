@@ -42,7 +42,7 @@ import {
   CalendarClock,
 } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
+import WriterAccessPanel from "@/components/admin/WriterAccessPanel";
 
 export default function AdminDashboard() {
   const router = useRouter();
@@ -697,7 +697,7 @@ export default function AdminDashboard() {
     },
     {
       id: "blogAdminAccess",
-      label: "Blog Dashboard",
+      label: "Writer Access",
       icon: CalendarClock,
       count: 0,
     },
@@ -1984,23 +1984,7 @@ export default function AdminDashboard() {
               )}
               {/* blog admin dashboard access */}
               {activeTab === "blogAdminAccess" && (
-                <div>
-                  <div className="px-4 lg:px-6 py-4 border-b border-gray-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-gradient-to-r from-purple-50 to-indigo-50">
-                    <div>
-                      <h2 className="text-lg font-semibold text-gray-900">
-                        blog admin access
-                      </h2>
-                      <div className="mt-12">
-                        <Link
-                          href="/blog-admin/active-users"
-                          className="inline-block px-6 py-3 text-white font-semibold bg-blue-600 rounded-xl shadow hover:bg-blue-700 transition duration-300"
-                        >
-                          Active Access
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <WriterAccessPanel />
               )}
 
               {activeTab === "testContacts" && (

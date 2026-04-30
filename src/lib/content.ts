@@ -12,6 +12,7 @@ export interface BlogPostRecord {
   excerpt: string;
   content: string;
   author: string;
+  isPublished: boolean;
   createdAt: string;
   updatedAt?: string;
   featuredImage?: string;
@@ -33,6 +34,7 @@ export interface NewsRecord {
   category: string;
   tags: string[];
   publishDate: string;
+  isPublished: boolean;
   views: number;
   metaTitle?: string;
   metaDescription?: string;
@@ -50,6 +52,7 @@ export interface EventRecord {
   eventTime: string;
   venue: string;
   organizer: string;
+  isPublished: boolean;
   featuredImage?: string;
   featuredImageAlt?: string;
   categories: string[];
@@ -73,7 +76,9 @@ export async function getBlogPosts(): Promise<BlogPostRecord[]> {
   }
   try {
     await connectDB();
-    const posts = await BlogPost.find().sort({ createdAt: -1 }).lean();
+    const posts = await BlogPost.find({ isPublished: true })
+      .sort({ createdAt: -1 })
+      .lean();
     return serialize(posts) as unknown as BlogPostRecord[];
   } catch (error) {
     console.error("Failed to load blog posts:", error);
@@ -87,7 +92,7 @@ export async function getBlogPost(slug: string): Promise<BlogPostRecord | null> 
   }
   try {
     await connectDB();
-    const post = await BlogPost.findOne({ slug }).lean();
+    const post = await BlogPost.findOne({ slug, isPublished: true }).lean();
     return post ? (serialize(post) as unknown as BlogPostRecord) : null;
   } catch (error) {
     console.error(`Failed to load blog post for slug "${slug}":`, error);
@@ -131,7 +136,9 @@ export async function getEvents(): Promise<EventRecord[]> {
   }
   try {
     await connectDB();
-    const events = await EventPost.find().sort({ createdAt: -1 }).lean();
+    const events = await EventPost.find({ isPublished: true })
+      .sort({ createdAt: -1 })
+      .lean();
     return serialize(events) as unknown as EventRecord[];
   } catch (error) {
     console.error("Failed to load events:", error);
@@ -145,7 +152,7 @@ export async function getEvent(slug: string): Promise<EventRecord | null> {
   }
   try {
     await connectDB();
-    const event = await EventPost.findOne({ slug }).lean();
+    const event = await EventPost.findOne({ slug, isPublished: true }).lean();
     return event ? (serialize(event) as unknown as EventRecord) : null;
   } catch (error) {
     console.error(`Failed to load event for slug "${slug}":`, error);

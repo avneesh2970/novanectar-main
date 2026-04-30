@@ -6,6 +6,11 @@ import { isAuthenticated } from "@/lib/auth"
 // DELETE - Delete news by ID
 export async function DELETE(request: NextRequest, { params }:any) {
   try {
+    const isAdmin = await isAuthenticated(request)
+    if (!isAdmin) {
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 })
+    }
+
     await connectDB()
 
     const { id } = await params
@@ -29,6 +34,11 @@ export async function DELETE(request: NextRequest, { params }:any) {
 // GET - Get single news by ID
 export async function GET(request: NextRequest, { params }:any) {
   try {
+    const isAdmin = await isAuthenticated(request)
+    if (!isAdmin) {
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 })
+    }
+
     await connectDB()
 
     const { id } =await params
@@ -60,6 +70,7 @@ export async function PUT(request: NextRequest, { params }:any) {
     await connectDB()
     const { id } = await params
     const body = await request.json()
+    body.isPublished = body.isPublished !== false
 
     // ADDED: Validation for required fields on update
     if (!body.title || !body.description || !body.content || !body.author) {

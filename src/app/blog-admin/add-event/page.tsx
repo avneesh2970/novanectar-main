@@ -11,6 +11,7 @@ interface EventPost {
   _id: string;
   title: string;
   slug: string;
+  isPublished: boolean;
   eventDate: string;
   eventTime: string;
   venue: string;
@@ -46,7 +47,7 @@ export default function EventDashboard() {
   const fetchPosts = async () => {
     try {
       setLoading(true);
-      const response = await fetch("/api/event/posts");
+      const response = await fetch("/api/event/posts?includeDrafts=true");
       if (!response.ok) throw new Error("Failed to fetch events");
       const data = await response.json();
       setPosts(data);
@@ -202,6 +203,17 @@ export default function EventDashboard() {
                     <td className="px-3 sm:px-6 py-4 text-sm font-medium text-gray-900">
                       <div className="max-w-[150px] sm:max-w-none truncate sm:whitespace-normal">
                         {post.title}
+                      </div>
+                      <div className="mt-1">
+                        <span
+                          className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${
+                            post.isPublished
+                              ? "bg-green-100 text-green-700"
+                              : "bg-amber-100 text-amber-700"
+                          }`}
+                        >
+                          {post.isPublished ? "Published" : "Draft"}
+                        </span>
                       </div>
                       {/* Show date on mobile */}
                       <div className="text-xs text-gray-500 mt-1 sm:hidden">

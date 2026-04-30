@@ -30,8 +30,10 @@ export default function AddNews() {
   const [imagePreview, setImagePreview] = useState("")
   const [imageAlt, setImageAlt] = useState("")
   const [saving, setSaving] = useState(false)
+  const [saveAction, setSaveAction] = useState<"draft" | "publish">("publish")
   const [showSeoSection, setShowSeoSection] = useState(false)
   const [autoSlug, setAutoSlug] = useState(true)
+  const [isPublished, setIsPublished] = useState(true)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -150,9 +152,7 @@ export default function AddNews() {
     if (fileInputRef.current) fileInputRef.current.value = ""
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
+  const submitNews = async (nextPublished: boolean) => {
     // Validation
     if (!title.trim()) {
       toast.error("News title is required")
@@ -179,6 +179,7 @@ export default function AddNews() {
       return
     }
 
+    setSaveAction(nextPublished ? "publish" : "draft")
     setSaving(true)
 
     try {
@@ -200,6 +201,7 @@ export default function AddNews() {
         featuredImageAlt: imageAlt.trim(),
         metaTitle: metaTitle.trim() || title.trim(),
         metaDescription: metaDescription.trim() || description.trim(),
+        isPublished: nextPublished,
       }
 
       const response = await fetch("/api/news/posts", {
@@ -211,7 +213,8 @@ export default function AddNews() {
       const result = await response.json()
 
       if (result.success) {
-        toast.success("News created successfully!")
+        setIsPublished(nextPublished)
+        toast.success(nextPublished ? "News article published successfully!" : "News draft saved successfully!")
         router.push("/blog-admin/add-news")
       } else {
         throw new Error(result.error || "Failed to create news")
@@ -222,6 +225,15 @@ export default function AddNews() {
     } finally {
       setSaving(false)
     }
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    await submitNews(true)
+  }
+
+  const handleSaveDraft = async () => {
+    await submitNews(false)
   }
 
   // Show loading while checking authentication
@@ -542,24 +554,52 @@ export default function AddNews() {
           )}
 
           {/* Submit Button */}
-          <div className="flex justify-end bg-white rounded-lg shadow-sm border p-6">
-            <button
-              type="submit"
-              disabled={saving}
-              className="flex items-center gap-2 px-8 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:bg-purple-400 disabled:cursor-not-allowed font-medium transition-colors"
-            >
-              {saving ? (
-                <>
-                  <Loader2 className="h-5 w-5 animate-spin" />
-                  <span>Creating Article...</span>
-                </>
-              ) : (
-                <>
-                  <Save className="h-5 w-5" />
-                  <span>Create Article</span>
-                </>
-              )}
-            </button>
+          <div className="flex flex-col gap-4 bg-white rounded-lg shadow-sm border p-6 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm text-gray-600">
+              Current status:{" "}
+              <span className={`font-semibold ${isPublished ? "text-green-600" : "text-amber-600"}`}>
+                {isPublished ? "Published" : "Draft"}
+              </span>
+            </p>
+
+            <div className="flex flex-wrap justify-end gap-3">
+              <button
+                type="button"
+                onClick={handleSaveDraft}
+                disabled={saving}
+                className="flex items-center gap-2 rounded-lg border border-gray-300 px-6 py-3 font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {saving && saveAction === "draft" ? (
+                  <>
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                    <span>Saving Draft...</span>
+                  </>
+                ) : (
+                  <>
+                    <Save className="h-5 w-5" />
+                    <span>Save Draft</span>
+                  </>
+                )}
+              </button>
+
+              <button
+                type="submit"
+                disabled={saving}
+                className="flex items-center gap-2 px-8 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:bg-purple-400 disabled:cursor-not-allowed font-medium transition-colors"
+              >
+                {saving && saveAction === "publish" ? (
+                  <>
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                    <span>Publishing Article...</span>
+                  </>
+                ) : (
+                  <>
+                    <Save className="h-5 w-5" />
+                    <span>Publish Article</span>
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         </form>
       </main>

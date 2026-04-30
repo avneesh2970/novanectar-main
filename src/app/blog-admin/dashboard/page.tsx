@@ -13,6 +13,7 @@ interface BlogPost {
   slug: string;
   excerpt: string;
   author: string;
+  isPublished: boolean;
   createdAt: string;
   categories: string[];
 }
@@ -103,7 +104,7 @@ export default function BlogDashboard() {
   const fetchPosts = async () => {
     try {
       setLoading(true);
-      const response = await fetch("/api/blog/posts");
+      const response = await fetch("/api/blog/posts?includeDrafts=true");
       if (!response.ok) throw new Error("Failed to fetch posts");
       const data = await response.json();
       setPosts(data);
@@ -286,6 +287,17 @@ export default function BlogDashboard() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900 truncate max-w-xs">
                         {post.title}
+                      </div>
+                      <div className="mt-1">
+                        <span
+                          className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${
+                            post.isPublished
+                              ? "bg-green-100 text-green-700"
+                              : "bg-amber-100 text-amber-700"
+                          }`}
+                        >
+                          {post.isPublished ? "Published" : "Draft"}
+                        </span>
                       </div>
                       <div className="text-sm text-gray-500 truncate max-w-xs md:hidden">
                         {post.author} •{" "}

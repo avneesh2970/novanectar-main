@@ -23,6 +23,7 @@ import { useRouter } from "next/navigation";
 interface NewsItem {
   _id: string;
   title: string;
+  slug: string;
   content: string;
   excerpt: string;
   featuredImage?: string;
@@ -31,6 +32,7 @@ interface NewsItem {
   category: string;
   tags: string[];
   publishDate: string;
+  isPublished: boolean;
   views: number;
   createdAt: string;
   updatedAt: string;
@@ -255,7 +257,7 @@ export default function NewsManagementPage() {
 
   const fetchNews = async () => {
     try {
-      const response = await fetch("/api/news/posts");
+      const response = await fetch("/api/news/posts?includeDrafts=true");
       const result = await response.json();
       if (result.success) {
         setNews(result.data);
@@ -306,10 +308,7 @@ export default function NewsManagementPage() {
   };
 
   const handleViewLive = (newsItem: NewsItem) => {
-    // Open news in new tab
-    console.log("View live:", newsItem._id);
-    // You can implement navigation to public news page here
-    // window.open(`/news/${newsItem.slug}`, '_blank')
+    window.open(`/news/${newsItem.slug}`, "_blank", "noopener,noreferrer");
   };
 
   // Filter and search functionality
@@ -551,6 +550,17 @@ export default function NewsManagementPage() {
                         <h3 className="font-semibold text-gray-900 line-clamp-2 text-sm leading-tight">
                           {item.title}
                         </h3>
+                        <div className="mt-2">
+                          <span
+                            className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${
+                              item.isPublished
+                                ? "bg-green-100 text-green-700"
+                                : "bg-amber-100 text-amber-700"
+                            }`}
+                          >
+                            {item.isPublished ? "Published" : "Draft"}
+                          </span>
+                        </div>
                         {item.excerpt && (
                           <p className="text-xs text-gray-500 mt-1 line-clamp-1">
                             {item.excerpt}

@@ -8,6 +8,7 @@ import { DMSans } from "@/fonts/font";
 import { format } from "date-fns";
 import FooterSection from "@/components/footer/FooterSection";
 import type { BlogPostRecord } from "@/lib/content";
+import ContentPaginationControls from "@/components/ui/ContentPaginationControls";
 
 export default function BlogIndexPage({
   initialPosts,
@@ -17,6 +18,8 @@ export default function BlogIndexPage({
   const [posts, setPosts] = useState(initialPosts);
   const [searchTerm, setSearchTerm] = useState("");
   const [isRefreshing, setIsRefreshing] = useState(initialPosts.length === 0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(20);
 
   useEffect(() => {
     if (initialPosts.length > 0) return;
@@ -56,6 +59,14 @@ export default function BlogIndexPage({
         category.toLowerCase().includes(searchTerm.toLowerCase()),
       ),
   );
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, pageSize]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredPosts.length / pageSize));
+  const startIndex = (currentPage - 1) * pageSize;
+  const paginatedPosts = filteredPosts.slice(startIndex, startIndex + pageSize);
 
   const getCategoryColorClasses = (index: number) => {
     const colorCombinations = [
@@ -125,59 +136,71 @@ export default function BlogIndexPage({
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {filteredPosts.map((post) => (
-              <article
-                key={post._id}
-                className="bg-white rounded-xl overflow-hidden shadow hover:shadow-md transition-shadow duration-300"
-              >
-                <Link href={`/blog/${post.slug}`} className="block group">
-                  <div className="relative w-full h-48 overflow-hidden bg-gray-50">
-                    <Image
-                      src={post.featuredImage || "/placeholder.svg"}
-                      alt={post.featuredImageAlt || post.title}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
-                    />
-                  </div>
-
-                  <div className="p-4">
-                    <div className="flex items-center text-sm text-gray-500 mb-2">
-                      <Calendar className="h-4 w-4 mr-1" />
-                      <span>{format(new Date(post.createdAt), "dd MMM yyyy")}</span>
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {paginatedPosts.map((post) => (
+                <article
+                  key={post._id}
+                  className="bg-white rounded-xl overflow-hidden shadow hover:shadow-md transition-shadow duration-300"
+                >
+                  <Link href={`/blog/${post.slug}`} className="block group">
+                    <div className="relative w-full h-48 overflow-hidden bg-gray-50">
+                      <Image
+                        src={post.featuredImage || "/placeholder.svg"}
+                        alt={post.featuredImageAlt || post.title}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
+                      />
                     </div>
 
-                    <div className="flex justify-between items-start mb-2">
-                      <h2 className="text-lg font-semibold text-gray-900 pr-4 group-hover:text-purple-600 transition-colors duration-200">
-                        {post.title}
-                      </h2>
-                      <ArrowRight className="h-4 w-4 text-gray-400 group-hover:text-purple-600 transition-colors duration-200 flex-shrink-0" />
+                    <div className="p-4">
+                      <div className="flex items-center text-sm text-gray-500 mb-2">
+                        <Calendar className="h-4 w-4 mr-1" />
+                        <span>{format(new Date(post.createdAt), "dd MMM yyyy")}</span>
+                      </div>
+
+                      <div className="flex justify-between items-start mb-2">
+                        <h2 className="text-lg font-semibold text-gray-900 pr-4 group-hover:text-purple-600 transition-colors duration-200">
+                          {post.title}
+                        </h2>
+                        <ArrowRight className="h-4 w-4 text-gray-400 group-hover:text-purple-600 transition-colors duration-200 flex-shrink-0" />
+                      </div>
+
+                      {post.author && (
+                        <p className="text-sm text-gray-500 mb-2">By {post.author}</p>
+                      )}
+
+                      <p className="text-gray-600 text-sm line-clamp-2">{post.excerpt}</p>
+
+                      <div className="flex gap-2 mt-3 overflow-x-auto whitespace-nowrap scrollbar-hide">
+                        {post.categories.map((category, i) => (
+                          <span
+                            key={i}
+                            className={`text-xs px-3 py-1 rounded-full ${getCategoryColorClasses(
+                              i,
+                            )}`}
+                          >
+                            {category}
+                          </span>
+                        ))}
+                      </div>
                     </div>
+                  </Link>
+                </article>
+              ))}
+            </div>
 
-                    {post.author && (
-                      <p className="text-sm text-gray-500 mb-2">By {post.author}</p>
-                    )}
-
-                    <p className="text-gray-600 text-sm line-clamp-2">{post.excerpt}</p>
-
-                    <div className="flex gap-2 mt-3 overflow-x-auto whitespace-nowrap scrollbar-hide">
-                      {post.categories.map((category, i) => (
-                        <span
-                          key={i}
-                          className={`text-xs px-3 py-1 rounded-full ${getCategoryColorClasses(
-                            i,
-                          )}`}
-                        >
-                          {category}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </Link>
-              </article>
-            ))}
-          </div>
+            <ContentPaginationControls
+              currentPage={currentPage}
+              totalItems={filteredPosts.length}
+              totalPages={totalPages}
+              pageSize={pageSize}
+              onPageChange={setCurrentPage}
+              onPageSizeChange={setPageSize}
+              itemLabel="articles"
+            />
+          </>
         )}
       </div>
       <FooterSection />

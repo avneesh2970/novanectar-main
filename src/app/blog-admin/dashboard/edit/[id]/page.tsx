@@ -28,11 +28,13 @@ export default function EditBlogPost({ params }: any) {
   const [currentImage, setCurrentImage] = useState("");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [saveAction, setSaveAction] = useState<"draft" | "publish">("publish");
   const [previewMode, setPreviewMode] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
   const [metaTitle, setMetaTitle] = useState("");
   const [metaDescription, setMetaDescription] = useState("");
+  const [isPublished, setIsPublished] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Set the post ID from unwrapped params
@@ -77,6 +79,7 @@ export default function EditBlogPost({ params }: any) {
       setCategories(post.categories || []);
       setMetaTitle(post.metaTitle || "");
       setMetaDescription(post.metaDescription || "");
+      setIsPublished(post.isPublished !== false);
 
       if (post.featuredImage) {
         setCurrentImage(post.featuredImage);
@@ -192,9 +195,7 @@ export default function EditBlogPost({ params }: any) {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
+  const submitPost = async (nextPublished: boolean) => {
     if (!postId) {
       toast.error("Post ID is missing");
       return;
@@ -211,6 +212,7 @@ export default function EditBlogPost({ params }: any) {
       return;
     }
 
+    setSaveAction(nextPublished ? "publish" : "draft");
     setSaving(true);
 
     try {
@@ -260,7 +262,8 @@ export default function EditBlogPost({ params }: any) {
         categories,
         featuredImage: imageUrl,
         metaTitle, // Add this
-  metaDescription, // Add this
+        metaDescription, // Add this
+        isPublished: nextPublished,
       };
 
       const response = await fetch(`/api/blog/posts/${postId}`, {
@@ -276,7 +279,8 @@ export default function EditBlogPost({ params }: any) {
         throw new Error(errorData.error || "Failed to update post");
       }
 
-      toast.success("Blog post updated successfully");
+      setIsPublished(nextPublished);
+      toast.success(nextPublished ? "Blog post updated successfully" : "Blog draft saved successfully");
       router.push("/blog-admin/dashboard");
     } catch (error) {
       console.error("Error updating post:", error);
@@ -286,6 +290,15 @@ export default function EditBlogPost({ params }: any) {
     } finally {
       setSaving(false);
     }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await submitPost(true);
+  };
+
+  const handleSaveDraft = async () => {
+    await submitPost(false);
   };
 
   if (loading) {
@@ -621,24 +634,52 @@ export default function EditBlogPost({ params }: any) {
             </div>
 
             {/* Submit Button - Removed the Preview button */}
-            <div className="flex justify-end">
-              <button
-                type="submit"
-                disabled={saving || isUploading}
-                className="flex items-center gap-2 px-6 py-3 bg-purple-600 text-white rounded-md hover:bg-purple-700 disabled:bg-purple-400"
-              >
-                {saving ? (
-                  <>
-                    <Loader2 className="h-5 w-5 animate-spin" />
-                    <span>Saving...</span>
-                  </>
-                ) : (
-                  <>
-                    <Save className="h-5 w-5" />
-                    <span>Update Post</span>
-                  </>
-                )}
-              </button>
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-sm text-gray-600">
+                Current status:{" "}
+                <span className={`font-semibold ${isPublished ? "text-green-600" : "text-amber-600"}`}>
+                  {isPublished ? "Published" : "Draft"}
+                </span>
+              </p>
+
+              <div className="flex flex-wrap justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={handleSaveDraft}
+                  disabled={saving || isUploading}
+                  className="flex items-center gap-2 rounded-md border border-gray-300 px-6 py-3 text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {saving && saveAction === "draft" ? (
+                    <>
+                      <Loader2 className="h-5 w-5 animate-spin" />
+                      <span>Saving Draft...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Save className="h-5 w-5" />
+                      <span>Save Draft</span>
+                    </>
+                  )}
+                </button>
+
+                <button
+                  type="submit"
+                  disabled={saving || isUploading}
+                  className="flex items-center gap-2 px-6 py-3 bg-purple-600 text-white rounded-md hover:bg-purple-700 disabled:bg-purple-400"
+                >
+                  {saving && saveAction === "publish" ? (
+                    <>
+                      <Loader2 className="h-5 w-5 animate-spin" />
+                      <span>Updating Post...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Save className="h-5 w-5" />
+                      <span>Update Post</span>
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           </form>
         )}

@@ -10,7 +10,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: false, message: "Username missing" }, { status: 400 })
   }
 
-  await ActiveBlogUser.deleteOne({ username })
+  await ActiveBlogUser.deleteOne({ username, sessionType: "guest" })
 
   return NextResponse.json({ success: true, message: `${username} logged out.` })
 }

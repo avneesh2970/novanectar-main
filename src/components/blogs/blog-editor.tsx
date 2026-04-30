@@ -6,6 +6,10 @@ import StarterKit from "@tiptap/starter-kit"
 import Underline from "@tiptap/extension-underline"
 import Link from "@tiptap/extension-link"
 import Image from "@tiptap/extension-image"
+import Table from "@tiptap/extension-table"
+import TableCell from "@tiptap/extension-table-cell"
+import TableHeader from "@tiptap/extension-table-header"
+import TableRow from "@tiptap/extension-table-row"
 import TextAlign from "@tiptap/extension-text-align"
 import { Color } from "@tiptap/extension-color"
 import TextStyle from "@tiptap/extension-text-style"
@@ -29,6 +33,10 @@ import {
   Edit,
   Code,
   Quote,
+  Table2,
+  Rows3,
+  Columns3,
+  Trash2,
 } from "lucide-react"
 
 // Custom extension to preserve hard breaks
@@ -163,6 +171,15 @@ export default function BlogEditor({ content, onChange }: BlogEditorProps) {
         inline: false,
         allowBase64: true,
       }),
+      Table.configure({
+        resizable: true,
+        HTMLAttributes: {
+          class: "editor-table",
+        },
+      }),
+      TableRow,
+      TableHeader,
+      TableCell,
       TextAlign.configure({
         types: ["heading", "paragraph"],
       }),
@@ -630,6 +647,53 @@ export default function BlogEditor({ content, onChange }: BlogEditorProps) {
               title="Insert Image"
             >
               <ImageIcon className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                focusEditor()
+                editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()
+              }}
+              className={`p-2 rounded hover:bg-gray-200 ${editor.isActive("table") ? "bg-gray-200" : ""}`}
+              title="Insert Table"
+            >
+              <Table2 className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                focusEditor()
+                editor.chain().focus().addRowAfter().run()
+              }}
+              disabled={!editor.isActive("table")}
+              className="p-2 rounded hover:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-40"
+              title="Add Row"
+            >
+              <Rows3 className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                focusEditor()
+                editor.chain().focus().addColumnAfter().run()
+              }}
+              disabled={!editor.isActive("table")}
+              className="p-2 rounded hover:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-40"
+              title="Add Column"
+            >
+              <Columns3 className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                focusEditor()
+                editor.chain().focus().deleteTable().run()
+              }}
+              disabled={!editor.isActive("table")}
+              className="p-2 rounded hover:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-40"
+              title="Delete Table"
+            >
+              <Trash2 className="h-4 w-4" />
             </button>
             <div className="w-px h-6 bg-gray-300 mx-1"></div>
             <button

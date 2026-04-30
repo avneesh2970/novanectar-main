@@ -1,0 +1,13 @@
+
+> novanectar@0.1.0 dev
+> next dev --turbopack --port 3001
+
+   ▲ Next.js 15.5.9 (Turbopack)
+   - Local:        http://localhost:3001
+   - Network:      http://192.168.1.11:3001
+   - Environments: .env
+
+ ✓ Starting...
+ ○ Compiling middleware ...
+ ✓ Compiled middleware in 646ms
+ ✓ Ready in 7.5s

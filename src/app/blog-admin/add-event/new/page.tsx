@@ -31,8 +31,10 @@ export default function AddEvent() {
   const [imagePreview, setImagePreview] = useState("")
   const [imageAlt, setImageAlt] = useState("")
   const [saving, setSaving] = useState(false)
+  const [saveAction, setSaveAction] = useState<"draft" | "publish">("publish")
   const [showSeoSection, setShowSeoSection] = useState(false)
   const [autoSlug, setAutoSlug] = useState(true)
+  const [isPublished, setIsPublished] = useState(true)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   // Add authentication check
@@ -155,9 +157,7 @@ export default function AddEvent() {
     if (fileInputRef.current) fileInputRef.current.value = ""
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
+  const submitEvent = async (nextPublished: boolean) => {
     // Validation
     if (!title.trim()) {
       toast.error("Event title is required")
@@ -192,6 +192,7 @@ export default function AddEvent() {
       return
     }
 
+    setSaveAction(nextPublished ? "publish" : "draft")
     setSaving(true)
 
     try {
@@ -214,6 +215,7 @@ export default function AddEvent() {
         featuredImageAlt: imageAlt.trim(),
         metaTitle: metaTitle.trim() || title.trim(),
         metaDescription: metaDescription.trim() || description.trim(),
+        isPublished: nextPublished,
       }
 
       const response = await fetch("/api/event/posts", {
@@ -227,7 +229,8 @@ export default function AddEvent() {
         throw new Error(errorData.error || "Failed to create event")
       }
 
-      toast.success("Event created successfully!")
+      setIsPublished(nextPublished)
+      toast.success(nextPublished ? "Event published successfully!" : "Event draft saved successfully!")
       router.push("/blog-admin/add-event")
     } catch (error: any) {
       console.error(error)
@@ -235,6 +238,15 @@ export default function AddEvent() {
     } finally {
       setSaving(false)
     }
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    await submitEvent(true)
+  }
+
+  const handleSaveDraft = async () => {
+    await submitEvent(false)
   }
 
   // Rest of your JSX remains exactly the same...
@@ -551,24 +563,52 @@ export default function AddEvent() {
           )}
 
           {/* Submit Button */}
-          <div className="flex justify-end bg-white rounded-lg shadow-sm border p-6">
-            <button
-              type="submit"
-              disabled={saving}
-              className="flex items-center gap-2 px-8 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:bg-purple-400 disabled:cursor-not-allowed font-medium transition-colors"
-            >
-              {saving ? (
-                <>
-                  <Loader2 className="h-5 w-5 animate-spin" />
-                  <span>Creating Event...</span>
-                </>
-              ) : (
-                <>
-                  <Save className="h-5 w-5" />
-                  <span>Create Event</span>
-                </>
-              )}
-            </button>
+          <div className="flex flex-col gap-4 bg-white rounded-lg shadow-sm border p-6 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm text-gray-600">
+              Current status:{" "}
+              <span className={`font-semibold ${isPublished ? "text-green-600" : "text-amber-600"}`}>
+                {isPublished ? "Published" : "Draft"}
+              </span>
+            </p>
+
+            <div className="flex flex-wrap justify-end gap-3">
+              <button
+                type="button"
+                onClick={handleSaveDraft}
+                disabled={saving}
+                className="flex items-center gap-2 rounded-lg border border-gray-300 px-6 py-3 font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {saving && saveAction === "draft" ? (
+                  <>
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                    <span>Saving Draft...</span>
+                  </>
+                ) : (
+                  <>
+                    <Save className="h-5 w-5" />
+                    <span>Save Draft</span>
+                  </>
+                )}
+              </button>
+
+              <button
+                type="submit"
+                disabled={saving}
+                className="flex items-center gap-2 px-8 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:bg-purple-400 disabled:cursor-not-allowed font-medium transition-colors"
+              >
+                {saving && saveAction === "publish" ? (
+                  <>
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                    <span>Publishing Event...</span>
+                  </>
+                ) : (
+                  <>
+                    <Save className="h-5 w-5" />
+                    <span>Publish Event</span>
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         </form>
       </main>

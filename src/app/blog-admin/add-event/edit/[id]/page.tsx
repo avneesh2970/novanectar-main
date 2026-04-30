@@ -38,8 +38,10 @@ export default function EditEvent() {
   const [imagePreview, setImagePreview] = useState("")
   const [imageAlt, setImageAlt] = useState("")
   const [saving, setSaving] = useState(false)
+  const [saveAction, setSaveAction] = useState<"draft" | "publish">("publish")
   const [showSeoSection, setShowSeoSection] = useState(false)
   const [autoSlug, setAutoSlug] = useState(true)
+  const [isPublished, setIsPublished] = useState(true)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   // Authentication check
@@ -80,6 +82,7 @@ export default function EditEvent() {
         setImageAlt(data.featuredImageAlt || "")
         setMetaTitle(data.metaTitle || "")
         setMetaDescription(data.metaDescription || "")
+        setIsPublished(data.isPublished !== false)
         setAutoSlug(false) // Disable auto-slug on edit
       } catch (error) {
         console.error(error)
@@ -191,9 +194,7 @@ export default function EditEvent() {
   }
 
   // MODIFIED: handleSubmit to update the event
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
+  const submitEvent = async (nextPublished: boolean) => {
     // Validation (same as add-event)
     if (
       !title.trim() ||
@@ -212,6 +213,7 @@ export default function EditEvent() {
       return
     }
 
+    setSaveAction(nextPublished ? "publish" : "draft")
     setSaving(true)
 
     try {
@@ -235,6 +237,7 @@ export default function EditEvent() {
         featuredImageAlt: imageAlt.trim(),
         metaTitle: metaTitle.trim() || title.trim(),
         metaDescription: metaDescription.trim() || description.trim(),
+        isPublished: nextPublished,
       }
 
       // MODIFIED: Use PUT method to update the event at its specific API endpoint
@@ -249,7 +252,8 @@ export default function EditEvent() {
         throw new Error(errorData.error || "Failed to update event")
       }
 
-      toast.success("Event updated successfully!")
+      setIsPublished(nextPublished)
+      toast.success(nextPublished ? "Event updated successfully!" : "Event draft saved successfully!")
       router.push("/blog-admin/add-event")
     } catch (error: any) {
       console.error(error)
@@ -257,6 +261,15 @@ export default function EditEvent() {
     } finally {
       setSaving(false)
     }
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    await submitEvent(true)
+  }
+
+  const handleSaveDraft = async () => {
+    await submitEvent(false)
   }
 
   // The JSX is mostly the same as your add-event page, with updated text.
@@ -534,26 +547,52 @@ export default function EditEvent() {
           )}
 
           {/* Submit Button */}
-          <div className="flex justify-end bg-white rounded-lg shadow-sm border p-6">
-            <button
-              type="submit"
-              disabled={saving}
-              className="flex items-center gap-2 px-8 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:bg-purple-400 disabled:cursor-not-allowed font-medium transition-colors"
-            >
-              {saving ? (
-                <>
-                  <Loader2 className="h-5 w-5 animate-spin" />
-                  {/* MODIFIED: Button text for saving state */}
-                  <span>Updating Event...</span>
-                </>
-              ) : (
-                <>
-                  <Save className="h-5 w-5" />
-                  {/* MODIFIED: Button text */}
-                  <span>Update Event</span>
-                </>
-              )}
-            </button>
+          <div className="flex flex-col gap-4 bg-white rounded-lg shadow-sm border p-6 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm text-gray-600">
+              Current status:{" "}
+              <span className={`font-semibold ${isPublished ? "text-green-600" : "text-amber-600"}`}>
+                {isPublished ? "Published" : "Draft"}
+              </span>
+            </p>
+
+            <div className="flex flex-wrap justify-end gap-3">
+              <button
+                type="button"
+                onClick={handleSaveDraft}
+                disabled={saving}
+                className="flex items-center gap-2 rounded-lg border border-gray-300 px-6 py-3 font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {saving && saveAction === "draft" ? (
+                  <>
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                    <span>Saving Draft...</span>
+                  </>
+                ) : (
+                  <>
+                    <Save className="h-5 w-5" />
+                    <span>Save Draft</span>
+                  </>
+                )}
+              </button>
+
+              <button
+                type="submit"
+                disabled={saving}
+                className="flex items-center gap-2 px-8 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:bg-purple-400 disabled:cursor-not-allowed font-medium transition-colors"
+              >
+                {saving && saveAction === "publish" ? (
+                  <>
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                    <span>Updating Event...</span>
+                  </>
+                ) : (
+                  <>
+                    <Save className="h-5 w-5" />
+                    <span>Update Event</span>
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         </form>
       </main>

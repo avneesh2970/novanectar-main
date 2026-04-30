@@ -8,16 +8,18 @@ export async function GET(request: NextRequest) {
     await connectDB()
     const { searchParams } = new URL(request.url)
     const slug = searchParams.get("slug")
+    const includeDrafts = searchParams.get("includeDrafts") === "true"
+    const canViewDrafts = includeDrafts && (await isAuthenticated(request))
 
     if (slug) {
-      const event = await EventPost.findOne({ slug })
+      const event = await EventPost.findOne(canViewDrafts ? { slug } : { slug, isPublished: true })
       if (!event) {
         return NextResponse.json({ error: "Event not found" }, { status: 404 })
       }
       return NextResponse.json(event)
     }
 
-    const events = await EventPost.find().sort({ createdAt: -1 })
+    const events = await EventPost.find(canViewDrafts ? {} : { isPublished: true }).sort({ createdAt: -1 })
     return NextResponse.json(events)
   } catch (error) {
     console.error("Error fetching events:", error)
@@ -34,6 +36,7 @@ export async function POST(request: NextRequest) {
 
     await connectDB()
     const data = await request.json()
+    data.isPublished = data.isPublished !== false
 
     // Validate required fields for events
     if (!data.title || !data.description || !data.content || !data.eventDate || !data.eventTime || !data.venue) {

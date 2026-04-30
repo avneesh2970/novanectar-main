@@ -6,6 +6,11 @@ import { isAuthenticated } from "@/lib/auth"
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const isAdmin = await isAuthenticated(request)
+    if (!isAdmin) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
     const { id } = await params
     await connectDB()
     const post = await BlogPost.findById(id)
