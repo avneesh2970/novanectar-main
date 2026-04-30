@@ -13,14 +13,16 @@ export async function GET(request: NextRequest) {
     const canViewDrafts = includeDrafts && (await isAuthenticated(request))
 
     if (slug) {
-      const news = await News.findOne(canViewDrafts ? { slug } : { slug, isPublished: true })
+      const news = await News.findOne(
+        canViewDrafts ? { slug } : { slug, isPublished: { $ne: false } },
+      )
       if (!news) {
         return NextResponse.json({ success: false, error: "News not found" }, { status: 404 })
       }
       return NextResponse.json({ success: true, data: news })
     }
 
-    const news = await News.find(canViewDrafts ? {} : { isPublished: true })
+    const news = await News.find(canViewDrafts ? {} : { isPublished: { $ne: false } })
       .sort({ publishDate: -1 })
       .lean()
     return NextResponse.json({

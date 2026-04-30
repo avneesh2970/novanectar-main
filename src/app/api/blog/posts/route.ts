@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
 
     if (slug) {
       const post = await BlogPost.findOne(
-        canViewDrafts ? { slug } : { slug, isPublished: true },
+        canViewDrafts ? { slug } : { slug, isPublished: { $ne: false } },
       );
       if (!post) {
         return NextResponse.json({ error: "Post not found" }, { status: 404 });
@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
     }
 
     const posts = await BlogPost.find(
-      canViewDrafts ? {} : { isPublished: true },
+      canViewDrafts ? {} : { isPublished: { $ne: false } },
     ).sort({ createdAt: -1 });
     return NextResponse.json(posts);
   } catch (error) {

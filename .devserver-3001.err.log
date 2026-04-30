@@ -1,0 +1,7 @@
+Error fetching posts: [Error: querySrv ECONNREFUSED _mongodb._tcp.cluster0.ge7kx.mongodb.net] {
+  errno: undefined,
+  code: 'ECONNREFUSED',
+  syscall: 'querySrv',
+  hostname: '_mongodb._tcp.cluster0.ge7kx.mongodb.net'
+}
+Error fetching posts: [MongooseError: Operation `blogposts.find()` buffering timed out after 10000ms]

@@ -12,14 +12,16 @@ export async function GET(request: NextRequest) {
     const canViewDrafts = includeDrafts && (await isAuthenticated(request))
 
     if (slug) {
-      const event = await EventPost.findOne(canViewDrafts ? { slug } : { slug, isPublished: true })
+      const event = await EventPost.findOne(
+        canViewDrafts ? { slug } : { slug, isPublished: { $ne: false } },
+      )
       if (!event) {
         return NextResponse.json({ error: "Event not found" }, { status: 404 })
       }
       return NextResponse.json(event)
     }
 
-    const events = await EventPost.find(canViewDrafts ? {} : { isPublished: true }).sort({ createdAt: -1 })
+    const events = await EventPost.find(canViewDrafts ? {} : { isPublished: { $ne: false } }).sort({ createdAt: -1 })
     return NextResponse.json(events)
   } catch (error) {
     console.error("Error fetching events:", error)

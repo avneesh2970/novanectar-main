@@ -11,3 +11,14 @@
  ○ Compiling middleware ...
  ✓ Compiled middleware in 646ms
  ✓ Ready in 7.5s
+ ○ Compiling /api/blog/posts ...
+ ✓ Compiled /api/blog/posts in 4.6s
+isLoggedIn false
+ GET /api/blog/posts 500 in 7526ms
+ GET /api/blog/posts?includeDrafts=true 500 in 17538ms
+   Reload env: .env
+   Reload env: .env
+ GET /api/blog/posts 200 in 2671ms
+ ○ Compiling /blog ...
+ ✓ Compiled /blog in 25.2s
+ GET /blog 200 in 27290ms
